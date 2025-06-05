@@ -68,3 +68,60 @@ When creating a pull request, keep the following in mind:
 - Please use English in all content.
 
 Typically, a project maintainer will review and test your code before merging it into the project. This process can take some time, and they may ask you for further edits or clarifications in the comments.
+
+
+## Development Guide
+
+### Prerequisites
+
+The following software is required to work on the spec:
+
+- Node.js 20 or above
+- TypeScript
+
+## Getting Started
+
+1. Fork the repository
+2. Clone your fork:
+
+```bash
+git clone https://github.com/YOUR-USERNAME/tuui.git
+cd tuui
+```
+
+3. Install dependencies:
+
+```bash
+npm install  # install dependencies
+```
+
+## Making Changes
+
+1. Create a new branch:
+
+```bash
+git checkout -b feature/your-feature-name
+```
+
+2. Make your changes
+3. Lint your changes:
+
+```bash
+npm run lint:fix    # perform lint validation/fixing
+```
+
+4. Format your changes:
+
+```bash
+npm run build:pre   # apply code formatting
+```
+
+5. Run build locally (optional):
+
+```bash
+npm run build:YOUR-OS
+```
+> For example: `npm run build:win`
+
+The built packages can be found and validated in the `release` directory at your project root (the same location as `package.json`).
+
