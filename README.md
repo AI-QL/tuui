@@ -27,6 +27,8 @@ To explore the project, please check wiki page: [TUUI.com](https://www.tuui.com)
 
 You can also check the documentation of the current project in sections: [Getting Started](docs/src/en/installation-and-build/getting-started.md) | [快速入门](/docs/src/zhHans/installation-and-build/getting-started.md)
 
+You can also ask the AI directly about project-related questions: [TUUI@DeepWiki](https://deepwiki.com/AI-QL/tuui)
+
 For features related to MCP, you'll need to set up your own LLM backend that supports tool calls.
 
 For guidance on configuring the LLM, refer to the template(i.e.: Qwen):
@@ -77,6 +79,7 @@ Once you modify or import the LLM configuration, it will be stored in your local
 ![](https://gcore.jsdelivr.net/gh/AI-QL/.github/public/tuui/8.png)
 
 ### Data insights
+
 ![](https://gcore.jsdelivr.net/gh/AI-QL/.github/public/tuui/9.png)
 
 ### Native devtools
