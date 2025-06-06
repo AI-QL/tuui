@@ -13,7 +13,6 @@ const baseConfig = {
     output: './release/${version}'
   },
   mac: {
-    bundleVersion: '1.0',
     hardenedRuntime: true,
     gatekeeperAssess: false,
     notarize: false,

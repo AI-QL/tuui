@@ -1,0 +1,44 @@
+name: Build Artifacts
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build project
+        run: npm run build:${{ fromJson('{"ubuntu-latest":"linux","macos-latest":"mac","windows-latest":"win"}')[matrix.os] }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Archive production artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-artifacts-${{ matrix.os }}
+          path: |
+            release/**/*.exe
+            release/**/*.appx
+            release/**/*.zip
+            release/**/*.deb
+            release/**/*.rpm
+            release/**/*.snap
+            release/**/*.dmg
+          retention-days: 3
+          compression-level: 0

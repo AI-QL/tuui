@@ -6,6 +6,7 @@ import { ServerConfig, McpClientTransport } from './types'
 import { connect } from './connection'
 
 import { sendToRenderer } from '../index'
+import Constants from '../utils/Constants'
 
 export async function initializeClient(
   name: string,
@@ -37,7 +38,7 @@ async function initializeStdioClient(
   const client = new Client(
     {
       name: clientName,
-      version: '1.0.0'
+      version: Constants.APP_VERSION
     },
     {
       capabilities: {

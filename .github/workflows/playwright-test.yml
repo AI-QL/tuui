@@ -1,4 +1,4 @@
-name: app-test
+name: Playwright Test
 
 on:
   push:
@@ -9,13 +9,13 @@ on:
       - '!*.md'
       - '!docs/**'
       - '!.github/**'
-      - '.github/workflows/app-test.yml'
+      - '.github/workflows/playwright-test.yml'
   pull_request:
     branches: [main]
   workflow_dispatch:
 
 jobs:
-  app-test:
+  playwright-test:
     runs-on: ${{ matrix.os }}
     name: Test Node.js ${{ matrix.node_version }} on ${{ matrix.os }}
     strategy:
