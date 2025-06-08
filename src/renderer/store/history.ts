@@ -35,28 +35,32 @@ export const useHistoryStore = defineStore('historyStore', {
     resetState() {
       this.$reset()
     },
-    deleteById(index) {
+    deleteById(index: number) {
       this.conversation.splice(index, 1)
     },
-    init(conversation) {
+    init(conversation: MessageEntry[]) {
       const newId = this.getDate()
       this.conversation.unshift({
         id: newId,
         messages: conversation
       })
       this.selected = [newId]
+      return newId
     },
-    replace(id) {
-      this.deleteById(id)
+    replace(index: number) {
+      this.deleteById(index)
       const messageStore = useMessageStore()
       this.init(messageStore.conversation)
     },
-    select(id) {
-      const messageStore = useMessageStore()
-      messageStore.conversation = this.conversation[id].messages
+    find(id: string) {
+      return this.conversation.find((item) => item.id === id)
     },
-    getColor(id) {
-      const targetElement = this.conversation[id]?.messages.find(
+    select(index: number) {
+      const messageStore = useMessageStore()
+      messageStore.conversation = this.conversation[index].messages
+    },
+    getColor(index: number) {
+      const targetElement = this.conversation[index]?.messages.find(
         (element) => element.role === 'assistant'
       )
       if (targetElement) {
@@ -65,9 +69,9 @@ export const useHistoryStore = defineStore('historyStore', {
         return 'grey'
       }
     },
-    downloadById(id) {
-      const name = this.conversation[id].id.replace(/[/: ]/g, '-')
-      this.download(this.conversation[id].messages, `history-${name}.json`)
+    downloadById(index: number) {
+      const name = this.conversation[index].id.replace(/[/: ]/g, '-')
+      this.download(this.conversation[index].messages, `history-${name}.json`)
     },
     downloadHistory() {
       this.download(this.conversation, 'history.json')

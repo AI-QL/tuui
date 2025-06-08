@@ -9,6 +9,7 @@ export const useMessageStore = defineStore('messageStore', {
   state: (): any => ({
     userMessage: '',
     conversation: [],
+    historyId: '',
     images: [],
     base64: '',
     generating: false
@@ -19,9 +20,13 @@ export const useMessageStore = defineStore('messageStore', {
       if (this.conversation.length === 0) {
         snackbarStore.showWarningMessage('snackbar.addfail')
       } else {
-        this.conversation = []
+        this.initConversation([])
         snackbarStore.showSuccessMessage('snackbar.addnew')
       }
+    },
+    initConversation(conversationArray) {
+      this.conversation = conversationArray
+      this.historyId = ''
     },
     stop() {
       const snackbarStore = useSnackbarStore()
@@ -73,22 +78,26 @@ export const useMessageStore = defineStore('messageStore', {
           role: 'user'
         })
 
-        if (this.conversation.length === 1) {
-          this.syncHistory()
-        }
-
         this.startInference()
       }
     },
     syncHistory: function () {
       const historyStore = useHistoryStore()
-      historyStore.init(this.conversation)
+      if (!this.historyId) {
+        this.historyId = historyStore.init(this.conversation)
+        return
+      }
+
+      if (!historyStore.find(this.historyId)) {
+        this.historyId = historyStore.init(this.conversation)
+      }
     },
     applyPrompt: function (messages) {
-      this.conversation = messages
-      this.syncHistory()
+      this.initConversation(messages)
+      // this.syncHistory()
     },
     startInference: async function () {
+      this.syncHistory()
       this.clear()
       await createCompletion(this.conversation)
       await this.postToolCall()
