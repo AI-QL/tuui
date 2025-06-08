@@ -11,8 +11,10 @@ import { createTray, hideWindow, showWindow } from './tray'
 import { loadConfig } from './mcp/init'
 
 const options = {
-  width: Constants.IS_DEV_ENV ? 1500 : 1200,
-  height: 650,
+  width: Constants.IS_DEV_ENV ? 1500 : 1280,
+  height: 960,
+  minWidth: 720,
+  minHeight: 480,
   tray: {
     // all optional values from DEFAULT_TRAY_OPTIONS can de defined here
     enabled: true,
@@ -35,6 +37,8 @@ export const createMainWindow = async (): Promise<BrowserWindow> => {
     show: false,
     width: options.width,
     height: options.height,
+    minWidth: options.minWidth,
+    minHeight: options.minHeight,
     useContentSize: true,
     webPreferences: Constants.DEFAULT_WEB_PREFERENCES,
     frame: true

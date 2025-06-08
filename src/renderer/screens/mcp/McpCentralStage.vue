@@ -28,6 +28,7 @@ const mcpNews = [
   <div v-if="mcpStore.getSelected">
     <div v-if="mcpStore.getSelected.primitive === 'tools'">
       <v-data-table
+        hover
         :key="mcpStore.getSelected"
         hide-default-footer
         hide-default-header

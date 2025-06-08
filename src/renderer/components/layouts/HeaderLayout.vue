@@ -32,13 +32,16 @@ watchEffect(() => {
 // }
 </script>
 <template>
-  <v-app-bar :order="-1" color="primary" density="compact" rounded="be-lg">
+  <v-app-bar block :order="-1" color="primary" height="36" rounded="be-lg">
     <v-app-bar-nav-icon
+      class="ml-2"
+      density="compact"
+      rounded="lg"
       :disabled="!hasComponent('sideDrawer').value"
       @click.stop="layoutStore.sidebar = !layoutStore.sidebar"
     >
     </v-app-bar-nav-icon>
-    <v-app-bar-title>{{ $t(titleKey.toString()) }}</v-app-bar-title>
+    <v-app-bar-title class="text-button">{{ $t(titleKey.toString()) }}</v-app-bar-title>
 
     <v-btn-toggle
       v-model="layoutStore.screen"
@@ -76,7 +79,13 @@ watchEffect(() => {
         </v-tooltip>
       </v-btn> -->
       <!-- @click="mcpStore.listTools().then((tools) => console.log(tools))" -->
-      <v-btn icon="mdi-clipboard-text" size="small" @click="console.log(mcpStore.getServers())">
+      <v-btn
+        class="ma-1"
+        density="compact"
+        rounded="lg"
+        icon="mdi-clipboard-text"
+        @click="console.log(mcpStore.getServers())"
+      >
       </v-btn>
     </template>
   </v-app-bar>

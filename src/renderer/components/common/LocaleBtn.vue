@@ -19,13 +19,20 @@ const handleChangeLanguage = (val): void => {
 }
 </script>
 <template>
-  <v-badge location="top left" :offset-y="7" :offset-x="4" class="click-through-badge">
+  <v-badge location="top left" :offset-y="7" :offset-x="5" class="click-through-badge">
     <template #badge>
       <iconify-icon :icon="localeStore.getIcon2()"></iconify-icon>
     </template>
-    <v-menu transition="fade-transition">
+    <v-menu transition="fade-transition" :offset="14">
       <template #activator="{ props }">
-        <v-btn v-tooltip:end="$t('locale.title')" icon="mdi-translate" v-bind="props" size="small">
+        <v-btn
+          class="ma-1"
+          density="compact"
+          rounded="lg"
+          v-tooltip:start="$t('locale.title')"
+          icon="mdi-translate"
+          v-bind="props"
+        >
         </v-btn>
       </template>
       <v-list class="mb-2">

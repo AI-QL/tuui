@@ -69,7 +69,6 @@ When creating a pull request, keep the following in mind:
 
 Typically, a project maintainer will review and test your code before merging it into the project. This process can take some time, and they may ask you for further edits or clarifications in the comments.
 
-
 ## Development Guide
 
 ### Prerequisites
@@ -121,7 +120,7 @@ npm run build:pre   # apply code formatting
 ```bash
 npm run build:YOUR-OS
 ```
+
 > For example: `npm run build:win`
 
 The built packages can be found and validated in the `release` directory at your project root (the same location as `package.json`).
-

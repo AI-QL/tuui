@@ -32,15 +32,15 @@ export default createVuetify({
       light: {
         dark: false,
         colors: {
-          primary: colors.blue.darken3,
-          secondary: colors.indigo.darken3
+          primary: colors.blue.darken3, // #1565C0
+          secondary: colors.indigo.darken3 // #283593
         }
       },
       dark: {
         dark: true,
         colors: {
-          primary: colors.indigo.darken2,
-          secondary: colors.indigo.darken4
+          primary: colors.indigo.darken2, // #303F9F
+          secondary: colors.indigo.darken4 // #1A237E
         }
       }
     }

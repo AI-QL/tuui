@@ -26,7 +26,7 @@ const { locale } = useI18n()
 
 <style scoped>
 .lottie-container {
-  height: calc(100vh - 252px);
+  height: calc(100vh - 218px);
   width: 100vw;
 }
 </style>
