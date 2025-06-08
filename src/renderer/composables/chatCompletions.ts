@@ -4,21 +4,12 @@ import { useChatbotStore } from '@/renderer/store/chatbot'
 import { useAgentStore } from '@/renderer/store/agent'
 import { useMcpStore } from '@/renderer/store/mcp'
 
-type ChatCompletionMessage = {
-  content: string
-  reasoning_content?: string
-  tool_calls?: ChatCompletionMessageToolCall[]
-  role: 'assistant' // Completion can only reply as assistant
-}
-
-type ChatCompletionMessageToolCall = {
-  id: string
-  type: 'function' // Currently only 'function' is supported
-  function: {
-    name: string
-    arguments: string // Typically a JSON string
-  }
-}
+import type {
+  AssistantMessage,
+  ToolCall,
+  ChatCompletionRequestMessage,
+  ChatCompletionResponseMessage
+} from '@/renderer/types/message'
 
 const isObjectEmpty = (obj?: Record<string, unknown>): boolean => {
   return !!obj && Object.keys(obj).length === 0
@@ -38,7 +29,10 @@ export const isEmptyTools = (tools: any): boolean => {
   }
 }
 
-const promptMessage = (conversation: string, systemPrompt: string | null) => {
+const promptMessage = (
+  conversation: ChatCompletionRequestMessage[],
+  systemPrompt: string | null
+): ChatCompletionRequestMessage[] => {
   if (systemPrompt) {
     return [{ content: systemPrompt, role: 'system' }, ...conversation]
   } else {
@@ -91,7 +85,7 @@ export const createCompletion = async (rawconversation, sampling: any = null) =>
       stream: chatbotStore.stream
     }
 
-    let target
+    let target: ChatCompletionResponseMessage[]
 
     if (!sampling) {
       target = messageStore.conversation
@@ -265,7 +259,7 @@ const parseChoices = (parsed, target) => {
   }
 }
 
-const parseChoice = (choice: ChatCompletionMessage, target: ChatCompletionMessage) => {
+const parseChoice = (choice: AssistantMessage, target: AssistantMessage) => {
   if (choice) {
     if (target.role === 'assistant') {
       if (typeof choice === 'string') {
@@ -280,10 +274,7 @@ const parseChoice = (choice: ChatCompletionMessage, target: ChatCompletionMessag
   }
 }
 
-const parseTool = (
-  tools: ChatCompletionMessageToolCall[] | undefined,
-  target: ChatCompletionMessage
-) => {
+const parseTool = (tools: ToolCall[] | undefined, target: AssistantMessage) => {
   // Early return if no tools to process
   if (!tools) return
 

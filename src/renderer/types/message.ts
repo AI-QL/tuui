@@ -1,0 +1,94 @@
+import { z } from 'zod'
+
+import { TextContentSchema as TextContentPartSchema } from '@modelcontextprotocol/sdk/types'
+
+const TextContent = z.string()
+
+// Either a URL of the image or the base64 encoded image data.
+const ImageURL = z.string()
+
+const RefusalContentPartSchema = z
+  .object({
+    type: z.literal('refusal'),
+    text: z.string()
+  })
+  .passthrough()
+
+const ImageLevel = z.union([z.literal('auto'), z.literal('low'), z.literal('high')])
+
+const ImageContentPartSchema = z.object({
+  type: z.literal('image_url'),
+  image_url: z.object({
+    url: ImageURL,
+    detail: ImageLevel.optional()
+  })
+})
+
+const ToolCallSchema = z.object({
+  id: z.string(),
+  type: z.literal('function'),
+  function: z.object({
+    name: z.string(),
+    arguments: z.string()
+  })
+})
+
+const SystemMessageSchema = z.object({
+  content: z.union([TextContent, z.array(TextContentPartSchema)]),
+  role: z.literal('system'),
+  name: z.string().optional()
+})
+
+const UserMessageSchema = z.object({
+  content: z.union([TextContent, z.array(TextContentPartSchema), z.array(ImageContentPartSchema)]),
+  role: z.literal('user'),
+  name: z.string().optional()
+})
+
+const AssistantMessageSchema = z.object({
+  content: z.union([
+    TextContent,
+    z.array(TextContentPartSchema),
+    z.array(RefusalContentPartSchema)
+  ]),
+  reasoning_content: z.string().optional(),
+  tool_calls: z.array(ToolCallSchema).optional(),
+  role: z.literal('assistant'),
+  name: z.string().optional()
+})
+
+const ToolMessageSchema = z.object({
+  content: z.union([TextContent, z.array(TextContentPartSchema)]),
+  role: z.literal('tool'),
+  tool_call_id: z.string()
+})
+
+const ChatCompletionRequestMessageSchema = z.union([
+  SystemMessageSchema,
+  UserMessageSchema,
+  AssistantMessageSchema,
+  ToolMessageSchema
+])
+
+const ChatCompletionResponseMessageSchema = z.object({
+  content: z.string(),
+  refusal: z.string().optional(),
+  reasoning_content: z.string().optional(),
+
+  tool_calls: z.array(ToolCallSchema).optional(),
+  role: z.literal('assistant')
+})
+
+export type ToolCall = z.infer<typeof ToolCallSchema>
+// type SystemMessage = Infer<typeof SystemMessageSchema>
+// type UserMessage = Infer<typeof UserMessageSchema>
+export type AssistantMessage = z.infer<typeof AssistantMessageSchema>
+// type ToolMessage = Infer<typeof ToolMessageSchema>
+
+// type TextContentPart = Infer<typeof TextContentPartSchema>;
+// type RefusalContentPart = Infer<typeof RefusalContentPartSchema>
+// type ImageContentPart = Infer<typeof ImageContentPartSchema>
+
+export type ChatCompletionRequestMessage = z.infer<typeof ChatCompletionRequestMessageSchema>
+
+export type ChatCompletionResponseMessage = z.infer<typeof ChatCompletionResponseMessageSchema>
