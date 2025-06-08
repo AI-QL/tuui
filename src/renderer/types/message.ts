@@ -1,6 +1,10 @@
 import { z, ZodTypeAny } from 'zod'
 
-import { TextContentSchema as TextContentPartSchema } from '@modelcontextprotocol/sdk/types'
+import {
+  TextContentSchema as TextContentPartSchema,
+  PromptMessage,
+  SamplingMessage
+} from '@modelcontextprotocol/sdk/types'
 
 type Primitive = string | number | boolean | bigint | null | undefined
 type Flatten<T> = T extends Primitive
@@ -101,10 +105,26 @@ export type ToolCall = Infer<typeof ToolCallSchema>
 export type AssistantMessage = Infer<typeof AssistantMessageSchema>
 // type ToolMessage = Infer<typeof ToolMessageSchema>
 
-// type TextContentPart = Infer<typeof TextContentPartSchema>;
+type TextContentPart = Infer<typeof TextContentPartSchema>
 // type RefusalContentPart = Infer<typeof RefusalContentPartSchema>
-// type ImageContentPart = Infer<typeof ImageContentPartSchema>
+type ImageContentPart = Infer<typeof ImageContentPartSchema>
+
+// ============================================================================
+// ## MCP SDK compatible type
+// ============================================================================
+
+// ## Needs to be converted to an OpenAI API compatible type
+export type McpSamplingMessage = SamplingMessage
+
+// ============================================================================
+// ## OpenAI API compatible type
+// ============================================================================
+
+// ## Supports text and images only
+export type ChatCompletionRequestContent = TextContentPart | ImageContentPart
 
 export type ChatCompletionRequestMessage = Infer<typeof ChatCompletionRequestMessageSchema>
+
+export type ChatCompletionPromptMessage = PromptMessage
 
 export type ChatCompletionResponseMessage = Infer<typeof ChatCompletionResponseMessageSchema>

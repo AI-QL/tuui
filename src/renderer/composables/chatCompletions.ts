@@ -7,9 +7,12 @@ import { useMcpStore } from '@/renderer/store/mcp'
 import type {
   AssistantMessage,
   ToolCall,
+  McpSamplingMessage,
   ChatCompletionRequestMessage,
   ChatCompletionResponseMessage
 } from '@/renderer/types/message'
+
+type ChatCompletionMessage = ChatCompletionRequestMessage | McpSamplingMessage
 
 const isObjectEmpty = (obj?: Record<string, unknown>): boolean => {
   return !!obj && Object.keys(obj).length === 0
@@ -40,7 +43,10 @@ const promptMessage = (
   }
 }
 
-export const createCompletion = async (rawconversation, sampling: any = null) => {
+export const createCompletion = async (
+  rawconversation: ChatCompletionMessage[],
+  sampling: any = null
+) => {
   const snackbarStore = useSnackbarStore()
 
   const messageStore = useMessageStore()
@@ -56,7 +62,7 @@ export const createCompletion = async (rawconversation, sampling: any = null) =>
 
   const conversation = rawconversation.reduce((newConversation, item) => {
     if (item.role === 'assistant') {
-      const { _reasoningContent, ...rest } = item
+      const { reasoning_content, ...rest } = item
       newConversation.push(rest)
     }
     // (item.role === "user" && item.content[0].type === "image_url") {
@@ -67,7 +73,7 @@ export const createCompletion = async (rawconversation, sampling: any = null) =>
       newConversation.push(item)
     }
     return newConversation
-  }, [])
+  }, [] as ChatCompletionMessage[])
   // const conversation = rawconversation
   try {
     messageStore.generating = true
@@ -90,7 +96,10 @@ export const createCompletion = async (rawconversation, sampling: any = null) =>
     if (!sampling) {
       target = messageStore.conversation
 
-      body.messages = promptMessage(conversation, agentStore.getPrompt())
+      body.messages = promptMessage(
+        conversation as ChatCompletionRequestMessage[],
+        agentStore.getPrompt()
+      )
 
       if (chatbotStore.maxTokensValue) {
         body[chatbotStore.maxTokensType] = parseInt(chatbotStore.maxTokensValue)
@@ -112,7 +121,7 @@ export const createCompletion = async (rawconversation, sampling: any = null) =>
       }
     } else {
       target = sampling.target
-      const msg = rawconversation.map((item) => ({
+      const msg = (rawconversation as McpSamplingMessage[]).map((item) => ({
         role: item.role,
         content: [mcpStore.convertItem(item.content)]
       }))

@@ -1,5 +1,9 @@
 import { defineStore } from 'pinia'
 import type { MCPAPI } from '@/preload/types'
+import type {
+  ChatCompletionRequestContent,
+  ChatCompletionPromptMessage
+} from '@/renderer/types/message'
 
 type McpPrimitiveType = 'tools' | 'resources' | 'prompts' | 'config'
 type AllowedPrimitive = Exclude<McpPrimitiveType, 'config'>
@@ -261,7 +265,9 @@ export const useMcpStore = defineStore('mcpStore', {
       const result = await this.getServers()[tool.server].tools.call(params)
       return result
     },
-    convertItem: function (item) {
+    convertItem: function (
+      item: ChatCompletionPromptMessage['content']
+    ): ChatCompletionRequestContent {
       if (item.type === 'text') {
         return item
       } else if (item.type === 'image') {
