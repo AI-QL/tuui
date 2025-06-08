@@ -1,6 +1,22 @@
-import { z } from 'zod'
+import { z, ZodTypeAny } from 'zod'
 
 import { TextContentSchema as TextContentPartSchema } from '@modelcontextprotocol/sdk/types'
+
+type Primitive = string | number | boolean | bigint | null | undefined
+type Flatten<T> = T extends Primitive
+  ? T
+  : T extends Array<infer U>
+    ? Array<Flatten<U>>
+    : T extends Set<infer U>
+      ? Set<Flatten<U>>
+      : T extends Map<infer K, infer V>
+        ? Map<Flatten<K>, Flatten<V>>
+        : T extends object
+          ? {
+              [K in keyof T]: Flatten<T[K]>
+            }
+          : T
+type Infer<Schema extends ZodTypeAny> = Flatten<z.infer<Schema>>
 
 const TextContent = z.string()
 
@@ -79,16 +95,16 @@ const ChatCompletionResponseMessageSchema = z.object({
   role: z.literal('assistant')
 })
 
-export type ToolCall = z.infer<typeof ToolCallSchema>
+export type ToolCall = Infer<typeof ToolCallSchema>
 // type SystemMessage = Infer<typeof SystemMessageSchema>
 // type UserMessage = Infer<typeof UserMessageSchema>
-export type AssistantMessage = z.infer<typeof AssistantMessageSchema>
+export type AssistantMessage = Infer<typeof AssistantMessageSchema>
 // type ToolMessage = Infer<typeof ToolMessageSchema>
 
 // type TextContentPart = Infer<typeof TextContentPartSchema>;
 // type RefusalContentPart = Infer<typeof RefusalContentPartSchema>
 // type ImageContentPart = Infer<typeof ImageContentPartSchema>
 
-export type ChatCompletionRequestMessage = z.infer<typeof ChatCompletionRequestMessageSchema>
+export type ChatCompletionRequestMessage = Infer<typeof ChatCompletionRequestMessageSchema>
 
-export type ChatCompletionResponseMessage = z.infer<typeof ChatCompletionResponseMessageSchema>
+export type ChatCompletionResponseMessage = Infer<typeof ChatCompletionResponseMessageSchema>
