@@ -3,8 +3,8 @@ import { ref, computed, watch } from 'vue'
 import { listenSampling, sendResponse } from '@/renderer/utils'
 import { useSnackbarStore } from '@/renderer/store/snackbar'
 import { useChatbotStore } from '@/renderer/store/chatbot'
-import { MessageEntry } from '@/renderer/store/history'
 import { createCompletion } from '@/renderer/composables/chatCompletions'
+import type { ChatCompletionResponseMessage } from '@/renderer/types/message'
 
 const snackbarStore = useSnackbarStore()
 
@@ -16,7 +16,7 @@ const samplingDialog = ref(false)
 
 const samplingParams = ref({})
 
-const samplingResults = ref<MessageEntry[]>([])
+const samplingResults = ref<ChatCompletionResponseMessage[]>([])
 
 const samplingChannel = ref('')
 
@@ -79,7 +79,10 @@ const finishSampling = (index: number) => {
     role: bestResponse?.role || 'assistant',
     content: {
       type: 'text',
-      text: bestResponse?.content || `No response from model ${chatbotStore.model}`
+      text:
+        bestResponse?.content ||
+        bestResponse?.reasoning_content ||
+        `No response from model ${chatbotStore.model}`
     }
   }
   sendResponse(samplingChannel.value, response)

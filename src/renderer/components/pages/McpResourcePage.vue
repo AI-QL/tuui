@@ -44,9 +44,16 @@ const resourceStore = useResourceStore()
           <v-expansion-panel
             v-for="item in items as any"
             :key="item.raw.uri + ':' + item.raw.name"
-            :text="JSON.stringify(item.raw)"
             :title="item.raw.name + ' - ' + item.raw.uri"
           >
+            <v-expansion-panel-text>
+              <v-textarea
+                :model-value="JSON.stringify(item.raw, null, 2)"
+                variant="plain"
+                auto-grow
+                readonly
+              ></v-textarea>
+            </v-expansion-panel-text>
           </v-expansion-panel>
         </v-expansion-panels>
       </v-container>

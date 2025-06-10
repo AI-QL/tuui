@@ -60,7 +60,10 @@ const SystemMessageSchema = z.object({
 })
 
 const UserMessageSchema = z.object({
-  content: z.union([TextContent, z.array(TextContentPartSchema), z.array(ImageContentPartSchema)]),
+  content: z.union([
+    TextContent,
+    z.array(z.union([TextContentPartSchema, ImageContentPartSchema]))
+  ]),
   role: z.literal('user'),
   name: z.string().optional()
 })
@@ -68,8 +71,7 @@ const UserMessageSchema = z.object({
 const AssistantMessageSchema = z.object({
   content: z.union([
     TextContent,
-    z.array(TextContentPartSchema),
-    z.array(RefusalContentPartSchema)
+    z.array(z.union([TextContentPartSchema, RefusalContentPartSchema]))
   ]),
   reasoning_content: z.string().optional(),
   tool_calls: z.array(ToolCallSchema).optional(),
@@ -84,6 +86,12 @@ const ToolMessageSchema = z.object({
 })
 
 const ChatCompletionRequestMessageSchema = z.union([
+  UserMessageSchema,
+  AssistantMessageSchema,
+  ToolMessageSchema
+])
+
+const ChatCompletionMessageSchema = z.union([
   SystemMessageSchema,
   UserMessageSchema,
   AssistantMessageSchema,
@@ -101,9 +109,9 @@ const ChatCompletionResponseMessageSchema = z.object({
 
 export type ToolCall = Infer<typeof ToolCallSchema>
 // type SystemMessage = Infer<typeof SystemMessageSchema>
-// type UserMessage = Infer<typeof UserMessageSchema>
+export type UserMessage = Infer<typeof UserMessageSchema>
 export type AssistantMessage = Infer<typeof AssistantMessageSchema>
-// type ToolMessage = Infer<typeof ToolMessageSchema>
+export type ToolMessage = Infer<typeof ToolMessageSchema>
 
 type TextContentPart = Infer<typeof TextContentPartSchema>
 // type RefusalContentPart = Infer<typeof RefusalContentPartSchema>
@@ -128,3 +136,7 @@ export type ChatCompletionRequestMessage = Infer<typeof ChatCompletionRequestMes
 export type ChatCompletionPromptMessage = PromptMessage
 
 export type ChatCompletionResponseMessage = Infer<typeof ChatCompletionResponseMessageSchema>
+
+export type ChatCompletionMessage = Infer<typeof ChatCompletionMessageSchema>
+
+export type ChatConversationMessage = ChatCompletionRequestMessage | ChatCompletionResponseMessage

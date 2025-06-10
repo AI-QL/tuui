@@ -9,10 +9,11 @@ import type {
   ToolCall,
   McpSamplingMessage,
   ChatCompletionRequestMessage,
-  ChatCompletionResponseMessage
+  ChatCompletionMessage,
+  ChatConversationMessage
 } from '@/renderer/types/message'
 
-type ChatCompletionMessage = ChatCompletionRequestMessage | McpSamplingMessage
+type RequestMessageType = ChatCompletionRequestMessage | McpSamplingMessage
 
 const isObjectEmpty = (obj?: Record<string, unknown>): boolean => {
   return !!obj && Object.keys(obj).length === 0
@@ -35,7 +36,7 @@ export const isEmptyTools = (tools: any): boolean => {
 const promptMessage = (
   conversation: ChatCompletionRequestMessage[],
   systemPrompt: string | null
-): ChatCompletionRequestMessage[] => {
+): ChatCompletionMessage[] => {
   if (systemPrompt) {
     return [{ content: systemPrompt, role: 'system' }, ...conversation]
   } else {
@@ -44,7 +45,7 @@ const promptMessage = (
 }
 
 export const createCompletion = async (
-  rawconversation: ChatCompletionMessage[],
+  rawconversation: RequestMessageType[],
   sampling: any = null
 ) => {
   const snackbarStore = useSnackbarStore()
@@ -73,7 +74,7 @@ export const createCompletion = async (
       newConversation.push(item)
     }
     return newConversation
-  }, [] as ChatCompletionMessage[])
+  }, [] as RequestMessageType[])
   // const conversation = rawconversation
   try {
     messageStore.generating = true
@@ -91,7 +92,7 @@ export const createCompletion = async (
       stream: chatbotStore.stream
     }
 
-    let target: ChatCompletionResponseMessage[]
+    let target: ChatConversationMessage[]
 
     if (!sampling) {
       target = messageStore.conversation

@@ -37,7 +37,6 @@ config({
 })
 
 interface Message {
-  index: number
   role: 'user' | 'assistant' | 'tool'
   content: any
   tool_calls?: any[]
@@ -221,15 +220,11 @@ const groupMessages = computed<Group[]>(() => {
             :show-copy="false"
             :index="group.index"
             :range="group.messages!.length"
+            @delete-messages="handleDeleteMessages"
           >
-            <v-tabs
-              v-model="dialogs[group.tab!]"
-              :items="group.messages"
-              show-arrows
-              @delete-messages="handleDeleteMessages"
-            >
+            <v-tabs v-model="dialogs[group.tab!]" :items="group.messages" show-arrows>
               <template #tab="{ item }">
-                <v-tab :text="item.index" :value="item.index">
+                <v-tab :text="item.role" :value="item">
                   <v-icon
                     v-if="item.role === 'tool'"
                     icon="mdi-arrow-left-bold-circle"
@@ -243,7 +238,7 @@ const groupMessages = computed<Group[]>(() => {
                 </v-tab>
               </template>
               <template #item="{ item }">
-                <v-tabs-window-item :value="item.index">
+                <v-tabs-window-item :value="item">
                   <v-card v-if="item.role === 'tool'" class="mt-1" variant="flat">
                     <v-card-item prepend-icon="mdi-chevron-left">
                       <v-card-subtitle>

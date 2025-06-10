@@ -4,13 +4,26 @@ import { useMcpStore } from '@/renderer/store/mcp'
 import { useHistoryStore } from '@/renderer/store/history'
 import { createCompletion, isEmptyTools } from '@/renderer/composables/chatCompletions'
 
+import type {
+  ToolCall,
+  ToolMessage,
+  UserMessage,
+  ChatConversationMessage
+} from '@/renderer/types/message'
+
+interface MessageStoreState {
+  userMessage: string
+  conversation: ChatConversationMessage[]
+  historyId: string
+  base64: string
+  generating: boolean
+}
+
 export const useMessageStore = defineStore('messageStore', {
-  // TODO: fix any to type
-  state: (): any => ({
+  state: (): MessageStoreState => ({
     userMessage: '',
     conversation: [],
     historyId: '',
-    images: [],
     base64: '',
     generating: false
   }),
@@ -35,7 +48,6 @@ export const useMessageStore = defineStore('messageStore', {
     },
     clear() {
       this.userMessage = ''
-      this.images = []
     },
     handleKeydown(e) {
       if (e.key === 'Enter' && e.shiftKey) {
@@ -105,48 +117,50 @@ export const useMessageStore = defineStore('messageStore', {
     postToolCall: async function () {
       const mcpStore = useMcpStore()
       const last = this.conversation.at(-1)
-      if (!last || !last.tool_calls) {
+
+      if (!last || !('tool_calls' in last) || !last.tool_calls) {
         return
       }
+
       if (isEmptyTools(last.tool_calls)) {
         delete last.tool_calls
-        //   return
-      } else {
-        let toolCalled = false
-        console.log(last.tool_calls)
+        return
+      }
 
-        const callNextTool = async (toolCalls, index) => {
-          if (index >= toolCalls.length) {
-            return
-          }
+      let toolCalled = false
+      console.log(last.tool_calls)
 
-          const toolCall = toolCalls[index]
-
-          let result
-
-          try {
-            result = await mcpStore.callTool(toolCall.function.name, toolCall.function.arguments)
-            console.log(result)
-          } catch (error) {
-            result = mcpStore.packReturn(`Error calling tool: ${error}`)
-          }
-
-          if (result.content) {
-            this.contentConvert(result.content, toolCall.id).forEach((item) => {
-              this.conversation.push(item)
-            })
-            toolCalled = true
-          }
+      const callNextTool = async (toolCalls: ToolCall[], index: number) => {
+        if (index >= toolCalls.length) {
+          return
         }
 
-        await callNextTool(last.tool_calls, 0)
+        const toolCall = toolCalls[index]
 
-        if (toolCalled) {
-          this.startInference()
+        let result
+
+        try {
+          result = await mcpStore.callTool(toolCall.function.name, toolCall.function.arguments)
+          console.log(result)
+        } catch (error) {
+          result = mcpStore.packReturn(`Error calling tool: ${error}`)
+        }
+
+        if (result.content) {
+          this.contentConvert(result.content, toolCall.id).forEach((item) => {
+            this.conversation.push(item)
+          })
+          toolCalled = true
         }
       }
+
+      await callNextTool(last.tool_calls, 0)
+
+      if (toolCalled) {
+        this.startInference()
+      }
     },
-    contentConvert: function (content, toolCallId) {
+    contentConvert: function (content, toolCallId): Array<UserMessage | ToolMessage> {
       const mcpStore = useMcpStore()
       const msg = content.map((item) => mcpStore.convertItem(item))
       console.log(msg)

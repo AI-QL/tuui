@@ -3,22 +3,22 @@ import localForage from 'localforage'
 import { v4 as uuidv4 } from 'uuid'
 import { useMessageStore } from '@/renderer/store/message'
 
-type ConversationID = string
+import type { ChatConversationMessage } from '@/renderer/types/message'
 
-export type MessageEntry = {
-  role: string
-  content: any
-  reasoning_content?: string
-  [key: string]: any
-}
+type ConversationID = string
 
 type ConversationEntry = {
   id: ConversationID
-  messages: MessageEntry[]
+  messages: ChatConversationMessage[]
+}
+
+interface HistoryStoreState {
+  selected: ConversationID[] | undefined
+  conversation: ConversationEntry[]
 }
 
 export const useHistoryStore = defineStore('historyStore', {
-  state: () => ({
+  state: (): HistoryStoreState => ({
     selected: undefined as ConversationID[] | undefined,
     conversation: [] as ConversationEntry[]
   }),
@@ -38,7 +38,7 @@ export const useHistoryStore = defineStore('historyStore', {
     deleteById(index: number) {
       this.conversation.splice(index, 1)
     },
-    init(conversation: MessageEntry[]) {
+    init(conversation: ChatConversationMessage[]) {
       const newId = this.getDate()
       this.conversation.unshift({
         id: newId,
@@ -76,7 +76,7 @@ export const useHistoryStore = defineStore('historyStore', {
     downloadHistory() {
       this.download(this.conversation, 'history.json')
     },
-    download(json, filename) {
+    download(json: ChatConversationMessage[] | ConversationEntry[], filename: string) {
       const blob = new Blob([JSON.stringify(json, null, 2)], { type: 'application/json' })
       const url = URL.createObjectURL(blob)
       const a = document.createElement('a')
