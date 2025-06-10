@@ -4,12 +4,9 @@
       "command": "npx",
       "args": ["-y", "@modelcontextprotocol/server-everything"]
     },
-    "sequential-thinking": {
+    "tuui Docs": {
       "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-sequential-thinking"],
-      "env": {
-        "TEST_ENV": "USED_FOR_TEST"
-      }
+      "args": ["mcp-remote", "https://gitmcp.io/AI-QL/tuui"]
     },
     "antvis-chart": {
       "command": "npx",
