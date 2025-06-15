@@ -265,7 +265,7 @@ const validateNumberRange = (min: number, max: number) => {
         </template>
         <v-btn-toggle
           class="mt-0"
-          color="primary"
+          color="info"
           :model-value="config.reasoningEffort"
           variant="plain"
           @update:model-value="(v) => handleUpdate('reasoningEffort', v)"

@@ -116,7 +116,7 @@ const groupMessages = computed<Group[]>(() => {
     <div v-if="group.group === 'user'">
       <div class="px-2 py-5 chat-message">
         <div class="message">
-          <v-avatar class="mt-3 mr-3 mr-lg-6" color="primary" icon="mdi-account-circle" />
+          <v-avatar class="mt-2 mr-3 mr-lg-6" color="primary" icon="mdi-account-circle" />
           <chat-card
             :index="group.index"
             :messages="messages"
@@ -163,7 +163,7 @@ const groupMessages = computed<Group[]>(() => {
     <div v-if="group.group === 'assistant'">
       <div class="px-2 py-5 chat-message">
         <div class="message">
-          <v-avatar class="mt-3 mr-3 mr-lg-6" color="teal" icon="mdi-lightning-bolt-circle" />
+          <v-avatar class="mt-2 mr-3 mr-lg-6" color="teal" icon="mdi-lightning-bolt-circle" />
           <chat-card
             :index="group.index"
             :messages="messages"
@@ -214,7 +214,7 @@ const groupMessages = computed<Group[]>(() => {
     <div v-if="group.group === 'tool'">
       <div class="px-2 py-5 chat-message">
         <div class="message">
-          <v-avatar class="mt-3 mr-3 mr-lg-6" color="brown" icon="mdi-swap-vertical-circle" />
+          <v-avatar class="mt-2 mr-3 mr-lg-6" color="brown" icon="mdi-swap-vertical-circle" />
           <chat-card
             :messages="messages"
             :show-copy="false"
