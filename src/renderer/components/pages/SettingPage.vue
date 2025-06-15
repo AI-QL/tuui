@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
-import { ChatbotConfig } from '@/renderer/types'
+import { ChatbotConfig, REASONING_EFFORT } from '@/renderer/types'
 import { useI18n } from 'vue-i18n'
 import { useLayoutStore } from '@/renderer/store/layout'
 import { v4 as uuidv4 } from 'uuid'
@@ -211,7 +211,7 @@ const validateNumberRange = (min: number, max: number) => {
 
   <v-card class="mx-auto mt-4" :title="$t('setting.title-model')">
     <v-divider></v-divider>
-    <v-card-text class="pt-6">
+    <v-card-text class="py-6">
       <v-row class="px-3 my-0">
         <v-combobox
           class="px-2"
@@ -259,6 +259,20 @@ const validateNumberRange = (min: number, max: number) => {
         >
         </v-combobox>
       </v-row>
+      <v-field class="ml-2 d-inline-flex" dirty variant="outlined">
+        <template #label>
+          <div>{{ $t('setting.reasoningEffort') }}</div>
+        </template>
+        <v-btn-toggle
+          class="mt-0"
+          color="primary"
+          :model-value="config.reasoningEffort"
+          variant="plain"
+          @update:model-value="(v) => handleUpdate('reasoningEffort', v)"
+        >
+          <v-btn v-for="level in REASONING_EFFORT">{{ level }}</v-btn>
+        </v-btn-toggle>
+      </v-field>
     </v-card-text>
   </v-card>
 </template>

@@ -27,6 +27,7 @@ export interface ChatbotConfig {
   method: string
   contentType: string
   stream: boolean
+  reasoningEffort: number | null
   mcp: boolean
 }
 
@@ -35,10 +36,10 @@ export const CHATBOT_DEFAULTS = {
   apiKey: '',
   apiCli: '',
 
-  url: 'https://ai.aiql.com',
-  urlList: ['https://ai.aiql.com'],
+  url: 'https://api2.aiql.com',
+  urlList: ['https://api2.aiql.com'],
 
-  path: '/v1/chat/completions',
+  path: '/chat/completions',
   pathList: [
     '/chat/completions',
     '/v1/chat/completions',
@@ -46,8 +47,8 @@ export const CHATBOT_DEFAULTS = {
     '/openai/v1/chat/completions'
   ],
 
-  model: 'meta-llama/Llama-3.3-70B-Instruct',
-  modelList: ['meta-llama/Llama-3.3-70B-Instruct'],
+  model: 'Qwen/Qwen3-32B',
+  modelList: ['Qwen/Qwen3-32B', 'Qwen/Qwen3-30B-A3B'],
 
   authPrefix: 'Bearer',
   authPrefixList: ['Bearer', 'Base', 'Token'],
@@ -62,6 +63,7 @@ export const CHATBOT_DEFAULTS = {
   method: 'POST',
   contentType: 'application/json',
   stream: true,
+  reasoningEffort: null,
   mcp: true
 }
 
@@ -86,6 +88,8 @@ export const CHATBOT_DEEPINFRA = {
   urlList: ['https://api.deepinfra.com'],
   path: '/v1/openai/chat/completions',
   name: 'DeepInfra',
-  model: 'gpt-4-turbo',
-  modelList: ['gpt-4-turbo', 'gpt-4.1', 'gpt-4o', 'o1']
+  model: 'Qwen/Qwen3-32B',
+  modelList: ['Qwen/Qwen3-32B', 'Qwen/Qwen3-30B-A3B', 'meta-llama/Llama-3.3-70B-Instruct']
 }
+
+export const REASONING_EFFORT = ['none', 'low', 'medium', 'high']

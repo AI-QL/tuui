@@ -65,6 +65,7 @@
     "maxTokensPrefix": "Max Tokens Prefix",
     "temperature": "Temperature",
     "topP": "Top P",
+    "reasoningEffort": "Reasoning Effort",
     "contentType": "Content Type",
     "authPrefix": "Auth Prefix",
     "configFile": "Config File"

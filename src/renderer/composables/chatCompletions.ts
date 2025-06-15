@@ -13,6 +13,8 @@ import type {
   ChatConversationMessage
 } from '@/renderer/types/message'
 
+import { REASONING_EFFORT } from '@/renderer/types'
+
 type RequestMessageType = ChatCompletionRequestMessage | McpSamplingMessage
 
 const isObjectEmpty = (obj?: Record<string, unknown>): boolean => {
@@ -90,6 +92,10 @@ export const createCompletion = async (
     const body: any = {
       model: chatbotStore.model,
       stream: chatbotStore.stream
+    }
+
+    if (typeof chatbotStore.reasoningEffort === 'number') {
+      body['reasoning_effort'] = REASONING_EFFORT[chatbotStore.reasoningEffort]
     }
 
     let target: ChatConversationMessage[]
@@ -274,10 +280,13 @@ const parseChoice = (choice: AssistantMessage, target: AssistantMessage) => {
     if (target.role === 'assistant') {
       if (typeof choice === 'string') {
         target.content += choice
-      } else if (typeof choice.content === 'string') {
-        target.content += choice.content
-      } else if (typeof choice.reasoning_content === 'string') {
-        target.reasoning_content += choice.reasoning_content
+      } else {
+        if (typeof choice.content === 'string') {
+          target.content += choice.content
+        }
+        if (typeof choice.reasoning_content === 'string') {
+          target.reasoning_content += choice.reasoning_content
+        }
       }
       parseTool(choice.tool_calls, target)
     }
