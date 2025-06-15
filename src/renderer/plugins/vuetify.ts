@@ -32,8 +32,21 @@ export default createVuetify({
       light: {
         dark: false,
         colors: {
-          primary: colors.blue.darken3, // #1565C0
-          secondary: colors.indigo.darken3 // #283593
+          primary: '#344767',
+          background: '#FFFFFF',
+          surface: '#FFFFFF',
+          secondary: '#2B323B',
+          'grey-0': '#F2F5F8',
+          'grey-50': '#FAFAFA',
+          'grey-100': '#F5F5F5',
+          'grey-200': '#EEEEEE',
+          'grey-300': '#E0E0E0',
+          'grey-400': '#BDBDBD',
+          'grey-500': '#9E9E9E',
+          'grey-600': '#757575',
+          'grey-700': '#616161',
+          'grey-800': '#424242',
+          'grey-900': '#212121'
         }
       },
       dark: {

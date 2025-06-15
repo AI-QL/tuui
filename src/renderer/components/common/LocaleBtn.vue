@@ -30,7 +30,7 @@ const handleChangeLanguage = (val): void => {
           density="compact"
           rounded="lg"
           v-tooltip:start="$t('locale.title')"
-          icon="mdi-translate"
+          icon="mdi-earth"
           v-bind="props"
         >
         </v-btn>

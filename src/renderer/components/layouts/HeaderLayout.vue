@@ -5,13 +5,13 @@ import { useLayoutStore, getScreenFromPath } from '@/renderer/store/layout'
 // import { useTheme } from 'vuetify'
 import LocaleBtn from '@/renderer/components/common/LocaleBtn.vue'
 import { useRouteFeatures } from '@/renderer/composables/useRouteFeatures'
-import { useMcpStore } from '@/renderer/store/mcp'
+// import { useMcpStore } from '@/renderer/store/mcp'
 
 const { titleKey, hasComponent } = useRouteFeatures()
 
 // const { hasComponent } = useRouteFeatures()
 
-const mcpStore = useMcpStore()
+// const mcpStore = useMcpStore()
 
 const layoutStore = useLayoutStore()
 
@@ -32,9 +32,9 @@ watchEffect(() => {
 // }
 </script>
 <template>
-  <v-app-bar block :order="-1" color="primary" height="36" rounded="be-lg">
+  <v-app-bar class="drag" block :order="-1" color="primary" height="36" rounded="be-lg">
     <v-app-bar-nav-icon
-      class="ml-2"
+      class="ml-2 no-drag"
       density="compact"
       rounded="lg"
       :disabled="!hasComponent('sideDrawer').value"
@@ -44,6 +44,7 @@ watchEffect(() => {
     <v-app-bar-title class="text-button">{{ $t(titleKey.toString()) }}</v-app-bar-title>
 
     <v-btn-toggle
+      class="no-drag"
       v-model="layoutStore.screen"
       data-testid="main-menu"
       mandatory
@@ -70,7 +71,7 @@ watchEffect(() => {
     <v-spacer></v-spacer>
 
     <template #append>
-      <LocaleBtn data-testid="select-language" />
+      <LocaleBtn class="no-drag" data-testid="select-language" />
 
       <!-- <v-btn icon @click="handleChangeTheme">
         <v-icon icon="mdi-brightness-6" />
@@ -79,15 +80,23 @@ watchEffect(() => {
         </v-tooltip>
       </v-btn> -->
       <!-- @click="mcpStore.listTools().then((tools) => console.log(tools))" -->
-      <v-btn
+      <!-- <v-btn
         class="ma-1"
         density="compact"
         rounded="lg"
         icon="mdi-clipboard-text"
         @click="console.log(mcpStore.getServers())"
       >
-      </v-btn>
+      </v-btn> -->
+      <v-col style="flex: 0 0 130px"></v-col>
     </template>
   </v-app-bar>
 </template>
-<style scoped></style>
+<style scoped>
+.drag {
+  app-region: drag;
+}
+.no-drag {
+  app-region: no-drag;
+}
+</style>

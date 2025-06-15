@@ -13,7 +13,7 @@ import { loadConfig } from './mcp/init'
 const options = {
   width: Constants.IS_DEV_ENV ? 1500 : 1280,
   height: 960,
-  minWidth: 720,
+  minWidth: 960,
   minHeight: 480,
   tray: {
     // all optional values from DEFAULT_TRAY_OPTIONS can de defined here
@@ -41,7 +41,17 @@ export const createMainWindow = async (): Promise<BrowserWindow> => {
     minHeight: options.minHeight,
     useContentSize: true,
     webPreferences: Constants.DEFAULT_WEB_PREFERENCES,
-    frame: true
+    frame: true,
+    ...(process.platform == 'win32'
+      ? {
+          titleBarStyle: 'hidden',
+          titleBarOverlay: {
+            color: '#344767',
+            symbolColor: 'white',
+            height: 36
+          }
+        }
+      : {})
   }
   const trayOptions: TrayOptions = options.tray?.enabled
     ? {
