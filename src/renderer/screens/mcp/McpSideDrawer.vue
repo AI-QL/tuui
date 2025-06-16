@@ -22,7 +22,7 @@ const mcpStore = useMcpStore()
           <v-btn
             class="mt-1"
             size="small"
-            color="grey-lighten-1"
+            color="primary"
             icon="mdi-cog"
             variant="text"
             @click="console.log((mcpStore.selectedChips[key] = undefined))"
@@ -32,7 +32,6 @@ const mcpStore = useMcpStore()
       <v-chip-group
         v-model="mcpStore.selectedChips[key]"
         :direction="mcpStore.selected?.[0] === key ? 'vertical' : undefined"
-        selected-class="text-primary"
         mandatory
       >
         <v-chip
@@ -40,7 +39,7 @@ const mcpStore = useMcpStore()
           :key="`${key}-${name}`"
           class="mr-1 my-1"
           label
-          color="primary"
+          color="info"
           size="small"
         >
           {{ name }}

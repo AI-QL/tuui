@@ -26,7 +26,9 @@
     "new": "新对话",
     "reg": "重新生成",
     "select-model": "选择模型",
-    "select-agent": "选择智能体"
+    "select-agent": "选择智能体",
+    "delete": "删除聊天历史",
+    "download": "下载聊天历史"
   },
   "agent": {
     "config": "智能体配置",
@@ -36,7 +38,9 @@
     "all": "全部工具",
     "selected": "已选择工具",
     "cancel": "取消",
-    "save": "保存"
+    "save": "保存",
+    "add": "新增智能体",
+    "reset": "重置智能体"
   },
   "prompt": {
     "title": "服务端提示模板",
@@ -68,7 +72,9 @@
     "reasoningEffort": "推理负荷",
     "contentType": "Content Type",
     "authPrefix": "Auth Prefix",
-    "configFile": "Config File"
+    "configFile": "加载配置文件",
+    "add": "新增配置",
+    "reset": "重置配置"
   },
   "validation": {
     "invalid-number": "必须为有效数字",

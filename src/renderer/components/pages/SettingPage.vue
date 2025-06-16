@@ -217,8 +217,8 @@ const validateNumberRange = (min: number, max: number) => {
           class="px-2"
           density="compact"
           :label="$t('setting.maxTokensPrefix')"
-          :items="config.maxTokensTypeList"
-          :model-value="config.maxTokensType"
+          :items="config.maxTokensPrefixList"
+          :model-value="config.maxTokensPrefix"
           variant="outlined"
           @update:model-value="(v) => handleUpdate('maxTokensPrefix', v)"
         >

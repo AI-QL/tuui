@@ -16,18 +16,16 @@ export interface ChatbotConfig {
   authPrefix: string
   authPrefixList: string[]
 
-  maxTokensType: string
-  maxTokensTypeList: string[]
-
+  maxTokensValue?: string
   maxTokensPrefix: string
-  maxTokensValue: string
+  maxTokensPrefixList: string[]
 
-  temperature: string
-  topP: string
+  temperature?: string
+  topP?: string
   method: string
   contentType: string
   stream: boolean
-  reasoningEffort: number | null
+  reasoningEffort?: number
   mcp: boolean
 }
 
@@ -53,17 +51,16 @@ export const CHATBOT_DEFAULTS = {
   authPrefix: 'Bearer',
   authPrefixList: ['Bearer', 'Base', 'Token'],
 
-  maxTokensType: 'max_tokens',
-  maxTokensTypeList: ['max_tokens', 'max_completion_tokens', 'max_new_tokens'],
-
+  maxTokensPrefixList: ['max_tokens', 'max_completion_tokens', 'max_new_tokens'],
   maxTokensPrefix: 'max_tokens',
-  maxTokensValue: '',
-  temperature: '',
-  topP: '',
+  maxTokensValue: undefined,
+
+  temperature: undefined,
+  topP: undefined,
   method: 'POST',
   contentType: 'application/json',
   stream: true,
-  reasoningEffort: null,
+  reasoningEffort: undefined,
   mcp: true
 }
 

@@ -26,7 +26,9 @@
     "new": "New Conversation",
     "reg": "Regeneration",
     "select-model": "Select Model",
-    "select-agent": "Select Agent"
+    "select-agent": "Select Agent",
+    "delete": "Delete History",
+    "download": "Download History"
   },
   "prompt": {
     "title": "Server Prompt",
@@ -40,7 +42,9 @@
     "all": "All tools",
     "selected": "Selected Tools",
     "cancel": "Cancel",
-    "save": "Save"
+    "save": "Save",
+    "add": "Add Agent",
+    "reset": "Reset Agent"
   },
   "sampling": {
     "title": "Sampling",
@@ -68,7 +72,9 @@
     "reasoningEffort": "Reasoning Effort",
     "contentType": "Content Type",
     "authPrefix": "Auth Prefix",
-    "configFile": "Config File"
+    "configFile": "Load Config File",
+    "add": "Add Config",
+    "reset": "Reset Config"
   },
   "validation": {
     "invalid-number": "Should be a valid number",

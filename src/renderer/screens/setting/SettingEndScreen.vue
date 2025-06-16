@@ -32,7 +32,11 @@ watch(configFile, (newValue, _oldValue) => {
 <template>
   <v-container>
     <v-btn-group variant="outlined" divided>
-      <v-btn icon @click="($refs.fileInput as HTMLInputElement).click()">
+      <v-btn
+        icon
+        @click="($refs.fileInput as HTMLInputElement).click()"
+        v-tooltip:top="$t('setting.configFile')"
+      >
         <v-icon>mdi-upload</v-icon>
         <v-file-input
           ref="fileInput"
@@ -44,8 +48,16 @@ watch(configFile, (newValue, _oldValue) => {
         ></v-file-input>
       </v-btn>
 
-      <v-btn icon="mdi-refresh" @click="chatbotStore.resetState"></v-btn>
-      <v-btn icon="mdi-plus" @click="chatbotStore.addChatbot"></v-btn>
+      <v-btn
+        icon="mdi-refresh"
+        @click="chatbotStore.resetState"
+        v-tooltip:top="$t('setting.reset')"
+      ></v-btn>
+      <v-btn
+        icon="mdi-plus"
+        @click="chatbotStore.addChatbot"
+        v-tooltip:top="$t('setting.add')"
+      ></v-btn>
     </v-btn-group>
   </v-container>
 </template>

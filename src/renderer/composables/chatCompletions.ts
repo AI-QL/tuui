@@ -13,9 +13,23 @@ import type {
   ChatConversationMessage
 } from '@/renderer/types/message'
 
+import { Tool } from '@modelcontextprotocol/sdk/types'
+
 import { REASONING_EFFORT } from '@/renderer/types'
 
+interface ChatRequestBody {
+  model?: string
+  stream?: boolean
+  temperature?: number
+  messages?: ChatCompletionMessage[]
+  top_p?: number
+  tools?: Tool[]
+}
+
 type RequestMessageType = ChatCompletionRequestMessage | McpSamplingMessage
+
+const THINK_OPEN = '<think>'
+const THINK_CLOSE = '</think>'
 
 const isObjectEmpty = (obj?: Record<string, unknown>): boolean => {
   return !!obj && Object.keys(obj).length === 0
@@ -81,18 +95,20 @@ export const createCompletion = async (
   try {
     messageStore.generating = true
     // Create a completion (axios is not used here because it does not support streaming)
-    // TODO: fix any
-    const headers: any = {
+
+    const headers: HeadersInit = {
       'Content-Type': chatbotStore.contentType
     }
 
     if (chatbotStore.apiKey)
       headers.Authorization = `${chatbotStore.authPrefix} ${chatbotStore.apiKey}`
 
-    const body: any = {
+    const body: ChatRequestBody = {
       model: chatbotStore.model,
       stream: chatbotStore.stream
     }
+
+    console.log(chatbotStore.reasoningEffort)
 
     if (typeof chatbotStore.reasoningEffort === 'number') {
       body['reasoning_effort'] = REASONING_EFFORT[chatbotStore.reasoningEffort]
@@ -109,7 +125,7 @@ export const createCompletion = async (
       )
 
       if (chatbotStore.maxTokensValue) {
-        body[chatbotStore.maxTokensType] = parseInt(chatbotStore.maxTokensValue)
+        body[chatbotStore.maxTokensPrefix] = parseInt(chatbotStore.maxTokensValue)
       }
 
       if (chatbotStore.temperature) {
@@ -135,7 +151,7 @@ export const createCompletion = async (
       body.messages = promptMessage(msg, sampling.systemPrompt)
       body.temperature = sampling.temperature
       if (sampling.maxTokens) {
-        body[chatbotStore.maxTokensType] = parseInt(sampling.maxTokens)
+        body[chatbotStore.maxTokensPrefix] = parseInt(sampling.maxTokens)
       }
     }
 
@@ -170,6 +186,7 @@ export const createCompletion = async (
     const reader = completion.body?.getReader()
     if (!reader) {
       snackbarStore.showErrorMessage('snackbar.parseStreamFail')
+      return
     }
 
     // Add the bot message
@@ -180,10 +197,14 @@ export const createCompletion = async (
       role: 'assistant'
     })
 
+    // The type of lastItem is guaranteed to be AssistantMessage,
+    // which is the type of the object just pushed into the array
+    const lastItem = target.at(-1)! as AssistantMessage
+
     const buffer = ''
 
     // Read the stream
-    await read(reader, target.at(-1), buffer, chatbotStore.stream)
+    await read(reader, lastItem, buffer, chatbotStore.stream)
   } catch (error: any) {
     snackbarStore.showErrorMessage(error?.message)
   } finally {
@@ -191,7 +212,12 @@ export const createCompletion = async (
   }
 }
 
-const read = async (reader, target, buffer, stream) => {
+const read = async (
+  reader: ReadableStreamDefaultReader<Uint8Array>,
+  target: AssistantMessage,
+  buffer: string,
+  stream: boolean
+) => {
   // TextDecoder is a built-in object that allows you to convert a stream of bytes into a string
   const decoder = new TextDecoder()
   // Destructure the value returned by reader.read()
@@ -222,7 +248,7 @@ const read = async (reader, target, buffer, stream) => {
 
     const last = parts[parts.length - 1]
     if (last && last.length > 0) {
-      buffer = parts.pop()
+      buffer = parts.pop() ?? ''
     }
 
     parts
@@ -250,12 +276,10 @@ const read = async (reader, target, buffer, stream) => {
   return read(reader, target, buffer, stream)
 }
 
-const parseJson = (content, target) => {
+const parseJson = (content, target: AssistantMessage) => {
   try {
     const parsed = JSON.parse(content)
-    // const choice =
     parseChoices(parsed, target)
-    // parseChoice(choice, target)
   } catch (e) {
     console.log(e, content)
     parseChoice(content, target)
@@ -279,10 +303,12 @@ const parseChoice = (choice: AssistantMessage, target: AssistantMessage) => {
   if (choice) {
     if (target.role === 'assistant') {
       if (typeof choice === 'string') {
-        target.content += choice
+        // target.content += choice
+        parseMixedContent(choice, target)
       } else {
         if (typeof choice.content === 'string') {
-          target.content += choice.content
+          // target.content += choice.content
+          parseMixedContent(choice.content, target)
         }
         if (typeof choice.reasoning_content === 'string') {
           target.reasoning_content += choice.reasoning_content
@@ -290,6 +316,24 @@ const parseChoice = (choice: AssistantMessage, target: AssistantMessage) => {
       }
       parseTool(choice.tool_calls, target)
     }
+  }
+}
+
+const parseMixedContent = (chunk: string, target: AssistantMessage) => {
+  // Only cases with a single occurrence of THINK_CLOSE in the response are considered, as the model typically fails to function properly when multiple THINK_CLOSE instances appear.
+
+  const data = (target.content ?? '') + chunk
+  const closeIdx = data.indexOf(THINK_CLOSE)
+  if (closeIdx === -1) {
+    target.content += chunk
+  } else {
+    const openIdx = data.indexOf(THINK_OPEN)
+    const divider = closeIdx + THINK_CLOSE.length
+    const afterThink = data.substring(divider)
+
+    const startIdx = openIdx < 0 ? 0 : openIdx + THINK_OPEN.length
+    target.reasoning_content += data.substring(startIdx, closeIdx).trim()
+    target.content = afterThink.trimStart()
   }
 }
 
