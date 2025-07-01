@@ -42,8 +42,11 @@
     "node": ">=18.0.0"
   },
   "dependencies": {
+    "@el3um4s/run-vbs": "^1.1.2",
     "@mdi/font": "^7.4.47",
     "@modelcontextprotocol/sdk": "^1.13.0",
+    "@nut-tree-fork/nut-js": "^4.2.6",
+    "applescript": "^1.0.0",
     "highlight.js": "^11.11.1",
     "iconify-icon": "^3.0.0",
     "katex": "^0.16.22",

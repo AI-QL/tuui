@@ -7,10 +7,20 @@ import { IpcSamplingEvents } from './mcp/types'
 
 import { responseToRenderer } from './IPCs'
 
+import * as shortcuts from './aid/shortcuts'
+import Commander, { notEditablePrompts } from './aid/commander'
+
 let mainWindow
 let errorWindow
 
 app.setAppUserModelId('TUUI')
+
+const registerShortcuts = () => {
+  shortcuts.registerShortcuts({
+    command: () => Commander.initCommand()
+    // command: () => console.log("hahahahaha"),
+  })
+}
 
 app.on('ready', async () => {
   // Disable special menus on macOS by uncommenting the following, if necessary
@@ -22,6 +32,7 @@ app.on('ready', async () => {
   */
 
   mainWindow = await createMainWindow()
+  registerShortcuts()
 })
 
 app.on('activate', async () => {
