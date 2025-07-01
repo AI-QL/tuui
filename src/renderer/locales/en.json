@@ -8,6 +8,7 @@
     "error": "Unknown Error"
   },
   "mcp": {
+    "file": "Archive File",
     "init": "Init MCP Servers",
     "updated": "MCP Severs Updated"
   },

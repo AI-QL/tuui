@@ -8,6 +8,7 @@
     "error": "未知错误"
   },
   "mcp": {
+    "file": "文件压缩包",
     "init": "初始化 MCP 服务端",
     "updated": "MCP 服务端已更新"
   },
