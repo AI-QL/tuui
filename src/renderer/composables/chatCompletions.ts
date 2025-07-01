@@ -100,8 +100,13 @@ export const createCompletion = async (
       'Content-Type': chatbotStore.contentType
     }
 
-    if (chatbotStore.apiKey)
-      headers.Authorization = `${chatbotStore.authPrefix} ${chatbotStore.apiKey}`
+    if (chatbotStore.apiKey) {
+      if (chatbotStore.authorization) {
+        headers.Authorization = `${chatbotStore.authPrefix} ${chatbotStore.apiKey}`
+      } else {
+        headers['x-api-key'] = chatbotStore.apiKey
+      }
+    }
 
     const body: ChatRequestBody = {
       model: chatbotStore.model,
@@ -111,7 +116,11 @@ export const createCompletion = async (
     console.log(chatbotStore.reasoningEffort)
 
     if (typeof chatbotStore.reasoningEffort === 'number') {
-      body['reasoning_effort'] = REASONING_EFFORT[chatbotStore.reasoningEffort]
+      if (chatbotStore.reasoningEffort === 0) {
+        body['chat_template_kwargs'] = { enable_thinking: false }
+      } else {
+        body['reasoning_effort'] = REASONING_EFFORT[chatbotStore.reasoningEffort]
+      }
     }
 
     let target: ChatConversationMessage[]

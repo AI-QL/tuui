@@ -17,7 +17,7 @@ export interface ChatbotStoreState {
 export const useChatbotStore = defineStore('chatbotStore', {
   state: (): ChatbotStoreState => ({
     chatbots: [
-      { ...CHATBOT_DEFAULTS, name: 'Chatbot Default', mcp: true, reasoningEffort: 0 },
+      { ...CHATBOT_DEFAULTS, name: 'Chatbot Default', mcp: true, reasoningEffort: 1 },
       {
         ...CHATBOT_DEFAULTS,
         ...CHATBOT_QWEN

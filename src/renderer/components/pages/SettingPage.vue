@@ -79,15 +79,32 @@ const validateNumberRange = (min: number, max: number) => {
   <v-card class="mx-auto" :title="$t('setting.title-api')">
     <v-divider></v-divider>
     <v-card-text class="pt-6">
-      <v-text-field
-        density="compact"
-        variant="outlined"
-        :model-value="config.name"
-        class="px-2"
-        :label="$t('setting.name')"
-        @update:model-value="(v) => handleUpdate('name', v)"
-        @blur="!config.name && handleUpdate('name', `Chatbot ${uuidv4()}`)"
-      ></v-text-field>
+      <v-row class="px-2 mr-2">
+        <v-col>
+          <v-text-field
+            density="compact"
+            variant="outlined"
+            :model-value="config.name"
+            :label="$t('setting.name')"
+            @update:model-value="(v) => handleUpdate('name', v)"
+            @blur="!config.name && handleUpdate('name', `Chatbot ${uuidv4()}`)"
+          ></v-text-field>
+        </v-col>
+        <v-checkbox
+          :model-value="config.mcp"
+          :label="$t('setting.mcp')"
+          color="primary"
+          @update:model-value="(v) => handleUpdate('mcp', Boolean(v))"
+        >
+        </v-checkbox>
+        <v-checkbox
+          :model-value="config.stream"
+          :label="$t('setting.stream')"
+          color="primary"
+          @update:model-value="(v) => handleUpdate('stream', Boolean(v))"
+        >
+        </v-checkbox>
+      </v-row>
 
       <!-- API Key -->
       <v-text-field
@@ -115,6 +132,7 @@ const validateNumberRange = (min: number, max: number) => {
           </v-icon-btn>
         </template>
       </v-text-field>
+
       <v-dialog v-model="apiDialog" width="auto">
         <v-card
           width="50vw"
@@ -147,31 +165,31 @@ const validateNumberRange = (min: number, max: number) => {
         </v-card>
       </v-dialog>
 
-      <v-row class="px-2 mr-2">
+      <v-row class="px-2">
+        <v-switch
+          class="mt-0 mb-6 ml-4"
+          v-tooltip:start="$t('setting.authHeader')"
+          :label="config.authorization ? 'Authorization' : 'X-Api-Key'"
+          color="info"
+          base-color="primary"
+          hide-details
+          inset
+          :model-value="config.authorization"
+          @update:model-value="(v) => handleUpdate('authorization', Boolean(v))"
+        >
+        </v-switch>
         <v-col>
           <v-combobox
+            :disabled="!config.authorization"
             density="compact"
             :label="$t('setting.authPrefix')"
             :items="config.authPrefixList"
             :model-value="config.authPrefix"
+            @update:model-value="(v) => handleUpdate('authPrefix', v)"
             variant="outlined"
           >
           </v-combobox>
         </v-col>
-        <v-checkbox
-          :model-value="config.mcp"
-          :label="$t('setting.mcp')"
-          color="primary"
-          @update:model-value="(v) => handleUpdate('mcp', Boolean(v))"
-        >
-        </v-checkbox>
-        <v-checkbox
-          :model-value="config.stream"
-          :label="$t('setting.stream')"
-          color="primary"
-          @update:model-value="(v) => handleUpdate('stream', Boolean(v))"
-        >
-        </v-checkbox>
       </v-row>
 
       <!-- URL -->

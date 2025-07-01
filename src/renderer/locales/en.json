@@ -71,6 +71,7 @@
     "topP": "Top P",
     "reasoningEffort": "Reasoning Effort",
     "contentType": "Content Type",
+    "authHeader": "Auth Header",
     "authPrefix": "Auth Prefix",
     "configFile": "Load Config File",
     "add": "Add Config",

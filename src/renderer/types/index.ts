@@ -26,6 +26,7 @@ export interface ChatbotConfig {
   contentType: string
   stream: boolean
   reasoningEffort?: number
+  authorization: boolean
   mcp: boolean
 }
 
@@ -61,6 +62,7 @@ export const CHATBOT_DEFAULTS = {
   contentType: 'application/json',
   stream: true,
   reasoningEffort: undefined,
+  authorization: true,
   mcp: true
 }
 
@@ -89,4 +91,4 @@ export const CHATBOT_DEEPINFRA = {
   modelList: ['Qwen/Qwen3-32B', 'Qwen/Qwen3-30B-A3B', 'meta-llama/Llama-3.3-70B-Instruct']
 }
 
-export const REASONING_EFFORT = ['none', 'low', 'medium', 'high']
+export const REASONING_EFFORT = ['false', 'none', 'low', 'medium', 'high']

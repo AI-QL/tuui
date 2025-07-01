@@ -65,6 +65,13 @@ watch(
   }
 )
 
+watch(
+  () => mcpStore.version,
+  (_val) => {
+    load()
+  }
+)
+
 onMounted(() => {
   load()
 })

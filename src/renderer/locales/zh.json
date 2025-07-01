@@ -71,7 +71,8 @@
     "topP": "核采样",
     "reasoningEffort": "推理负荷",
     "contentType": "Content Type",
-    "authPrefix": "Auth Prefix",
+    "authHeader": "鉴权头",
+    "authPrefix": "鉴权前缀",
     "configFile": "加载配置文件",
     "add": "新增配置",
     "reset": "重置配置"
