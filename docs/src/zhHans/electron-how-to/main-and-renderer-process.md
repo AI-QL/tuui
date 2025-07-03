@@ -29,7 +29,6 @@ rendererPlugin({
 默认情况下，WebSecurity功能（定义在`DEFAULT_WEB_PREFERENCES`）会启用生产级安全防护。但在后端开发/调试过程中：
 
 - 若出现以下情况可临时关闭webSecurity：
-
   - 后端未配置CORS响应头（如Access-Control-Allow-Origin等）
 
   - OPTIONS预检请求被302重定向（非标准处理方式）
