@@ -43,12 +43,17 @@ export default class Utils {
   static async openFile(type: string): Promise<any> {
     return window.mainApi.invoke('msgOpenFile', type)
   }
+
+  static async sendFileToMain(file: { name: string; data: ArrayBuffer }): Promise<void> {
+    await window.mainApi.send('msgSendFile', file)
+  }
 }
 
 export const {
   getCurrentLocale,
   openExternal,
   openFile,
+  sendFileToMain,
   getApiToken,
   initAllMcpServers,
   listenStdioProgress,

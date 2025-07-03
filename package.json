@@ -42,6 +42,7 @@
     "node": ">=22.12.0"
   },
   "dependencies": {
+    "@anthropic-ai/dxt": "^0.2.0",
     "@el3um4s/run-vbs": "^1.1.2",
     "@mdi/font": "^7.4.47",
     "@modelcontextprotocol/sdk": "^1.13.3",

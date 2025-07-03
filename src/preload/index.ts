@@ -6,6 +6,7 @@ const mainAvailChannels: string[] = [
   'msgRequestGetVersion',
   'msgOpenExternalLink',
   'msgOpenFile',
+  'msgSendFile',
   'msgGetApiToken',
   'msgInitAllMcpServers',
   'msgWindowReload'

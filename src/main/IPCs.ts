@@ -5,10 +5,13 @@ import { capabilitySchemas, ClientObj, ConfigObj } from './mcp/types'
 import { manageRequests } from './mcp/client'
 
 import { spawn } from 'child_process'
+import { existsSync, mkdirSync, writeFileSync, readFileSync } from 'fs'
+import { promises as fsPromise } from 'fs'
 
 import { initClients } from './mcp/init'
 import { disconnect } from './mcp/connection'
 import { loadConfig } from './mcp/init'
+import { unpackDxt, getManifest } from './mcp/dxt'
 
 const handlerRegistry = new Map<string, Function>()
 
@@ -125,6 +128,25 @@ export default class IPCs {
         filters
       })
       return dialogResult
+    })
+
+    ipcMain.on('msgSendFile', async (event: IpcMainEvent, { name, data }) => {
+      const buffer = Buffer.from(data)
+      const saveOption = Constants.getDxtSource(name)
+      const filePath = saveOption.dxtPath
+      const dirPath = saveOption.outputDir
+      if (!existsSync(dirPath)) {
+        mkdirSync(dirPath, { recursive: true })
+      }
+      console.log('DXT to be saved in: ', filePath)
+
+      writeFileSync(filePath, buffer, { encoding: null })
+
+      console.log(saveOption)
+      await unpackDxt(saveOption)
+      console.log(getManifest(dirPath))
+
+      event.reply('file-upload-reply', { success: true, path: saveOption.outputDir })
     })
   }
 

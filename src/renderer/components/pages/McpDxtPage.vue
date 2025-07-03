@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
+import { sendFileToMain } from '@/renderer/utils'
 
 const files = ref([] as File[])
 
@@ -12,35 +13,14 @@ const processFiles = async () => {
   const file = files.value[0]
 
   const arrayBuffer = await file.arrayBuffer()
-  const uint8Array = new Uint8Array(arrayBuffer)
 
-  console.log(file.name, uint8Array)
+  sendFileToMain({
+    name: file.name,
+    data: arrayBuffer
+  })
 
-  //
-  // window.electronAPI.sendFileToMain({
-  //   name: file.name,
-  //   uint8Array,
-  // });
-
-  //   contextBridge.exposeInMainWorld('electronAPI', {
-  //   sendFileToMain: (file) => ipcRenderer.send('file-upload', file),
-  // });
-
-  // ipcMain.on('file-upload', (event, { name, uint8Array }) => {
-  //   const buffer = Buffer.from(uint8Array);
-  //   const cachePath = app.getPath('cache');
-  //   const savePath = path.join(cachePath, name);
-  //   fs.writeFile(savePath, buffer, (err) => {
-  //     if (err) {
-  //       console.error(err);
-  //       event.reply('file-upload-reply', { success: false, error: err.message });
-  //     } else {
-  //       event.reply('file-upload-reply', { success: true, path: savePath });
-  //     }
-  //   });
-  // });
+  files.value = []
 }
-// :active="files.length !== 0"
 </script>
 
 <template>

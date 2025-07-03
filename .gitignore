@@ -4,6 +4,9 @@
 # Node artifact files
 node_modules/
 
+# Desktop extensions
+src/main/assets/dxt
+
 # Log files
 *.log
 

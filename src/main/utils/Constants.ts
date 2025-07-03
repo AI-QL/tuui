@@ -17,6 +17,7 @@ export interface TrayOptions {
 export interface AssetsPaths {
   icon: string
   config: string
+  dxt: string
 }
 
 export default class Constants {
@@ -60,6 +61,25 @@ export default class Constants {
 
   static ASSETS_PATH: AssetsPaths = {
     icon: Constants._buildAssetsPath('icon16.png'),
-    config: Constants._buildAssetsPath('config.json')
+    config: Constants._buildAssetsPath('config.json'),
+    dxt: Constants._buildAssetsPath('dxt/')
+  }
+
+  static getDxtSource(
+    filename: string,
+    requiredExtension: string = '.dxt'
+  ): {
+    dxtPath: string
+    outputDir: string
+  } {
+    if (!filename.endsWith(requiredExtension)) {
+      throw new Error(`File extension name must be: ${requiredExtension}`)
+    }
+    const dirName = filename.slice(0, -requiredExtension.length)
+    const dirPath = join(this.ASSETS_PATH.dxt, dirName, '/')
+    return {
+      dxtPath: join(dirPath, filename),
+      outputDir: dirPath
+    }
   }
 }

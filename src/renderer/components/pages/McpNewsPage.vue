@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { computed } from 'vue'
+
 const mcpNews = [
   {
     img: 'https://www.anthropic.com/_next/image?url=https%3A%2F%2Fwww-cdn.anthropic.com%2Fimages%2F4zrzovbb%2Fwebsite%2F3aabd8804251c0364cbde9d2e4be6dc8e8c2faec-2880x1620.png&w=3840&q=75',
@@ -73,6 +75,15 @@ const mcpNews = [
     link: 'https://github.com/AI-QL/openai-proxy-docker'
   }
 ]
+
+const placeholderColor = computed(() => {
+  return (index: number) => {
+    const hue = (index * 137.508) % 360 // Evenly distribute hues using golden angle approximation
+    const saturation = 30 + Math.sin(index * 0.5) * 20 // 30%~50% saturation (soft pastel tones)
+    const lightness = 50 + Math.cos(index * 0.3) * 10 // 40%~60% lightness (avoids extreme brightness)
+    return `data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Crect width='10' height='6' fill='hsl(${hue}, ${saturation}%, ${lightness}%)'/%3E%3C/svg%3E`
+  }
+})
 </script>
 
 <template>
@@ -82,12 +93,7 @@ const mcpNews = [
         <v-row dense>
           <v-col v-for="(item, index) in items" :key="item.raw.title" cols="auto" md="4">
             <v-card class="pb-3" border flat>
-              <v-img
-                :src="item.raw.img"
-                :height="150"
-                cover
-                :lazy-src="`https://picsum.photos/10/6?image=${index * 5 + 10}`"
-              >
+              <v-img :src="item.raw.img" :height="142" cover :lazy-src="placeholderColor(index)">
                 <template v-slot:placeholder>
                   <div class="d-flex align-center justify-center fill-height">
                     <v-progress-circular color="grey-lighten-4" indeterminate></v-progress-circular>
