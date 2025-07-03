@@ -30,14 +30,6 @@ async function activeAllMcpServers() {
 
 <template>
   <v-container>
-    <!-- <v-file-upload class = "mb-2" density="compact" height="50"  accept=".dxt">
-      <template #icon >
-        <v-icon class= "mb-2" size="30" icon="mdi-upload"></v-icon>
-      </template>
-      <template #title >
-        <div  class="text-grey text-body-1"> .DXT {{ $t('mcp.file') }} </div>
-      </template>
-    </v-file-upload> -->
     <v-btn block :loading="isLoading" @click="activeAllMcpServers()">
       {{ $t('mcp.init') }}
     </v-btn>

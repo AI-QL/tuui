@@ -10,6 +10,8 @@
   "mcp": {
     "file": "Archive File",
     "init": "Init MCP Servers",
+    "read": "Read",
+    "minutes": "minutes",
     "updated": "MCP Severs Updated"
   },
   "menu": {

@@ -2,26 +2,9 @@
 import { useMcpStore } from '@/renderer/store/mcp'
 import McpResourcePage from '@/renderer/components/pages/McpResourcePage.vue'
 import McpPromptPage from '@/renderer/components/pages/McpPromptPage.vue'
+import McpDxtPage from '@/renderer/components/pages/McpDxtPage.vue'
+import McpNewsPage from '@/renderer/components/pages/McpNewsPage.vue'
 const mcpStore = useMcpStore()
-
-const mcpNews = [
-  {
-    title: 'MCP Introduction',
-    description: 'Get started with the Model Context Protocol (MCP)',
-    link: 'https://modelcontextprotocol.io'
-  },
-  {
-    title: 'MCP Servers',
-    description:
-      'A collection of reference and third-party servers for the Model Context Protocol (MCP)',
-    link: 'https://github.com/modelcontextprotocol/servers'
-  },
-  {
-    title: 'MCP Specification',
-    description: 'MCP specification details',
-    link: 'https://spec.modelcontextprotocol.io'
-  }
-]
 </script>
 
 <template>
@@ -57,14 +40,7 @@ const mcpNews = [
     </div>
   </div>
   <div v-else>
-    <v-card
-      v-for="news in mcpNews"
-      :key="news.title"
-      class="ma-1 mb-5"
-      :title="news.title"
-      :subtitle="news.description"
-      :href="news.link"
-    >
-    </v-card>
+    <McpDxtPage v-show="false"></McpDxtPage>
+    <McpNewsPage></McpNewsPage>
   </div>
 </template>
