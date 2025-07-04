@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import type { MCPAPI } from '@/preload/types'
+import type { MCPAPI, DXT } from '@/preload/types'
 import type {
   ChatCompletionRequestContent,
   ChatCompletionPromptMessage
@@ -82,8 +82,10 @@ export const useMcpStore = defineStore('mcpStore', {
 
   actions: {
     getServers: (): MCPAPI => {
-      // console.log('MCP:', window.mcpServers)
       return window.mcpServers.get() as MCPAPI
+    },
+    getManifests: (): DXT[] => {
+      return window.dxtManifest.get() as DXT[]
     },
     getAllByServer: function (serverName: string): McpCoreType[] {
       const mcpServers = this.getServers()

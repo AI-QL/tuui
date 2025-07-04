@@ -95,20 +95,9 @@ process.on('uncaughtException', () => {
   errorWindow = createErrorWindow(errorWindow, mainWindow)
 })
 
-// export function sendToRenderer<T extends keyof IpcSamplingEvents>(
-//   channel: T,
-//   ...args: Parameters<IpcSamplingEvents[T]>
-// ) {
-//   if (mainWindow && !mainWindow.isDestroyed()) {
-//     mainWindow.webContents.send(channel, ...args);
+const msgSamplingTransferResultChannel = 'msgSamplingTransferResult'
 
-//   }
-// }
-
-const rendererResponseChannel = 'renderResponse'
-
-export function sendToRenderer<T extends keyof IpcSamplingEvents>(
-  channel: T,
+export function samplingTransferInvoke<T extends keyof IpcSamplingEvents>(
   ...args: Parameters<IpcSamplingEvents[T]>
 ): Promise<any> {
   return new Promise((resolve) => {
@@ -117,11 +106,11 @@ export function sendToRenderer<T extends keyof IpcSamplingEvents>(
       return
     }
 
-    const responseChannel = `${rendererResponseChannel}-${uuidv4()}`
+    const responseChannel = `${msgSamplingTransferResultChannel}-${uuidv4()}`
 
     responseToRenderer(responseChannel, resolve)
 
-    mainWindow.webContents.send(channel, {
+    mainWindow.webContents.send('msgSamplingTransferInvoke', {
       args,
       responseChannel
     })

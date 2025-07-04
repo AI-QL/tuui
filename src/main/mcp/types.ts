@@ -57,5 +57,5 @@ export type ClientObj = {
 }
 
 export interface IpcSamplingEvents {
-  renderListenSampling: (_message: CreateMessageResult) => void
+  msgSamplingTransferInvoke: (_message: CreateMessageResult) => void
 }

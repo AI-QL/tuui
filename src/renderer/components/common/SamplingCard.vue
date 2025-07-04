@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue'
-import { listenSampling, sendResponse } from '@/renderer/utils'
+import { SamplingTransfer } from '@/renderer/utils'
 import { useSnackbarStore } from '@/renderer/store/snackbar'
 import { useChatbotStore } from '@/renderer/store/chatbot'
 import { createCompletion } from '@/renderer/composables/chatCompletions'
@@ -85,7 +85,7 @@ const finishSampling = (index: number) => {
         `No response from model ${chatbotStore.model}`
     }
   }
-  sendResponse(samplingChannel.value, response)
+  SamplingTransfer.response(samplingChannel.value, response)
   clearSampling()
   return
 }
@@ -100,7 +100,7 @@ const rejectSampling = () => {
       text: 'The sampling request was rejected by the user for containing non-compliant content.'
     }
   }
-  sendResponse(samplingChannel.value, response)
+  SamplingTransfer.response(samplingChannel.value, response)
   clearSampling()
   return
 }
@@ -112,7 +112,7 @@ const handleProgress = (_event, progress) => {
   samplingChannel.value = progress.responseChannel
 }
 
-listenSampling(handleProgress)
+SamplingTransfer.request(handleProgress)
 </script>
 
 <template>

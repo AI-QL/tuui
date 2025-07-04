@@ -1,3 +1,10 @@
+import { DxtManifest } from '@anthropic-ai/dxt'
+
+export type DXT = {
+  name: string
+  manifest: DxtManifest
+}
+
 export type AsyncFunction = (..._args: any[]) => Promise<any>
 
 export type MCPAPI = {

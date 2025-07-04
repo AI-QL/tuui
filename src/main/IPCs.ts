@@ -5,8 +5,8 @@ import { capabilitySchemas, ClientObj, ConfigObj } from './mcp/types'
 import { manageRequests } from './mcp/client'
 
 import { spawn } from 'child_process'
-import { existsSync, mkdirSync, writeFileSync, readFileSync } from 'fs'
-import { promises as fsPromise } from 'fs'
+import { existsSync, mkdirSync, writeFileSync, readdirSync } from 'fs'
+import { join } from 'path'
 
 import { initClients } from './mcp/init'
 import { disconnect } from './mcp/connection'
@@ -130,23 +130,54 @@ export default class IPCs {
       return dialogResult
     })
 
-    ipcMain.on('msgSendFile', async (event: IpcMainEvent, { name, data }) => {
-      const buffer = Buffer.from(data)
-      const saveOption = Constants.getDxtSource(name)
-      const filePath = saveOption.dxtPath
-      const dirPath = saveOption.outputDir
-      if (!existsSync(dirPath)) {
-        mkdirSync(dirPath, { recursive: true })
+    ipcMain.on('msgFileTransferRequest', async (event: IpcMainEvent, { name, data }) => {
+      try {
+        const buffer = Buffer.from(data)
+        const saveOption = Constants.getDxtSource(name)
+        const filePath = saveOption.dxtPath
+        const dirPath = saveOption.outputDir
+        if (!existsSync(dirPath)) {
+          mkdirSync(dirPath, { recursive: true })
+        }
+        console.log('DXT to be saved in: ', filePath)
+
+        writeFileSync(filePath, buffer, { encoding: null })
+
+        console.log(saveOption)
+        await unpackDxt(saveOption)
+        // console.log(getManifest(dirPath))
+
+        event.reply('msgFileTransferResponse', { name, success: true, path: saveOption.outputDir })
+      } catch (err) {
+        event.reply('msgFileTransferResponse', { name, success: false, reason: err.message })
       }
-      console.log('DXT to be saved in: ', filePath)
+    })
 
-      writeFileSync(filePath, buffer, { encoding: null })
+    ipcMain.handle('list-manifests', async (event: IpcMainEvent) => {
+      const dxtPath = Constants.ASSETS_PATH.dxt
 
-      console.log(saveOption)
-      await unpackDxt(saveOption)
-      console.log(getManifest(dirPath))
+      try {
+        const entries = readdirSync(dxtPath, { withFileTypes: true })
+        console.log(entries)
+        const folderNames = entries
+          .filter((dirent) => dirent.isDirectory())
+          .map((dirent) => {
+            return {
+              name: dirent.name,
+              manifest: getManifest(join(dxtPath, dirent.name))
+            }
+          })
 
-      event.reply('file-upload-reply', { success: true, path: saveOption.outputDir })
+        return {
+          status: 'success',
+          result: folderNames
+        }
+      } catch (err) {
+        return {
+          status: 'error',
+          error: err.message
+        }
+      }
     })
   }
 

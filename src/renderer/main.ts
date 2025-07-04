@@ -15,6 +15,7 @@ declare global {
   interface Window {
     mainApi?: any
     mcpServers?: any
+    dxtManifest?: any
   }
 }
 

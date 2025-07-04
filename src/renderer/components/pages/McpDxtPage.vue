@@ -1,30 +1,51 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
-import { sendFileToMain } from '@/renderer/utils'
+import { FileTransfer } from '@/renderer/utils'
+import { useMcpStore } from '@/renderer/store/mcp'
+const mcpStore = useMcpStore()
 
 const files = ref([] as File[])
+const loading = ref(false)
 
 watch(files, (val) => {
   console.log(val)
 })
 
-const processFiles = async () => {
-  console.log(files)
-  const file = files.value[0]
-
-  const arrayBuffer = await file.arrayBuffer()
-
-  sendFileToMain({
-    name: file.name,
-    data: arrayBuffer
+const filterFiles = () => {
+  files.value = files.value.filter((file) => {
+    return file.name.toLowerCase().endsWith('.dxt')
   })
+}
 
-  files.value = []
+const processFiles = async () => {
+  try {
+    loading.value = true
+    console.log(files)
+    const fileList = files.value
+    files.value = []
+
+    const promises = fileList.map(async (file) => {
+      const arrayBuffer = await file.arrayBuffer()
+      return FileTransfer.request({
+        name: file.name,
+        data: arrayBuffer
+      })
+    })
+
+    await Promise.all(promises)
+
+    await FileTransfer.response(fileList.length)
+
+    await window.dxtManifest.refresh()
+  } finally {
+    loading.value = false
+    console.log(mcpStore.getManifests())
+  }
 }
 </script>
 
 <template>
-  <v-card variant="flat">
+  <v-card variant="flat" :loading="loading">
     <v-fab
       :disabled="files.length === 0"
       class="my-3 ml-4"
@@ -48,6 +69,8 @@ const processFiles = async () => {
     ></v-fab>
 
     <v-file-upload
+      :disabled="loading"
+      color="light-grey"
       class="mb-2"
       density="compact"
       height="66"
@@ -56,6 +79,7 @@ const processFiles = async () => {
       show-size
       multiple
       v-model="files"
+      @change="filterFiles"
     >
       <template #icon>
         <v-icon class="mb-2" size="x-small" icon="mdi-upload"></v-icon>
@@ -64,5 +88,6 @@ const processFiles = async () => {
         <div class="text-grey text-h6"> .DXT {{ $t('mcp.file') }} </div>
       </template>
     </v-file-upload>
+    <v-btn @click="mcpStore.getManifests()"></v-btn>
   </v-card>
 </template>

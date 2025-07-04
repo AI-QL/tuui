@@ -1,19 +1,5 @@
 import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron'
-import type { AsyncFunction, MCPAPI } from './types'
-
-// Whitelist of valid channels used for IPC communication (Send message from Renderer to Main)
-const mainAvailChannels: string[] = [
-  'msgRequestGetVersion',
-  'msgOpenExternalLink',
-  'msgOpenFile',
-  'msgSendFile',
-  'msgGetApiToken',
-  'msgInitAllMcpServers',
-  'msgWindowReload'
-]
-const rendererAvailChannels: string[] = ['renderListenStdioProgress', 'renderListenSampling']
-
-const rendererResponseChannel = 'renderResponse'
+import type { AsyncFunction, MCPAPI, DXT } from './types'
 
 type CLIENT = {
   name: string
@@ -22,9 +8,30 @@ type CLIENT = {
   resources?: Record<string, string>
 }
 
+// Whitelist of valid channels used for IPC communication (Send message from Renderer to Main)
+const mainAvailChannels: string[] = [
+  'msgRequestGetVersion',
+  'msgOpenExternalLink',
+  'msgOpenFile',
+  'msgFileTransferRequest',
+  'msgGetApiToken',
+  'msgInitAllMcpServers',
+  'msgWindowReload'
+]
+const rendererAvailChannels: string[] = [
+  'renderListenStdioProgress',
+  'msgSamplingTransferInvoke',
+  'msgFileTransferResponse'
+]
+
+const rendererDynamicChannels: string[] = ['msgSamplingTransferResult']
+
 contextBridge.exposeInMainWorld('mainApi', {
   send: (channel: string, ...data: any[]): void => {
-    if (mainAvailChannels.includes(channel) || channel.startsWith(rendererResponseChannel)) {
+    if (
+      mainAvailChannels.includes(channel) ||
+      rendererDynamicChannels.some((respChannel) => channel.startsWith(respChannel))
+    ) {
       ipcRenderer.send.apply(null, [channel, ...data])
       if (process.env.NODE_ENV === 'development') {
         console.log({ type: 'send', channel, request: data })
@@ -141,3 +148,33 @@ async function updateAPI(name: string) {
 refreshAPI()
 
 contextBridge.exposeInMainWorld('mcpServers', api)
+
+const dxt = {
+  _currentAPI: [],
+  get: () => {
+    console.log('List currentDXT:', dxt._currentAPI)
+    return dxt._currentAPI
+  },
+  refresh: async () => {
+    await refreshDXT()
+    return dxt._currentAPI
+  },
+  update: async (name: string) => {
+    // await updateAPI(name)
+    return dxt._currentAPI
+  }
+}
+
+async function traverseManifest(): Promise<DXT[]> {
+  const manifests = await ipcRenderer.invoke('list-manifests')
+  return manifests.result || []
+}
+
+async function refreshDXT() {
+  const manifests = await traverseManifest()
+  dxt._currentAPI = manifests
+}
+
+refreshDXT()
+
+contextBridge.exposeInMainWorld('dxtManifest', dxt)

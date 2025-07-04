@@ -5,7 +5,7 @@ import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js'
 import { ServerConfig, McpClientTransport } from './types'
 import { connect } from './connection'
 
-import { sendToRenderer } from '../index'
+import { samplingTransferInvoke } from '../index'
 import Constants from '../utils/Constants'
 
 export async function initializeClient(
@@ -58,7 +58,7 @@ async function initializeStdioClient(
 
   client.setRequestHandler(CreateMessageRequestSchema, async (request) => {
     console.log('Sampling request received:\n', request)
-    const response = await sendToRenderer('renderListenSampling', request)
+    const response = await samplingTransferInvoke(request)
     console.log(response)
     return response
   })

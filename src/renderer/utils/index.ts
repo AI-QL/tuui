@@ -9,10 +9,6 @@ export default class Utils {
     return window.mainApi.invoke('msgGetApiToken', cli)
   }
 
-  static async listenSampling(callback: any): Promise<any> {
-    return window.mainApi.on('renderListenSampling', callback)
-  }
-
   static async listenStdioProgress(progress: any): Promise<any> {
     return window.mainApi.once('renderListenStdioProgress', progress)
   }
@@ -29,10 +25,6 @@ export default class Utils {
     await window.mainApi.send('msgWindowReload')
   }
 
-  static async sendResponse(channel: string, response: any): Promise<void> {
-    await window.mainApi.send(channel, response)
-  }
-
   static async initAllMcpServers(configs: MCPAPI): Promise<any> {
     const filteredConfigs = Object.fromEntries(
       Object.entries(configs).map(([key, value]) => [key, value?.config])
@@ -43,22 +35,54 @@ export default class Utils {
   static async openFile(type: string): Promise<any> {
     return window.mainApi.invoke('msgOpenFile', type)
   }
-
-  static async sendFileToMain(file: { name: string; data: ArrayBuffer }): Promise<void> {
-    await window.mainApi.send('msgSendFile', file)
-  }
 }
 
 export const {
   getCurrentLocale,
   openExternal,
   openFile,
-  sendFileToMain,
   getApiToken,
   initAllMcpServers,
   listenStdioProgress,
   removeListenStdioProgress,
-  listenSampling,
-  sendResponse,
   windowReload
 } = Utils
+
+class Sampling {
+  static async msgSamplingTransferInvoke(callback: any): Promise<any> {
+    return window.mainApi.on('msgSamplingTransferInvoke', callback)
+  }
+
+  // Channel format: "msgSamplingTransferResult-uuid4()"
+  static async msgSamplingTransferResult(channel: string, response: any): Promise<void> {
+    await window.mainApi.send(channel, response)
+  }
+}
+
+export const SamplingTransfer = {
+  request: Sampling.msgSamplingTransferInvoke,
+  response: Sampling.msgSamplingTransferResult
+}
+
+class File {
+  static async sendFileToMainRequest(file: { name: string; data: ArrayBuffer }): Promise<void> {
+    await window.mainApi.send('msgFileTransferRequest', file)
+  }
+  static async sendFileToMainResponse(count: number): Promise<void> {
+    const results: any = []
+    let completedCount = 0
+    window.mainApi.on('msgFileTransferResponse', (_event, result) => {
+      results.push(result)
+      completedCount++
+      if (completedCount === count) {
+        console.log('All done', results)
+      }
+    })
+    return results
+  }
+}
+
+export const FileTransfer = {
+  request: File.sendFileToMainRequest,
+  response: File.sendFileToMainResponse
+}
