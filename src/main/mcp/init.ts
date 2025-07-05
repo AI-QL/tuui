@@ -1,4 +1,4 @@
-import { ClientObj, ConfigObj, ServerConfig } from './types'
+import { ClientObj, ConfigMcpMetadataStdio, ServerConfig } from './types'
 // import { Notification } from 'electron'
 import { initializeClient } from './client'
 import { loadConfigFile } from './config'
@@ -14,13 +14,18 @@ export async function loadConfig(): Promise<ClientObj[]> {
   return []
 }
 
-export async function initClients(allConfig: ConfigObj): Promise<ClientObj[]> {
-  if (allConfig) {
-    console.log('Config init:', allConfig)
+export async function initClients(metadata: ConfigMcpMetadataStdio): Promise<ClientObj[]> {
+  if (metadata) {
+    console.log('Config init:', metadata)
     try {
       const clients = await Promise.all(
-        Object.entries(allConfig).map(([name, object]) => {
-          return initSingleClient(name, object)
+        Object.entries(metadata).map(([name, object]) => {
+          if (object.type === 'metadata__stdio_config') {
+            return initSingleClient(name, object.config)
+            // TODO support other type
+          } else {
+            return { name }
+          }
         })
       )
       console.log('All clients initialized.')

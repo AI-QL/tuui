@@ -9,13 +9,23 @@ import i18n from '@/renderer/plugins/i18n'
 
 import Vue3Lottie from 'vue3-lottie'
 
+import type { MCPAPI, DXT } from '@/preload/types'
+
 // Add API key defined in contextBridge to window object type
 declare global {
   // eslint-disable-next-line no-unused-vars
   interface Window {
     mainApi?: any
-    mcpServers?: any
-    dxtManifest?: any
+    mcpServers?: {
+      get: () => MCPAPI
+      refresh: () => Promise<{}>
+      update: (name: string) => Promise<{}>
+    }
+    dxtManifest?: {
+      get: () => DXT[]
+      refresh: () => Promise<{}>
+      update: (name: string) => Promise<{}>
+    }
   }
 }
 

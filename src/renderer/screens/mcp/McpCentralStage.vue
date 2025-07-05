@@ -30,7 +30,7 @@ const mcpStore = useMcpStore()
     <div v-else-if="mcpStore.getSelected.primitive === 'prompts'">
       <McpPromptPage :key="mcpStore.getSelected"></McpPromptPage>
     </div>
-    <div v-else-if="mcpStore.getSelected.primitive === 'config'">
+    <div v-else-if="mcpStore.getSelected.primitive === 'metadata'">
       <v-textarea
         variant="solo"
         auto-grow

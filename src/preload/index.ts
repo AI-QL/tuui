@@ -1,11 +1,13 @@
 import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron'
 import type { AsyncFunction, MCPAPI, DXT } from './types'
+import { StdioServerParameters } from '@modelcontextprotocol/sdk/client/stdio.js'
 
 type CLIENT = {
   name: string
   tools?: Record<string, string>
   prompts?: Record<string, string>
   resources?: Record<string, string>
+  config?: StdioServerParameters
 }
 
 // Whitelist of valid channels used for IPC communication (Send message from Renderer to Main)
@@ -113,15 +115,21 @@ const api = {
   }
 }
 
-function buildClientAPI(client: any): MCPAPI[string] {
-  const { tools, prompts, resources, config } = client
+function buildClientAPI(client: CLIENT): MCPAPI[string] {
+  const { name, tools, prompts, resources, config } = client
   const apiItem: MCPAPI[string] = {}
 
   if (tools) apiItem.tools = createAPIMethods(tools)
   if (prompts) apiItem.prompts = createAPIMethods(prompts)
   if (resources) apiItem.resources = createAPIMethods(resources)
 
-  apiItem.config = config
+  const metadata = {
+    name: name,
+    type: 'metadata__stdio_config' as const,
+    config: config
+  }
+
+  apiItem.metadata = metadata
 
   return apiItem
 }

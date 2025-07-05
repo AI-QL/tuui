@@ -1,6 +1,7 @@
 import { ipcMain, shell, IpcMainEvent, dialog, BrowserWindow } from 'electron'
+import { StdioServerParameters } from '@modelcontextprotocol/sdk/client/stdio.js'
 import Constants from './utils/Constants'
-import { capabilitySchemas, ClientObj, ConfigObj } from './mcp/types'
+import { capabilitySchemas, ClientObj, ConfigObj, ConfigMcpMetadataStdio } from './mcp/types'
 
 import { manageRequests } from './mcp/client'
 
@@ -28,39 +29,42 @@ export default class IPCs {
       return Constants.APP_VERSION
     })
 
-    ipcMain.handle('msgInitAllMcpServers', async (event: IpcMainEvent, config: ConfigObj) => {
-      this.clients.forEach((client: ClientObj) => {
-        if (client.connection?.transport) {
-          disconnect(client.connection.transport)
-        }
-      })
-
-      IPCs.removeAllHandlers()
-
-      try {
-        const newClients = await initClients(config)
-        const features = newClients.map((params) => {
-          return registerIpcHandlers(params)
+    ipcMain.handle(
+      'msgInitAllMcpServers',
+      async (event: IpcMainEvent, metadata: ConfigMcpMetadataStdio) => {
+        this.clients.forEach((client: ClientObj) => {
+          if (client.connection?.transport) {
+            disconnect(client.connection.transport)
+          }
         })
 
-        IPCs.updateMCP(features)
-        this.clients = newClients
-        return features
-      } catch (error) {
-        const configs = await loadConfig()
+        IPCs.removeAllHandlers()
 
-        const features = configs.map((params) => {
-          return registerIpcHandlers(params)
-        })
+        try {
+          const newClients = await initClients(metadata)
+          const features = newClients.map((params) => {
+            return registerIpcHandlers(params)
+          })
 
-        IPCs.updateMCP(features)
+          IPCs.updateMCP(features)
+          this.clients = newClients
+          return features
+        } catch (error) {
+          const configs = await loadConfig()
 
-        return {
-          status: 'error',
-          error: error
+          const features = configs.map((params) => {
+            return registerIpcHandlers(params)
+          })
+
+          IPCs.updateMCP(features)
+
+          return {
+            status: 'error',
+            error: error
+          }
         }
       }
-    })
+    )
 
     // Open url via web browser
     ipcMain.on('msgOpenExternalLink', async (event: IpcMainEvent, url: string) => {

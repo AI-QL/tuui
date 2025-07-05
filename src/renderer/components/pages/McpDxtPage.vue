@@ -36,7 +36,7 @@ const processFiles = async () => {
 
     await FileTransfer.response(fileList.length)
 
-    await window.dxtManifest.refresh()
+    await window.dxtManifest?.refresh()
   } finally {
     loading.value = false
     console.log(mcpStore.getManifests())

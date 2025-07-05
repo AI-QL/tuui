@@ -1,4 +1,5 @@
 import { DxtManifest } from '@anthropic-ai/dxt'
+import { StdioServerParameters } from '@modelcontextprotocol/sdk/client/stdio.js'
 
 export type DXT = {
   name: string
@@ -7,20 +8,34 @@ export type DXT = {
 
 export type AsyncFunction = (..._args: any[]) => Promise<any>
 
-export type MCPAPI = {
-  [key: string]: {
-    config?: Record<string, any>
-    tools?: {
-      list?: AsyncFunction
-      call?: AsyncFunction
+export type McpMetadata =
+  | {
+      name: string
+      type: 'metadata__stdio_config'
+      config: StdioServerParameters
     }
-    prompts?: {
-      list?: AsyncFunction
-      get?: AsyncFunction
+  | {
+      name: string
+      type: 'metadata__dxt_manifest'
+      config: DxtManifest
     }
-    resources?: {
-      list?: AsyncFunction
-      read?: AsyncFunction
-    }
+
+export type McpObject = {
+  metadata?: McpMetadata
+  tools?: {
+    list?: AsyncFunction
+    call?: AsyncFunction
   }
+  prompts?: {
+    list?: AsyncFunction
+    get?: AsyncFunction
+  }
+  resources?: {
+    list?: AsyncFunction
+    read?: AsyncFunction
+  }
+}
+
+export type MCPAPI = {
+  [key: string]: McpObject
 }

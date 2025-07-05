@@ -1,12 +1,13 @@
 import { defineStore } from 'pinia'
-import type { MCPAPI, DXT } from '@/preload/types'
 import type {
   ChatCompletionRequestContent,
   ChatCompletionPromptMessage
 } from '@/renderer/types/message'
 
-type McpPrimitiveType = 'tools' | 'resources' | 'prompts' | 'config'
-type AllowedPrimitive = Exclude<McpPrimitiveType, 'config'>
+import type { MCPAPI, McpObject } from '@/preload/types'
+
+type McpPrimitiveType = 'tools' | 'resources' | 'prompts' | 'metadata'
+type AllowedPrimitive = Exclude<McpPrimitiveType, 'metadata'>
 type McpMethodType =
   | { type: 'list'; fn: () => any }
   | { type: 'get'; fn: () => any }
@@ -21,6 +22,10 @@ export function getAllowedPrimitive(item: MCPAPI): AllowedPrimitive[] {
   return (Object.keys(item) as Array<keyof typeof item>).filter((key) =>
     ['tools', 'resources', 'prompts'].includes(key as AllowedPrimitive)
   ) as AllowedPrimitive[]
+}
+
+export function getServers(): MCPAPI | undefined {
+  return window.mcpServers?.get()
 }
 
 export interface FunctionType {
@@ -58,8 +63,8 @@ export const useMcpStore = defineStore('mcpStore', {
     },
     getSelectedByServer(state) {
       return (serverName: string): McpCoreType | null => {
-        const mcpServers = this.getServers()
-        if (!mcpServers[serverName]) return null
+        const mcpServers = getServers()
+        if (!mcpServers || !mcpServers[serverName]) return null
         const selectedIndex = state.selectedChips[serverName]
         if (typeof selectedIndex === 'number') {
           const selectedPrimitive = {
@@ -72,8 +77,8 @@ export const useMcpStore = defineStore('mcpStore', {
         } else {
           return {
             server: serverName,
-            primitive: 'config',
-            method: JSON.stringify(mcpServers[serverName].config, null, 2)
+            primitive: 'metadata',
+            method: JSON.stringify(mcpServers[serverName].metadata, null, 2)
           }
         }
       }
@@ -81,14 +86,14 @@ export const useMcpStore = defineStore('mcpStore', {
   },
 
   actions: {
-    getServers: (): MCPAPI => {
-      return window.mcpServers.get() as MCPAPI
+    getServers: (): MCPAPI | undefined => {
+      return getServers()
     },
-    getManifests: (): DXT[] => {
-      return window.dxtManifest.get() as DXT[]
+    getManifests: () => {
+      return window.dxtManifest?.get()
     },
     getAllByServer: function (serverName: string): McpCoreType[] {
-      const mcpServers = this.getServers()
+      const mcpServers = getServers()
       if (!mcpServers) {
         return []
       }
@@ -106,7 +111,7 @@ export const useMcpStore = defineStore('mcpStore', {
       return allPrimitives
     },
     updateServers: async function () {
-      const servers = await window.mcpServers.refresh()
+      const servers = await window.mcpServers?.refresh()
       console.log(servers)
       return servers
     },
@@ -189,7 +194,7 @@ export const useMcpStore = defineStore('mcpStore', {
     },
 
     listTools: async function () {
-      const mcpServers = this.getServers()
+      const mcpServers = getServers()
       if (!mcpServers) {
         return null
       }
@@ -220,7 +225,10 @@ export const useMcpStore = defineStore('mcpStore', {
       return mcpTools
     },
     getTool: async function (toolName) {
-      const mcpServers = this.getServers()
+      const mcpServers = getServers()
+      if (!mcpServers) {
+        return null
+      }
       const mcpKeys = Object.keys(mcpServers)
       const result = await Promise.any(
         mcpKeys.map(async (key) => {
@@ -264,8 +272,13 @@ export const useMcpStore = defineStore('mcpStore', {
         arguments: toolArguments
       }
 
-      const result = await this.getServers()[tool.server].tools.call(params)
-      return result
+      const mcpServerObj: McpObject | undefined = getServers()?.[tool.server]
+
+      if (mcpServerObj && mcpServerObj.tools && mcpServerObj.tools.call) {
+        return await mcpServerObj.tools.call(params)
+      } else {
+        return null
+      }
     },
     convertItem: function (
       item: ChatCompletionPromptMessage['content']

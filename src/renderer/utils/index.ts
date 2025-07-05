@@ -27,7 +27,7 @@ export default class Utils {
 
   static async initAllMcpServers(configs: MCPAPI): Promise<any> {
     const filteredConfigs = Object.fromEntries(
-      Object.entries(configs).map(([key, value]) => [key, value?.config])
+      Object.entries(configs).map(([key, value]) => [key, value?.metadata])
     )
     return window.mainApi.invoke('msgInitAllMcpServers', filteredConfigs)
   }

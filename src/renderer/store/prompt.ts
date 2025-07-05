@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { useMcpStore } from '@/renderer/store/mcp'
+import { getServers } from './mcp'
 
 interface ParamsType {
   name: string
@@ -49,17 +50,24 @@ export const usePromptStore = defineStore('promptStore', {
       }))
     },
     fetchAllPrompts: async function () {
-      const mcpStore = useMcpStore()
-      const mcpServers = mcpStore.getServers()
+      const mcpServers = getServers()
       if (!mcpServers) {
         return []
       }
       const mcpKeys = Object.keys(mcpServers)
       const allPrompts = [] as PromptType[]
       for (const key of mcpKeys) {
-        const obj = await mcpServers[key]?.prompts?.list()
-        if (obj) {
-          obj.prompts.forEach((prompt) => allPrompts.push({ title: key, ...prompt }))
+        const func = mcpServers[key]?.prompts?.list
+
+        if (func) {
+          try {
+            const obj = await func()
+            if (obj) {
+              obj.prompts.forEach((prompt) => allPrompts.push({ title: key, ...prompt }))
+            }
+          } catch (error) {
+            console.error(`Error fetching prompts from ${key}:`, error)
+          }
         }
       }
 
@@ -73,8 +81,8 @@ export const usePromptStore = defineStore('promptStore', {
     },
     fetchSelect: async function () {
       const mcpStore = useMcpStore()
-      const mcpServers = mcpStore.getServers()
-      const getFun = mcpServers[this.promptSelect.title]?.prompts?.get
+      const mcpServers = getServers()
+      const getFun = mcpServers?.[this.promptSelect.title]?.prompts?.get
       if (!getFun) {
         return []
       }

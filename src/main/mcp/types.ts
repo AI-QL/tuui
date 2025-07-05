@@ -50,6 +50,16 @@ export type ConfigObj = {
   [key: string]: ServerConfig
 }
 
+type McpMetadataStdio = {
+  name: string
+  type: 'metadata__stdio_config'
+  config: ServerConfig
+}
+
+export type ConfigMcpMetadataStdio = {
+  [key: string]: McpMetadataStdio
+}
+
 export type ClientObj = {
   name: string
   connection?: McpClientTransport
