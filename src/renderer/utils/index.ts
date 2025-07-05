@@ -25,7 +25,10 @@ export default class Utils {
     await window.mainApi.send('msgWindowReload')
   }
 
-  static async initAllMcpServers(configs: MCPAPI): Promise<any> {
+  static async initAllMcpServers(configs: MCPAPI | undefined): Promise<any> {
+    if (!configs) {
+      return
+    }
     const filteredConfigs = Object.fromEntries(
       Object.entries(configs).map(([key, value]) => [key, value?.metadata])
     )

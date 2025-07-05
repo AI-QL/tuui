@@ -73,21 +73,6 @@ watchEffect(() => {
     <template #append>
       <LocaleBtn class="no-drag" data-testid="select-language" />
 
-      <!-- <v-btn icon @click="handleChangeTheme">
-        <v-icon icon="mdi-brightness-6" />
-        <v-tooltip activator="parent" location="bottom">
-          {{ $t('menu.change-theme') }}
-        </v-tooltip>
-      </v-btn> -->
-      <!-- @click="mcpStore.listTools().then((tools) => console.log(tools))" -->
-      <!-- <v-btn
-        class="ma-1"
-        density="compact"
-        rounded="lg"
-        icon="mdi-clipboard-text"
-        @click="console.log(mcpStore.getServers())"
-      >
-      </v-btn> -->
       <v-col style="flex: 0 0 130px"></v-col>
     </template>
   </v-app-bar>

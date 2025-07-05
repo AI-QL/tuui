@@ -9,7 +9,7 @@ import i18n from '@/renderer/plugins/i18n'
 
 import Vue3Lottie from 'vue3-lottie'
 
-import type { MCPAPI, DXT } from '@/preload/types'
+import type { MCPAPI, DXTAPI } from '@/preload/types'
 
 // Add API key defined in contextBridge to window object type
 declare global {
@@ -22,7 +22,7 @@ declare global {
       update: (name: string) => Promise<{}>
     }
     dxtManifest?: {
-      get: () => DXT[]
+      get: () => DXTAPI
       refresh: () => Promise<{}>
       update: (name: string) => Promise<{}>
     }

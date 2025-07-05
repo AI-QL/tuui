@@ -1,5 +1,5 @@
 <script setup>
-import { useMcpStore } from '@/renderer/store/mcp'
+import { useMcpStore, getServers } from '@/renderer/store/mcp'
 import { useAgentStore } from '@/renderer/store/agent'
 import { useI18n } from 'vue-i18n'
 import { v4 as uuidv4 } from 'uuid'
@@ -77,7 +77,7 @@ onMounted(() => {
 })
 
 function load() {
-  const mcpServers = mcpStore.getServers()
+  const mcpServers = getServers()
   const mcpKeys = Object.keys(mcpServers)
   // Create an array of Promises
   const toolPromises = mcpKeys.map((key) => {

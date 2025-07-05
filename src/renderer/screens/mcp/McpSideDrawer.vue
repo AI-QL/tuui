@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import { useMcpStore, getAllowedPrimitive } from '@/renderer/store/mcp'
+import { useMcpStore, getAllowedPrimitive, getServers } from '@/renderer/store/mcp'
 const mcpStore = useMcpStore()
 </script>
 
 <template>
   <v-list :key="mcpStore.version" v-model:selected="mcpStore.selected" nav mandatory>
     <v-list-item
-      v-for="(item, key) in mcpStore.getServers()"
+      v-for="(item, key) in getServers()"
       :key="key"
       two-line
       :value="key"

@@ -1,5 +1,5 @@
 import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron'
-import type { AsyncFunction, MCPAPI, DXT } from './types'
+import type { AsyncFunction, MCPAPI, DXTAPI } from './types'
 import { StdioServerParameters } from '@modelcontextprotocol/sdk/client/stdio.js'
 
 type CLIENT = {
@@ -158,7 +158,7 @@ refreshAPI()
 contextBridge.exposeInMainWorld('mcpServers', api)
 
 const dxt = {
-  _currentAPI: [],
+  _currentAPI: {},
   get: () => {
     console.log('List currentDXT:', dxt._currentAPI)
     return dxt._currentAPI
@@ -173,9 +173,9 @@ const dxt = {
   }
 }
 
-async function traverseManifest(): Promise<DXT[]> {
+async function traverseManifest(): Promise<DXTAPI> {
   const manifests = await ipcRenderer.invoke('list-manifests')
-  return manifests.result || []
+  return manifests.result || {}
 }
 
 async function refreshDXT() {

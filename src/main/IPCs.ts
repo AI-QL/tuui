@@ -1,5 +1,4 @@
 import { ipcMain, shell, IpcMainEvent, dialog, BrowserWindow } from 'electron'
-import { StdioServerParameters } from '@modelcontextprotocol/sdk/client/stdio.js'
 import Constants from './utils/Constants'
 import { capabilitySchemas, ClientObj, ConfigObj, ConfigMcpMetadataStdio } from './mcp/types'
 
@@ -13,8 +12,15 @@ import { initClients } from './mcp/init'
 import { disconnect } from './mcp/connection'
 import { loadConfig } from './mcp/init'
 import { unpackDxt, getManifest } from './mcp/dxt'
+import { DxtManifest } from '@anthropic-ai/dxt'
 
 const handlerRegistry = new Map<string, Function>()
+
+interface ManifestResponse {
+  status: 'success' | 'error'
+  result?: Record<string, DxtManifest> // Object with string keys and DXT values
+  error?: string
+}
 
 /*
  * IPC Communications
@@ -157,24 +163,27 @@ export default class IPCs {
       }
     })
 
-    ipcMain.handle('list-manifests', async (event: IpcMainEvent) => {
+    ipcMain.handle('list-manifests', async (_event: IpcMainEvent): Promise<ManifestResponse> => {
       const dxtPath = Constants.ASSETS_PATH.dxt
 
       try {
         const entries = readdirSync(dxtPath, { withFileTypes: true })
         console.log(entries)
-        const folderNames = entries
+
+        // Transform the array into an object
+        const manifestsObject = entries
           .filter((dirent) => dirent.isDirectory())
-          .map((dirent) => {
-            return {
-              name: dirent.name,
-              manifest: getManifest(join(dxtPath, dirent.name))
-            }
-          })
+          .reduce(
+            (acc, dirent) => {
+              acc[dirent.name] = getManifest(join(dxtPath, dirent.name))
+              return acc
+            },
+            {} as Record<string, any>
+          ) // You can replace 'any' with your manifest type
 
         return {
           status: 'success',
-          result: folderNames
+          result: manifestsObject
         }
       } catch (err) {
         return {

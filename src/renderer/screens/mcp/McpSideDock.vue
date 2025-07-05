@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { initAllMcpServers } from '@/renderer/utils'
-import { useMcpStore } from '@/renderer/store/mcp'
+import { useMcpStore, getServers } from '@/renderer/store/mcp'
 import { useSnackbarStore } from '@/renderer/store/snackbar'
 const snackbarStore = useSnackbarStore()
 
@@ -12,7 +12,7 @@ const isLoading = ref(false)
 async function activeAllMcpServers() {
   isLoading.value = true
   try {
-    const configs = mcpStore.getServers()
+    const configs = getServers()
     const result = await initAllMcpServers(configs)
     console.log(result)
     await mcpStore.updateServers()

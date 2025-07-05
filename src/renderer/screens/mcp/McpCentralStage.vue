@@ -40,7 +40,7 @@ const mcpStore = useMcpStore()
     </div>
   </div>
   <div v-else>
-    <McpDxtPage v-show="false"></McpDxtPage>
+    <McpDxtPage></McpDxtPage>
     <McpNewsPage></McpNewsPage>
   </div>
 </template>

@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
 import { FileTransfer } from '@/renderer/utils'
-import { useMcpStore } from '@/renderer/store/mcp'
-const mcpStore = useMcpStore()
+import { getDxtManifest } from '@/renderer/store/mcp'
 
 const files = ref([] as File[])
 const loading = ref(false)
@@ -39,7 +38,7 @@ const processFiles = async () => {
     await window.dxtManifest?.refresh()
   } finally {
     loading.value = false
-    console.log(mcpStore.getManifests())
+    console.log(getDxtManifest())
   }
 }
 </script>
@@ -88,6 +87,6 @@ const processFiles = async () => {
         <div class="text-grey text-h6"> .DXT {{ $t('mcp.file') }} </div>
       </template>
     </v-file-upload>
-    <v-btn @click="mcpStore.getManifests()"></v-btn>
+    <v-btn @click="getDxtManifest"></v-btn>
   </v-card>
 </template>

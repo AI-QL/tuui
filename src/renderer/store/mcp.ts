@@ -4,7 +4,7 @@ import type {
   ChatCompletionPromptMessage
 } from '@/renderer/types/message'
 
-import type { MCPAPI, McpObject } from '@/preload/types'
+import type { MCPAPI, McpObject, DXTAPI } from '@/preload/types'
 
 type McpPrimitiveType = 'tools' | 'resources' | 'prompts' | 'metadata'
 type AllowedPrimitive = Exclude<McpPrimitiveType, 'metadata'>
@@ -16,7 +16,7 @@ type McpMethodType =
   | { type: 'templates/list'; fn: () => any }
   | string
 
-export function getAllowedPrimitive(item: MCPAPI): AllowedPrimitive[] {
+export function getAllowedPrimitive(item: McpObject): AllowedPrimitive[] {
   if (!item) return []
 
   return (Object.keys(item) as Array<keyof typeof item>).filter((key) =>
@@ -26,6 +26,10 @@ export function getAllowedPrimitive(item: MCPAPI): AllowedPrimitive[] {
 
 export function getServers(): MCPAPI | undefined {
   return window.mcpServers?.get()
+}
+
+export function getDxtManifest(): DXTAPI | undefined {
+  return window.dxtManifest?.get()
 }
 
 export interface FunctionType {
@@ -86,12 +90,6 @@ export const useMcpStore = defineStore('mcpStore', {
   },
 
   actions: {
-    getServers: (): MCPAPI | undefined => {
-      return getServers()
-    },
-    getManifests: () => {
-      return window.dxtManifest?.get()
-    },
     getAllByServer: function (serverName: string): McpCoreType[] {
       const mcpServers = getServers()
       if (!mcpServers) {
