@@ -3,17 +3,19 @@ import { StdioServerParameters } from '@modelcontextprotocol/sdk/client/stdio.js
 
 export type AsyncFunction = (..._args: any[]) => Promise<any>
 
-export type McpMetadata =
-  | {
-      name: string
-      type: 'metadata__stdio_config'
-      config: StdioServerParameters
-    }
-  | {
-      name: string
-      type: 'metadata__dxt_manifest'
-      config: DxtManifest
-    }
+export type McpMetadataStdio = {
+  name: string
+  type: 'metadata__stdio_config'
+  config: StdioServerParameters
+}
+
+export type McpMetadataDxt = {
+  name: string
+  type: 'metadata__dxt_manifest'
+  config: DxtManifest
+}
+
+export type McpMetadata = McpMetadataStdio | McpMetadataDxt
 
 export type McpObject = {
   metadata?: McpMetadata

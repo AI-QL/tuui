@@ -4,6 +4,7 @@ import McpResourcePage from '@/renderer/components/pages/McpResourcePage.vue'
 import McpPromptPage from '@/renderer/components/pages/McpPromptPage.vue'
 import McpDxtPage from '@/renderer/components/pages/McpDxtPage.vue'
 import McpNewsPage from '@/renderer/components/pages/McpNewsPage.vue'
+import McpConfigPage from '@/renderer/components/pages/McpConfigPage.vue'
 const mcpStore = useMcpStore()
 </script>
 
@@ -31,12 +32,7 @@ const mcpStore = useMcpStore()
       <McpPromptPage :key="mcpStore.getSelected"></McpPromptPage>
     </div>
     <div v-else-if="mcpStore.getSelected.primitive === 'metadata'">
-      <v-textarea
-        variant="solo"
-        auto-grow
-        readonly
-        :model-value="mcpStore.getSelected.method"
-      ></v-textarea>
+      <McpConfigPage></McpConfigPage>
     </div>
   </div>
   <div v-else>

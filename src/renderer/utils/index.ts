@@ -9,6 +9,10 @@ export default class Utils {
     return window.mainApi.invoke('msgGetApiToken', cli)
   }
 
+  static async getDxtUrl(): Promise<any> {
+    return window.mainApi.invoke('msgRequestGetDxtUrl')
+  }
+
   static async listenStdioProgress(progress: any): Promise<any> {
     return window.mainApi.once('renderListenStdioProgress', progress)
   }
@@ -45,6 +49,7 @@ export const {
   openExternal,
   openFile,
   getApiToken,
+  getDxtUrl,
   initAllMcpServers,
   listenStdioProgress,
   removeListenStdioProgress,

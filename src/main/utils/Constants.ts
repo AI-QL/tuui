@@ -51,6 +51,8 @@ export default class Constants {
     showAtStartup: false
   }
 
+  static APP_URL = __dirname
+
   static APP_INDEX_URL_DEV = `${debug.env.VITE_DEV_SERVER_URL}/index.html`
   static APP_INDEX_URL_PROD = join(__dirname, '../index.html')
 

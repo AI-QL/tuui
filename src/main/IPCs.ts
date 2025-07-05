@@ -6,7 +6,8 @@ import { manageRequests } from './mcp/client'
 
 import { spawn } from 'child_process'
 import { existsSync, mkdirSync, writeFileSync, readdirSync } from 'fs'
-import { join } from 'path'
+import { join, resolve, normalize } from 'path'
+import { pathToFileURL } from 'url'
 
 import { initClients } from './mcp/init'
 import { disconnect } from './mcp/connection'
@@ -33,6 +34,10 @@ export default class IPCs {
     // Get application version
     ipcMain.handle('msgRequestGetVersion', () => {
       return Constants.APP_VERSION
+    })
+
+    ipcMain.handle('msgRequestGetDxtUrl', () => {
+      return pathToFileURL(normalize(resolve(Constants.ASSETS_PATH.dxt))).toString()
     })
 
     ipcMain.handle(

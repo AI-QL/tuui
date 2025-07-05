@@ -1,5 +1,5 @@
 import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron'
-import type { AsyncFunction, MCPAPI, DXTAPI } from './types'
+import type { AsyncFunction, MCPAPI, DXTAPI, McpMetadataDxt } from './types'
 import { StdioServerParameters } from '@modelcontextprotocol/sdk/client/stdio.js'
 
 type CLIENT = {
@@ -13,6 +13,7 @@ type CLIENT = {
 // Whitelist of valid channels used for IPC communication (Send message from Renderer to Main)
 const mainAvailChannels: string[] = [
   'msgRequestGetVersion',
+  'msgRequestGetDxtUrl',
   'msgOpenExternalLink',
   'msgOpenFile',
   'msgFileTransferRequest',
@@ -140,6 +141,18 @@ async function refreshAPI() {
 
   clients.forEach((client) => {
     newAPI[client.name] = buildClientAPI(client)
+  })
+
+  const dxtManifests = await traverseManifest()
+
+  Object.keys(dxtManifests).forEach((key) => {
+    const manifest = dxtManifests[key]
+    const metadata: McpMetadataDxt = {
+      name: key,
+      type: 'metadata__dxt_manifest',
+      config: manifest
+    }
+    newAPI[key] = { metadata }
   })
 
   api._currentAPI = newAPI
