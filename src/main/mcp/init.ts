@@ -1,8 +1,10 @@
-import { ClientObj, ConfigMcpMetadataStdio, ServerConfig } from './types'
+import { ClientObj, ConfigMcpMetadata, ServerConfig } from './types'
 // import { Notification } from 'electron'
 import { initializeClient } from './client'
 import { loadConfigFile } from './config'
 import Constants from '../utils/Constants'
+import { getMcpConfigForDxt } from './dxt'
+import path from 'node:path'
 
 export async function loadConfig(): Promise<ClientObj[]> {
   const config = loadConfigFile(Constants.ASSETS_PATH.config)
@@ -14,34 +16,69 @@ export async function loadConfig(): Promise<ClientObj[]> {
   return []
 }
 
-export async function initClients(metadata: ConfigMcpMetadataStdio): Promise<ClientObj[]> {
-  if (metadata) {
-    console.log('Config init:', metadata)
-    try {
-      const clients = await Promise.all(
-        Object.entries(metadata).map(([name, object]) => {
-          if (object.type === 'metadata__stdio_config') {
-            return initSingleClient(name, object.config)
-            // TODO support other type
-          } else {
-            return { name }
-          }
-        })
-      )
-      console.log('All clients initialized.')
-      return clients
-    } catch (error) {
-      console.error('Error during client initialization:', error?.message)
-      throw new Error(`${error?.message}`)
-      // new Notification({
-      //   title: 'Client initialization failed',
-      //   body: 'Cannot start with current config file: ' + error?.message
-      // }).show()
-      // process.exit(1)
-    }
-  } else {
+// export async function initClients(metadata: ConfigMcpMetadata): Promise<ClientObj[]> {
+//   if (metadata) {
+//     console.log('Config init:', metadata)
+//     try {
+//       const clients = await Promise.all(
+//         Object.entries(metadata).map(([name, object]) => {
+//           if (object.type === 'metadata__stdio_config') {
+//             return initSingleClient(name, object.config)
+//             // TODO support other type
+//           } else {
+//             const stdioConfig = await getMcpConfigForDxt(
+//               Constants.getDxtSource(name).outputDir,
+//               object.config,
+//               object.user_config
+//             )
+//             return initSingleClient(name, stdioConfig)
+//           }
+//         })
+//       )
+//       console.log('All clients initialized.')
+//       return clients
+//     } catch (error) {
+//       console.error('Error during client initialization:', error?.message)
+//       throw new Error(`${error?.message}`)
+//     }
+//   } else {
+//     console.log('NO clients initialized.')
+//     return []
+//   }
+// }
+
+export async function initClients(metadata: ConfigMcpMetadata): Promise<ClientObj[]> {
+  if (!metadata) {
     console.log('NO clients initialized.')
     return []
+  }
+
+  console.log('Config init:', metadata)
+
+  try {
+    const entries = Object.entries(metadata)
+    const clientPromises = entries.map(async ([name, object]) => {
+      if (object.type === 'metadata__stdio_config') {
+        return initSingleClient(name, object.config)
+      } else if (object.type === 'metadata__dxt_manifest') {
+        const stdioConfig = await getMcpConfigForDxt(
+          path.posix.join(path.normalize(Constants.ASSETS_PATH.dxt).replace(/\\/g, '/'), name),
+          object.config,
+          object.user_config
+        )
+        console.log(stdioConfig)
+        return initSingleClient(name, stdioConfig)
+      } else {
+        return { name }
+      }
+    })
+
+    const clients = await Promise.all(clientPromises)
+    console.log('All clients initialized.')
+    return clients
+  } catch (error) {
+    console.error('Error during client initialization:', error?.message)
+    throw new Error(`${error?.message}`)
   }
 }
 

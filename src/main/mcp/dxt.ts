@@ -2,11 +2,32 @@ import {
   unpackExtension,
   getMcpConfigForManifest,
   DxtManifestSchema,
-  DxtManifest
+  DxtManifest,
+  DxtUserConfigValues,
+  McpServerConfig
 } from '@anthropic-ai/dxt'
 
 import { existsSync, readFileSync, statSync } from 'fs'
 import { join, resolve } from 'path'
+
+const mockSystemDirs = {
+  home: '/home/user',
+  data: '/data'
+}
+
+export async function getMcpConfigForDxt(
+  basePath: string,
+  baseManifest: DxtManifest,
+  userConfig: DxtUserConfigValues
+): Promise<McpServerConfig | undefined> {
+  return getMcpConfigForManifest({
+    manifest: baseManifest,
+    extensionPath: basePath,
+    systemDirs: mockSystemDirs,
+    userConfig: userConfig,
+    pathSeparator: '/'
+  })
+}
 
 export async function unpackDxt(dxtUnpackOption: {
   dxtPath: string

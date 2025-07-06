@@ -1,6 +1,6 @@
 import { ipcMain, shell, IpcMainEvent, dialog, BrowserWindow } from 'electron'
 import Constants from './utils/Constants'
-import { capabilitySchemas, ClientObj, ConfigObj, ConfigMcpMetadataStdio } from './mcp/types'
+import { capabilitySchemas, ClientObj, ConfigMcpMetadata } from './mcp/types'
 
 import { manageRequests } from './mcp/client'
 
@@ -42,7 +42,7 @@ export default class IPCs {
 
     ipcMain.handle(
       'msgInitAllMcpServers',
-      async (event: IpcMainEvent, metadata: ConfigMcpMetadataStdio) => {
+      async (event: IpcMainEvent, metadata: ConfigMcpMetadata) => {
         this.clients.forEach((client: ClientObj) => {
           if (client.connection?.transport) {
             disconnect(client.connection.transport)
@@ -80,6 +80,10 @@ export default class IPCs {
     // Open url via web browser
     ipcMain.on('msgOpenExternalLink', async (event: IpcMainEvent, url: string) => {
       await shell.openExternal(url)
+    })
+
+    ipcMain.on('msgOpenDxtFilePath', async (event: IpcMainEvent, name: string) => {
+      shell.openPath(resolve(join(Constants.ASSETS_PATH.dxt, name)))
     })
 
     ipcMain.on('msgWindowReload', async (event: IpcMainEvent) => {

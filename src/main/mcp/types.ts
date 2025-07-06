@@ -13,6 +13,8 @@ import {
   CreateMessageResult
 } from '@modelcontextprotocol/sdk/types.js'
 
+import { DxtUserConfigValues, DxtManifest } from '@anthropic-ai/dxt'
+
 import { StdioServerParameters } from '@modelcontextprotocol/sdk/client/stdio.js'
 
 import { Client } from '@modelcontextprotocol/sdk/client/index.js'
@@ -56,8 +58,15 @@ type McpMetadataStdio = {
   config: ServerConfig
 }
 
-export type ConfigMcpMetadataStdio = {
-  [key: string]: McpMetadataStdio
+type McpMetadataDxt = {
+  name: string
+  type: 'metadata__dxt_manifest'
+  config: DxtManifest
+  user_config?: DxtUserConfigValues
+}
+
+export type ConfigMcpMetadata = {
+  [key: string]: McpMetadataStdio | McpMetadataDxt
 }
 
 export type ClientObj = {

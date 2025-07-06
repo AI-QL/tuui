@@ -15,6 +15,7 @@ const mainAvailChannels: string[] = [
   'msgRequestGetVersion',
   'msgRequestGetDxtUrl',
   'msgOpenExternalLink',
+  'msgOpenDxtFilePath',
   'msgOpenFile',
   'msgFileTransferRequest',
   'msgGetApiToken',
@@ -152,7 +153,13 @@ async function refreshAPI() {
       type: 'metadata__dxt_manifest',
       config: manifest
     }
-    newAPI[key] = { metadata }
+    if (newAPI[key]) {
+      // If key exists, only update/replace the metadata
+      newAPI[key].metadata = metadata
+    } else {
+      // If key doesn't exist, create new entry
+      newAPI[key] = { metadata }
+    }
   })
 
   api._currentAPI = newAPI

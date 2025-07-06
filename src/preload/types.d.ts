@@ -1,4 +1,4 @@
-import { DxtManifest } from '@anthropic-ai/dxt'
+import { DxtManifest, DxtUserConfigValues } from '@anthropic-ai/dxt'
 import { StdioServerParameters } from '@modelcontextprotocol/sdk/client/stdio.js'
 
 export type AsyncFunction = (..._args: any[]) => Promise<any>
@@ -9,10 +9,13 @@ export type McpMetadataStdio = {
   config: StdioServerParameters
 }
 
+export type userConfigValue = string | number | boolean
+
 export type McpMetadataDxt = {
   name: string
   type: 'metadata__dxt_manifest'
   config: DxtManifest
+  user_config?: DxtUserConfigValues
 }
 
 export type McpMetadata = McpMetadataStdio | McpMetadataDxt

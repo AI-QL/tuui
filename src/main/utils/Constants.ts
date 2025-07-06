@@ -64,7 +64,7 @@ export default class Constants {
   static ASSETS_PATH: AssetsPaths = {
     icon: Constants._buildAssetsPath('icon16.png'),
     config: Constants._buildAssetsPath('config.json'),
-    dxt: Constants._buildAssetsPath('dxt/')
+    dxt: Constants._buildAssetsPath('dxt')
   }
 
   static getDxtSource(

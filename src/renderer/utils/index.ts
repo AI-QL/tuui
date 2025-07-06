@@ -1,4 +1,5 @@
 import type { MCPAPI } from '@/preload/types'
+import { useDxtStore } from '@/renderer/store/dxt'
 
 export default class Utils {
   static getCurrentLocale(): string {
@@ -25,6 +26,10 @@ export default class Utils {
     await window.mainApi.send('msgOpenExternalLink', url)
   }
 
+  static async openDxtFilePath(name: string): Promise<void> {
+    await window.mainApi.send('msgOpenDxtFilePath', name)
+  }
+
   static async windowReload(): Promise<void> {
     await window.mainApi.send('msgWindowReload')
   }
@@ -33,9 +38,24 @@ export default class Utils {
     if (!configs) {
       return
     }
+
+    const dxtStore = useDxtStore()
+
     const filteredConfigs = Object.fromEntries(
-      Object.entries(configs).map(([key, value]) => [key, value?.metadata])
+      Object.entries(configs).map(([key, config]) => {
+        if (config?.metadata?.type !== 'metadata__dxt_manifest') {
+          return [key, config?.metadata]
+        }
+
+        const userConfig = dxtStore.getConfig(key)
+        const mergedMetadata = {
+          ...config.metadata,
+          user_config: userConfig
+        }
+        return [key, mergedMetadata]
+      })
     )
+    console.log(filteredConfigs)
     return window.mainApi.invoke('msgInitAllMcpServers', filteredConfigs)
   }
 
@@ -47,6 +67,7 @@ export default class Utils {
 export const {
   getCurrentLocale,
   openExternal,
+  openDxtFilePath,
   openFile,
   getApiToken,
   getDxtUrl,
