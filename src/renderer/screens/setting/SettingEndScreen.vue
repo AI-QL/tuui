@@ -1,8 +1,10 @@
 <script setup lang="tsx">
 import { ref, watch } from 'vue'
 import { useChatbotStore, ChatbotStoreState } from '@/renderer/store/chatbot'
+import { useSnackbarStore } from '@/renderer/store/snackbar'
 
 const chatbotStore = useChatbotStore()
+const snackbarStore = useSnackbarStore()
 
 const configFile = ref(undefined)
 
@@ -17,9 +19,9 @@ watch(configFile, (newValue, _oldValue) => {
         }
         console.log(json)
         chatbotStore.updateStoreFromJSON(json.chatbotStore)
-      } catch {
-        console.log('parse——error')
-        // snackbarStore.showErrorMessage('snackbar.parseConfigFail')
+      } catch (err) {
+        console.log(err)
+        snackbarStore.showErrorMessage('snackbar.parse-config-fail')
       } finally {
         configFile.value = undefined
       }
@@ -35,7 +37,7 @@ watch(configFile, (newValue, _oldValue) => {
       <v-btn
         icon
         @click="($refs.fileInput as HTMLInputElement).click()"
-        v-tooltip:top="$t('setting.configFile')"
+        v-tooltip:top="$t('setting.config-file')"
       >
         <v-icon>mdi-upload</v-icon>
         <v-file-input
@@ -43,7 +45,7 @@ watch(configFile, (newValue, _oldValue) => {
           v-model="configFile"
           style="display: none"
           accept="application/json"
-          :label="$t('setting.configFile')"
+          :label="$t('setting.config-file')"
           single-line
         ></v-file-input>
       </v-btn>

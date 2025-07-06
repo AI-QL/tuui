@@ -8,7 +8,7 @@ import {
 } from '@anthropic-ai/dxt'
 
 import { existsSync, readFileSync, statSync } from 'fs'
-import { join, resolve } from 'path'
+import { join, resolve, sep } from 'path'
 
 const mockSystemDirs = {
   home: '/home/user',
@@ -25,7 +25,7 @@ export async function getMcpConfigForDxt(
     extensionPath: basePath,
     systemDirs: mockSystemDirs,
     userConfig: userConfig,
-    pathSeparator: '/'
+    pathSeparator: sep
   })
 }
 

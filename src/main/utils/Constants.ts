@@ -1,4 +1,4 @@
-import { join, dirname } from 'path'
+import { join, dirname, normalize, sep } from 'path'
 import { name, version, debug } from '../../../package.json'
 import { fileURLToPath } from 'url'
 import { app } from 'electron'
@@ -65,6 +65,10 @@ export default class Constants {
     icon: Constants._buildAssetsPath('icon16.png'),
     config: Constants._buildAssetsPath('config.json'),
     dxt: Constants._buildAssetsPath('dxt')
+  }
+
+  static getPosixPath(inputPath) {
+    return normalize(inputPath).split(sep).join('/')
   }
 
   static getDxtSource(

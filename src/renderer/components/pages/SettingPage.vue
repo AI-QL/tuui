@@ -168,7 +168,7 @@ const validateNumberRange = (min: number, max: number) => {
       <v-row class="px-2">
         <v-switch
           class="mt-0 mb-6 ml-4"
-          v-tooltip:start="$t('setting.authHeader')"
+          v-tooltip:start="$t('setting.auth-header')"
           :label="config.authorization ? 'Authorization' : 'X-Api-Key'"
           color="info"
           base-color="primary"
@@ -182,7 +182,7 @@ const validateNumberRange = (min: number, max: number) => {
           <v-combobox
             :disabled="!config.authorization"
             density="compact"
-            :label="$t('setting.authPrefix')"
+            :label="$t('setting.auth-prefix')"
             :items="config.authPrefixList"
             :model-value="config.authPrefix"
             @update:model-value="(v) => handleUpdate('authPrefix', v)"
@@ -234,7 +234,7 @@ const validateNumberRange = (min: number, max: number) => {
         <v-combobox
           class="px-2"
           density="compact"
-          :label="$t('setting.maxTokensPrefix')"
+          :label="$t('setting.max-tokens-prefix')"
           :items="config.maxTokensPrefixList"
           :model-value="config.maxTokensPrefix"
           variant="outlined"
@@ -279,7 +279,7 @@ const validateNumberRange = (min: number, max: number) => {
       </v-row>
       <v-field class="ml-2 d-inline-flex" dirty variant="outlined">
         <template #label>
-          <div>{{ $t('setting.reasoningEffort') }}</div>
+          <div>{{ $t('setting.reasoning-effort') }}</div>
         </template>
         <v-btn-toggle
           class="mt-0"

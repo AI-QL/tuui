@@ -194,7 +194,7 @@ export const createCompletion = async (
     // Create a reader
     const reader = completion.body?.getReader()
     if (!reader) {
-      snackbarStore.showErrorMessage('snackbar.parseStreamFail')
+      snackbarStore.showErrorMessage('snackbar.parse-stream-fail')
       return
     }
 

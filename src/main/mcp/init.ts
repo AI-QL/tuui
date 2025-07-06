@@ -62,7 +62,7 @@ export async function initClients(metadata: ConfigMcpMetadata): Promise<ClientOb
         return initSingleClient(name, object.config)
       } else if (object.type === 'metadata__dxt_manifest') {
         const stdioConfig = await getMcpConfigForDxt(
-          path.posix.join(path.normalize(Constants.ASSETS_PATH.dxt).replace(/\\/g, '/'), name),
+          Constants.getPosixPath(path.join(Constants.ASSETS_PATH.dxt, name)),
           object.config,
           object.user_config
         )

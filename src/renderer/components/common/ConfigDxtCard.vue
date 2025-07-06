@@ -75,15 +75,16 @@ const dynamicModel = (name: string, key: string) => ({
       </div>
     </v-card-text>
   </v-card>
-  <v-card>
-    <v-card-text>
-      <v-row v-for="(para, key) in manifest.user_config" :key="key">
+  <v-card :title="$t('dxt.user-config')" class="mt-4">
+    <v-divider></v-divider>
+    <v-card-text class="mt-4">
+      <v-row class="mx-2" v-for="(para, key) in manifest.user_config" :key="key">
         <v-text-field
           :model-value="dynamicModel(metadata.name, key).get()"
           @update:model-value="dynamicModel(metadata.name, key).set($event)"
-          density="compact"
           :label="para.title"
-          variant="solo"
+          density="compact"
+          variant="outlined"
           clearable
         ></v-text-field>
       </v-row>
