@@ -1,7 +1,19 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
 import { FileTransfer } from '@/renderer/utils'
-import { getDxtManifest } from '@/renderer/store/mcp'
+import { useMcpStore } from '@/renderer/store/mcp'
+const mcpStore = useMcpStore()
+
+const props = defineProps({
+  modelValue: {
+    type: Boolean,
+    required: true
+  }
+})
+
+const emit = defineEmits(['update:modelValue'])
+
+const internalDialog = ref(props.modelValue)
 
 const files = ref([] as File[])
 const loading = ref(false)
@@ -36,57 +48,92 @@ const processFiles = async () => {
     await FileTransfer.response(fileList.length)
 
     await window.dxtManifest?.refresh()
+    await window.mcpServers?.refresh()
+    mcpStore.version++
   } finally {
     loading.value = false
-    console.log(getDxtManifest())
+    closeDialog()
   }
+}
+
+watch(
+  () => props.modelValue,
+  (newVal) => {
+    internalDialog.value = newVal
+  }
+)
+
+watch(internalDialog, (newVal) => {
+  emit('update:modelValue', newVal)
+})
+
+const closeDialog = () => {
+  files.value = []
+  internalDialog.value = false
 }
 </script>
 
 <template>
-  <v-card variant="flat" :loading="loading">
-    <v-fab
-      :disabled="files.length === 0"
-      class="my-3 ml-4"
-      icon="mdi-content-save-plus"
-      location="top left"
-      size="small"
-      :color="files.length === 0 ? 'null' : 'success'"
-      absolute
-      @click="processFiles()"
-    ></v-fab>
+  <v-dialog v-model="internalDialog" persistent max-width="80vw">
+    <v-card>
+      <v-card-title class="d-flex align-center">
+        <div> {{ $t('dxt.title') }} </div>
+        <v-spacer></v-spacer>
+        <v-icon-btn
+          icon="mdi-close"
+          color="error"
+          variant="plain"
+          @click="closeDialog"
+        ></v-icon-btn>
+      </v-card-title>
+      <v-divider></v-divider>
+      <v-card-text>
+        <slot></slot>
+        <v-card variant="flat" :loading="loading">
+          <v-file-upload
+            :disabled="loading"
+            color="light-grey"
+            class="mb-2"
+            density="compact"
+            accept=".dxt"
+            clearable
+            show-size
+            multiple
+            scrim="primary"
+            v-model="files"
+            @change="filterFiles"
+          >
+            <template #icon>
+              <v-icon class="mb-2" size="x-small" icon="mdi-upload"></v-icon>
+            </template>
+            <template #title>
+              <div class="text-grey text-h6"> .DXT {{ $t('mcp.file') }} </div>
+            </template>
+          </v-file-upload>
+        </v-card>
+      </v-card-text>
 
-    <v-fab
-      :disabled="files.length === 0"
-      class="my-3 mr-4"
-      icon="mdi-close-thick"
-      location="top right"
-      size="small"
-      absolute
-      :color="files.length === 0 ? 'null' : 'error'"
-      @click="files.length = 0"
-    ></v-fab>
+      <v-card-actions>
+        <v-spacer></v-spacer>
 
-    <v-file-upload
-      :disabled="loading"
-      color="light-grey"
-      class="mb-2"
-      density="compact"
-      height="66"
-      accept=".dxt"
-      clearable
-      show-size
-      multiple
-      v-model="files"
-      @change="filterFiles"
-    >
-      <template #icon>
-        <v-icon class="mb-2" size="x-small" icon="mdi-upload"></v-icon>
-      </template>
-      <template #title>
-        <div class="text-grey text-h6"> .DXT {{ $t('mcp.file') }} </div>
-      </template>
-    </v-file-upload>
-    <v-btn @click="getDxtManifest"></v-btn>
-  </v-card>
+        <v-btn
+          variant="plain"
+          rounded="lg"
+          :disabled="files.length === 0"
+          icon="mdi-delete"
+          color="error"
+          @click="files.length = 0"
+        ></v-btn>
+
+        <v-btn
+          variant="plain"
+          rounded="lg"
+          :disabled="files.length === 0"
+          icon="mdi-content-save-plus"
+          color="success"
+          @click="processFiles()"
+        ></v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
 </template>

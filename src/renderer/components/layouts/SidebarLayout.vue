@@ -23,7 +23,7 @@ const layoutStore = useLayoutStore()
 // })
 </script>
 <template>
-  <v-navigation-drawer v-model="layoutStore.sidebar" permanent>
+  <v-navigation-drawer width="273" v-model="layoutStore.sidebar" permanent>
     <slot />
     <template #append>
       <slot name="append" />

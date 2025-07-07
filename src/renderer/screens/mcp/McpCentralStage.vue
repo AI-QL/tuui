@@ -2,7 +2,6 @@
 import { useMcpStore } from '@/renderer/store/mcp'
 import McpResourcePage from '@/renderer/components/pages/McpResourcePage.vue'
 import McpPromptPage from '@/renderer/components/pages/McpPromptPage.vue'
-import McpDxtPage from '@/renderer/components/pages/McpDxtPage.vue'
 import McpNewsPage from '@/renderer/components/pages/McpNewsPage.vue'
 import McpConfigPage from '@/renderer/components/pages/McpConfigPage.vue'
 const mcpStore = useMcpStore()
@@ -36,7 +35,6 @@ const mcpStore = useMcpStore()
     </div>
   </div>
   <div v-else>
-    <McpDxtPage v-show="false"></McpDxtPage>
     <McpNewsPage></McpNewsPage>
   </div>
 </template>

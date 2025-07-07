@@ -62,6 +62,10 @@ Once you modify or import the LLM configuration, it will be stored in your local
 
 ![](https://gcore.jsdelivr.net/gh/AI-QL/.github/public/tuui/1.png)
 
+### Desktop extensions (.dxt) support
+
+![](https://gcore.jsdelivr.net/gh/AI-QL/.github/public/tuui/dxt1.png)
+
 ### Tool call tracing
 
 ![](https://gcore.jsdelivr.net/gh/AI-QL/.github/public/tuui/2.png)
