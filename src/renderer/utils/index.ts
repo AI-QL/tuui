@@ -48,13 +48,23 @@ export default class Utils {
         }
 
         const userConfig = dxtStore.getConfig(key)
+        const filteredUserConfig = Object.fromEntries(
+          Object.entries(userConfig).filter(([, value]) => {
+            if (value === null || value === undefined) return false
+            if (typeof value === 'string' && value.trim() === '') return false
+            if (Array.isArray(value) && value.length === 0) return false
+            return true
+          })
+        )
+
         const mergedMetadata = {
           ...config.metadata,
-          user_config: userConfig
+          user_config: filteredUserConfig
         }
         return [key, mergedMetadata]
       })
     )
+
     console.log(filteredConfigs)
     return window.mainApi.invoke('msgInitAllMcpServers', filteredConfigs)
   }

@@ -14,7 +14,13 @@
     "url": "URL",
     "type": "Type",
     "user-config": "User Config",
-    "platform": "Platform"
+    "platform": "Platform",
+    "keywords": "Keywords",
+    "repository": "Repository",
+    "homepage": "Homepage",
+    "support": "Support",
+    "documentation": "Documentation",
+    "tools": "Tools"
   },
   "title": {
     "main": "MCP Screen",

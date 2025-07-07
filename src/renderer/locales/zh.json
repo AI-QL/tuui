@@ -14,7 +14,13 @@
     "url": "主页",
     "type": "类型",
     "user-config": "用户配置",
-    "platform": "平台"
+    "platform": "平台",
+    "keywords": "关键词",
+    "repository": "仓库",
+    "homepage": "主页",
+    "support": "支持",
+    "documentation": "文档",
+    "tools": "工具列表"
   },
   "title": {
     "main": "MCP 界面",
