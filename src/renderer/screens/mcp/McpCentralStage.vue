@@ -31,7 +31,7 @@ const mcpStore = useMcpStore()
       <McpPromptPage :key="mcpStore.getSelected"></McpPromptPage>
     </div>
     <div v-else-if="mcpStore.getSelected.primitive === 'metadata'">
-      <McpConfigPage></McpConfigPage>
+      <McpConfigPage :key="mcpStore.getSelected"></McpConfigPage>
     </div>
   </div>
   <div v-else>

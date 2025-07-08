@@ -1,10 +1,18 @@
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue'
+import { ref } from 'vue'
 import { SamplingTransfer } from '@/renderer/utils'
 import { useSnackbarStore } from '@/renderer/store/snackbar'
 import { useChatbotStore } from '@/renderer/store/chatbot'
 import { createCompletion } from '@/renderer/composables/chatCompletions'
+import ConfigSamplingCard from './ConfigSamplingCard.vue'
+
 import type { ChatCompletionResponseMessage } from '@/renderer/types/message'
+import type {
+  CreateMessageRequest,
+  SamplingMessage as SamplingResponse
+} from '@modelcontextprotocol/sdk/types'
+
+type SamplingRequest = CreateMessageRequest['params']
 
 const snackbarStore = useSnackbarStore()
 
@@ -14,7 +22,7 @@ const chatbotStore = allChatbotStore.chatbots[allChatbotStore.selectedChatbotId]
 
 const samplingDialog = ref(false)
 
-const samplingParams = ref({})
+const samplingParams = ref<SamplingRequest | {}>({})
 
 const samplingResults = ref<ChatCompletionResponseMessage[]>([])
 
@@ -22,43 +30,15 @@ const samplingChannel = ref('')
 
 const jsonError = ref<string | null>(null)
 
-const json2Str = (json: unknown) => {
-  return JSON.stringify(json, null, 2)
+function handleError(errorMessage: string | null) {
+  jsonError.value = errorMessage
 }
-
-const jsonString = ref(json2Str(samplingParams.value))
-
-// samplingParams -> jsonString -> editableSamplingParams
-
-watch(
-  () => samplingParams.value,
-  (newVal) => {
-    jsonString.value = json2Str(newVal)
-  },
-  { deep: true }
-)
-
-const editableSamplingParams = computed({
-  get: () => jsonString.value,
-  set: (value) => {
-    console.log('Sampling value changed: ', value)
-    jsonString.value = value
-    try {
-      JSON.parse(value)
-      jsonError.value = null
-    } catch (e: any) {
-      jsonError.value = e.toString()
-    }
-  }
-})
 
 const tryCompletions = () => {
   if (jsonError.value) {
     snackbarStore.showErrorMessage(jsonError.value)
   } else {
-    const completionParams = JSON.parse(jsonString.value)
-    console.log(completionParams)
-    const { messages, ...restParams } = completionParams
+    const { messages, ...restParams } = samplingParams.value as SamplingRequest
     restParams.target = samplingResults.value
     createCompletion(messages, restParams)
   }
@@ -73,8 +53,8 @@ const clearSampling = () => {
 }
 
 const finishSampling = (index: number) => {
-  const bestResponse: any = samplingResults.value[index]
-  const response = {
+  const bestResponse: ChatCompletionResponseMessage = samplingResults.value[index]
+  const response: SamplingResponse = {
     model: chatbotStore.model,
     role: bestResponse?.role || 'assistant',
     content: {
@@ -91,7 +71,7 @@ const finishSampling = (index: number) => {
 }
 
 const rejectSampling = () => {
-  const response = {
+  const response: SamplingResponse = {
     model: 'N/A',
     role: 'assistant',
     stopReason: 'Reject by user',
@@ -116,17 +96,12 @@ SamplingTransfer.request(handleProgress)
 </script>
 
 <template>
+  <!-- For UI visualization without chat -->
   <!-- <v-btn @click="samplingDialog = true" color="surface-variant" text="Open Dialog" variant="flat"></v-btn> -->
   <v-dialog v-model="samplingDialog" persistent>
     <v-card :title="$t('sampling.title')">
       <v-card-text>
-        <v-textarea
-          v-model="editableSamplingParams"
-          variant="solo"
-          outlined
-          auto-grow
-          :error-messages="jsonError"
-        ></v-textarea>
+        <ConfigSamplingCard v-model="samplingParams" @on-error="handleError"></ConfigSamplingCard>
         <v-data-iterator :items="samplingResults" :items-per-page="-1">
           <template #default="{ items }">
             <template v-for="(item, index) in items" :key="index">
@@ -167,8 +142,6 @@ SamplingTransfer.request(handleProgress)
             </template>
           </template>
         </v-data-iterator>
-        <!-- <v-textarea v-if="samplingResults.length > 0" variant="solo" :model-value="json2Str(samplingResults)" outlined
-          readonly auto-grow></v-textarea> -->
       </v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
@@ -180,7 +153,6 @@ SamplingTransfer.request(handleProgress)
           rounded="lg"
           @click="rejectSampling"
         ></v-icon-btn>
-
         <v-icon-btn
           v-tooltip:top="$t('sampling.comp')"
           icon="mdi-file-document-refresh-outline"
@@ -189,8 +161,6 @@ SamplingTransfer.request(handleProgress)
           rounded="lg"
           @click="tryCompletions"
         ></v-icon-btn>
-        <!-- <v-icon-btn v-if="samplingResults.length > 0" v-tooltip:top="$t('sampling.confirm')" icon="mdi-hand-okay"
-          color="success" variant="plain" rounded="lg" @click="finishSampling"></v-icon-btn> -->
       </v-card-actions>
     </v-card>
   </v-dialog>

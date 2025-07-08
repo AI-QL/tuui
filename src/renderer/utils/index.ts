@@ -35,30 +35,35 @@ export default class Utils {
   }
 
   static async initAllMcpServers(configs: MCPAPI | undefined): Promise<any> {
-    if (!configs) {
-      return
-    }
-
+    if (!configs) return
     const dxtStore = useDxtStore()
-
     const filteredConfigs = Object.fromEntries(
       Object.entries(configs).map(([key, config]) => {
-        if (config?.metadata?.type !== 'metadata__dxt_manifest') {
-          return [key, config?.metadata]
+        const mcpMetadata = config?.metadata
+
+        // Only dxt manifest need include user_config
+        if (!mcpMetadata || mcpMetadata.type !== 'metadata__dxt_manifest') {
+          return [key, mcpMetadata]
+        }
+
+        const userConfigObj = mcpMetadata.config.user_config
+        if (!userConfigObj) {
+          return [key, mcpMetadata]
         }
 
         const userConfig = dxtStore.getConfig(key)
         const filteredUserConfig = Object.fromEntries(
-          Object.entries(userConfig).filter(([, value]) => {
+          Object.entries(userConfig).filter(([key, value]) => {
+            if (!(key in userConfigObj)) return false
             if (value === null || value === undefined) return false
-            if (typeof value === 'string' && value.trim() === '') return false
+            if (typeof value === 'string' && value === '') return false
             if (Array.isArray(value) && value.length === 0) return false
             return true
           })
         )
 
         const mergedMetadata = {
-          ...config.metadata,
+          ...mcpMetadata,
           user_config: filteredUserConfig
         }
         return [key, mergedMetadata]
