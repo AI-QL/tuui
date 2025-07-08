@@ -52,6 +52,11 @@ export default class Utils {
         }
 
         const userConfig = dxtStore.getConfig(key)
+
+        if (!userConfig) {
+          return [key, mcpMetadata]
+        }
+
         const filteredUserConfig = Object.fromEntries(
           Object.entries(userConfig).filter(([key, value]) => {
             if (!(key in userConfigObj)) return false

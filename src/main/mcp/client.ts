@@ -11,7 +11,7 @@ import Constants from '../utils/Constants'
 export async function initializeClient(
   name: string,
   serverConfig: ServerConfig,
-  timer: number = 60 // 60 sec by default
+  timer: number = 90 // 90 sec by default
 ): Promise<McpClientTransport> {
   const timeoutPromise = new Promise<McpClientTransport>((_, reject) => {
     setTimeout(() => {
