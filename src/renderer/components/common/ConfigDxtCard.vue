@@ -60,14 +60,14 @@ const validateNumberRange = (min: number | undefined, max: number | undefined) =
     if (!value && value !== 0) return true
 
     const num = Number(value)
-    if (isNaN(num)) return t('dxt.invalid-number')
+    if (isNaN(num)) return t('dxt.number.invalid')
 
     if (min !== undefined && num < Number(min)) {
-      return t('dxt.number-too-small', { min })
+      return t('dxt.number.too-small', { min })
     }
 
     if (max !== undefined && num > Number(max)) {
-      return t('dxt.number-too-big', { max })
+      return t('dxt.number.too-big', { max })
     }
 
     return true
@@ -222,7 +222,7 @@ function getPlatformIcon(platform: string): string {
     <v-card-text>
       <v-row class="mx-2 mt-2 mb-4" v-if="manifest.compatibility?.platforms">
         <div class="d-flex align-center ga-4">
-          <v-label style="width: 100px">{{ $t('dxt.platform') }}</v-label>
+          <v-label style="width: 80px">{{ $t('dxt.platform') }}</v-label>
           <div v-for="platform in manifest.compatibility.platforms" :key="platform">
             <v-chip :color="getPlatformColor(platform)" label size="small">
               <v-icon :icon="getPlatformIcon(platform)" start></v-icon>
@@ -233,7 +233,7 @@ function getPlatformIcon(platform: string): string {
       </v-row>
       <v-row class="mx-2 mt-2 mb-4" v-if="manifest.keywords">
         <div class="d-flex align-center ga-4">
-          <v-label style="width: 100px">{{ $t('dxt.keywords') }}</v-label>
+          <v-label style="width: 80px">{{ $t('dxt.keywords') }}</v-label>
           <v-chip color="light-green-darken-4" size="small" v-for="keyword in manifest.keywords">
             {{ keyword }}
           </v-chip>

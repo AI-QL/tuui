@@ -20,7 +20,13 @@
     "homepage": "主页",
     "support": "支持",
     "documentation": "文档",
-    "tools": "工具列表"
+    "tools": "工具列表",
+    "required": "请提供必需的参数",
+    "number": {
+      "invalid": "请提供一个有效数字",
+      "too-small": "允许的最小值为{min}",
+      "too-big": "允许的最大值为{max}"
+    }
   },
   "title": {
     "main": "MCP 界面",

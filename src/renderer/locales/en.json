@@ -20,7 +20,13 @@
     "homepage": "Homepage",
     "support": "Support",
     "documentation": "Documentation",
-    "tools": "Tools"
+    "tools": "Tools",
+    "required": "Please provide the parameter",
+    "number": {
+      "invalid": "Please provide a valid number",
+      "too-small": "Minimum allowed value is {min}",
+      "too-big": "Maximium allowed value is {max}"
+    }
   },
   "title": {
     "main": "MCP Screen",

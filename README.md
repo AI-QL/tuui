@@ -35,21 +35,51 @@ For guidance on configuring the LLM, refer to the template(i.e.: Qwen):
 
 ```json
 {
-  "chatbotStore": {
-    "chatbots": [
-      {
-        "name": "Qwen",
-        "apiKey": "",
-        "url": "https://dashscope.aliyuncs.com/compatible-mode",
-        "path": "/v1/chat/completions",
-        "model": "qwen-turbo",
-        "modelList": ["qwen-turbo", "qwen-plus", "qwen-max"],
-        "maxTokensValue": "",
-        "mcp": true
-      }
-    ]
-  }
+  "name": "Qwen",
+  "apiKey": "",
+  "url": "https://dashscope.aliyuncs.com/compatible-mode",
+  "path": "/v1/chat/completions",
+  "model": "qwen-turbo",
+  "modelList": ["qwen-turbo", "qwen-plus", "qwen-max"],
+  "maxTokensValue": "",
+  "mcp": true
 }
+```
+
+The configuration accepts either a JSON object (for a single chatbot) or a JSON array (for multiple chatbots):
+
+```json
+[
+  {
+    "name": "Openrouter && Proxy",
+    "apiKey": "",
+    "url": "https://api3.aiql.com",
+    "urlList": ["https://api3.aiql.com", "https://openrouter.ai/api"],
+    "path": "/v1/chat/completions",
+    "model": "openai/gpt-4.1-mini",
+    "modelList": [
+      "openai/gpt-4.1-mini",
+      "openai/gpt-4.1",
+      "anthropic/claude-sonnet-4",
+      "google/gemini-2.5-pro-preview"
+    ],
+    "maxTokensValue": "",
+    "mcp": true
+  },
+  {
+    "name": "DeepInfra",
+    "apiKey": "",
+    "url": "https://api.deepinfra.com",
+    "path": "/v1/openai/chat/completions",
+    "model": "Qwen/Qwen3-32B",
+    "modelList": [
+      "Qwen/Qwen3-32B",
+      "Qwen/Qwen3-235B-A22B",
+      "meta-llama/Meta-Llama-3.1-70B-Instruct"
+    ],
+    "mcp": true
+  }
+]
 ```
 
 The full config and corresponding types could be found in: [Config Type](/src/renderer/types/index.ts)

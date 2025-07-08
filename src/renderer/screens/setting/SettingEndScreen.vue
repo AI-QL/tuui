@@ -1,7 +1,8 @@
 <script setup lang="tsx">
 import { ref, watch } from 'vue'
-import { useChatbotStore, ChatbotStoreState } from '@/renderer/store/chatbot'
+import { useChatbotStore } from '@/renderer/store/chatbot'
 import { useSnackbarStore } from '@/renderer/store/snackbar'
+import { ChatbotConfig } from '@/renderer/types'
 
 const chatbotStore = useChatbotStore()
 const snackbarStore = useSnackbarStore()
@@ -14,11 +15,10 @@ watch(configFile, (newValue, _oldValue) => {
     const reader = new FileReader()
     reader.onload = (event) => {
       try {
-        const json = JSON.parse(event.target!.result as string) as {
-          chatbotStore: ChatbotStoreState
-        }
-        console.log(json)
-        chatbotStore.updateStoreFromJSON(json.chatbotStore)
+        const chatbotConfigJson = JSON.parse(event.target!.result as string) as
+          | ChatbotConfig
+          | ChatbotConfig[]
+        chatbotStore.updateStoreFromJSON(chatbotConfigJson)
       } catch (err) {
         console.log(err)
         snackbarStore.showErrorMessage('snackbar.parse-config-fail')

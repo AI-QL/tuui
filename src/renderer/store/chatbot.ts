@@ -64,18 +64,16 @@ export const useChatbotStore = defineStore('chatbotStore', {
       }
     },
 
-    updateStoreFromJSON(json: { chatbots: ChatbotConfig[] | ChatbotConfig }) {
+    updateStoreFromJSON(chatbotConfigJson: ChatbotConfig[] | ChatbotConfig) {
       this.$reset()
       this.chatbots = []
-      if (json.chatbots) {
-        if (Array.isArray(json.chatbots)) {
-          json.chatbots.forEach((newChatbot, _index) => {
-            this.chatbots.push({ ...CHATBOT_DEFAULTS, ...newChatbot })
-          })
-        } else {
-          // Handle case when chatbots is a single object
-          this.chatbots.push({ ...CHATBOT_DEFAULTS, ...json.chatbots })
-        }
+      if (Array.isArray(chatbotConfigJson)) {
+        chatbotConfigJson.forEach((newChatbot, _index) => {
+          this.chatbots.push({ ...CHATBOT_DEFAULTS, ...newChatbot })
+        })
+      } else {
+        // Handle case when chatbots is a single object
+        this.chatbots.push({ ...CHATBOT_DEFAULTS, ...chatbotConfigJson })
       }
     },
 
