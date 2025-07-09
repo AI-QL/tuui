@@ -247,11 +247,26 @@ const groupMessages = computed<Group[]>(() => {
                     </v-card-item>
                     <template v-if="Array.isArray(item.content)">
                       <v-card-text v-for="content in item.content" :key="content.id">
-                        {{ content.text }}
+                        <v-textarea
+                          :rows="1"
+                          auto-grow
+                          max-rows="15"
+                          variant="plain"
+                          :model-value="content.text"
+                          hide-details
+                        ></v-textarea>
                       </v-card-text>
                     </template>
                     <v-card-text v-else>
-                      {{ item.content }}
+                      <v-textarea
+                        :rows="1"
+                        auto-grow
+                        max-rows="15"
+                        variant="plain"
+                        :model-value="item.content"
+                        hide-details
+                      >
+                      </v-textarea>
                     </v-card-text>
                   </v-card>
                   <v-card v-if="item.role === 'assistant'" class="mt-1" variant="flat">

@@ -62,6 +62,7 @@ const promptMessage = (
 
 export const createCompletion = async (
   rawconversation: RequestMessageType[],
+  sessionId: string,
   sampling: any = null
 ) => {
   const snackbarStore = useSnackbarStore()
@@ -93,7 +94,8 @@ export const createCompletion = async (
   }, [] as RequestMessageType[])
   // const conversation = rawconversation
   try {
-    messageStore.generating = true
+    console.log('Chat session started: ', sessionId)
+    messageStore.generating = sessionId
     // Create a completion (axios is not used here because it does not support streaming)
 
     const headers: HeadersInit = {
@@ -208,36 +210,46 @@ export const createCompletion = async (
 
     // The type of lastItem is guaranteed to be AssistantMessage,
     // which is the type of the object just pushed into the array
-    const lastItem = target.at(-1)! as AssistantMessage
+    const lastItem = target.at(-1) as AssistantMessage
 
     const buffer = ''
 
     // Read the stream
-    await read(reader, lastItem, buffer, chatbotStore.stream)
+    await read(reader, sessionId, lastItem, buffer, chatbotStore.stream)
   } catch (error: any) {
     snackbarStore.showErrorMessage(error?.message)
   } finally {
-    messageStore.generating = false
+    if (messageStore.generating === sessionId) {
+      messageStore.generating = ''
+    }
   }
 }
 
 const read = async (
   reader: ReadableStreamDefaultReader<Uint8Array>,
+  sessionId: string,
   target: AssistantMessage,
   buffer: string,
   stream: boolean
 ) => {
   // TextDecoder is a built-in object that allows you to convert a stream of bytes into a string
   const decoder = new TextDecoder()
-  // Destructure the value returned by reader.read()
-  const { done, value } = await reader.read()
   const messageStore = useMessageStore()
 
-  // If the stream is done reading, release the lock on the reader
-  if (done || !messageStore.generating) {
-    messageStore.generating = false
+  if (!messageStore.generating || messageStore.generating !== sessionId) {
     return reader.releaseLock()
   }
+  // Destructure the value returned by reader.read()
+  const { done, value } = await reader.read()
+
+  // If the stream is done reading, release the lock on the reader
+  if (done) {
+    if (messageStore.generating === sessionId) {
+      messageStore.generating = ''
+    }
+    return reader.releaseLock()
+  }
+
   // Convert the stream of bytes into a string
   const chunks = decoder.decode(value)
 
@@ -247,7 +259,7 @@ const read = async (
 
     if (parts.length === 1) {
       buffer += parts[0]
-      return read(reader, target, buffer, stream)
+      return read(reader, sessionId, target, buffer, stream)
     }
 
     if (buffer.length > 0) {
@@ -282,7 +294,7 @@ const read = async (
   }
 
   // Repeat the process
-  return read(reader, target, buffer, stream)
+  return read(reader, sessionId, target, buffer, stream)
 }
 
 const parseJson = (content, target: AssistantMessage) => {

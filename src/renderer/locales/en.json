@@ -79,9 +79,10 @@
   },
   "sampling": {
     "title": "Sampling",
-    "comp": "Start Completions",
-    "reject": "Reject Sampling",
-    "confirm": "Confirm Completions"
+    "comp": "Start completions",
+    "reject": "Reject sampling",
+    "confirm": "Confirm completions",
+    "confirm-last": "Confirm completions with last sampling"
   },
   "setting": {
     "title-api": "API Setting",

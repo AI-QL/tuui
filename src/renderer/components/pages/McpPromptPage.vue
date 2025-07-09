@@ -73,7 +73,7 @@ const handleApplyPrompt = async () => {
     </template>
   </v-data-iterator>
 
-  <v-dialog v-model="promptStore.promptSheet" class="dialog-card">
+  <v-dialog v-model="promptStore.promptSheet" max-width="80vw" max-height="80vh" scrollable>
     <v-card
       prepend-icon="mdi-account-cog-outline"
       :title="$t('prompt.title') + ' - ' + promptStore.promptSelect.title"

@@ -3,6 +3,7 @@ import { ref } from 'vue'
 import { SamplingTransfer } from '@/renderer/utils'
 import { useSnackbarStore } from '@/renderer/store/snackbar'
 import { useChatbotStore } from '@/renderer/store/chatbot'
+import { useHistoryStore } from '@/renderer/store/history'
 import { createCompletion } from '@/renderer/composables/chatCompletions'
 import ConfigSamplingCard from './ConfigSamplingCard.vue'
 
@@ -19,6 +20,8 @@ const snackbarStore = useSnackbarStore()
 const allChatbotStore = useChatbotStore()
 
 const chatbotStore = allChatbotStore.chatbots[allChatbotStore.selectedChatbotId]
+
+const historyStore = useHistoryStore()
 
 const samplingDialog = ref(false)
 
@@ -40,7 +43,7 @@ const tryCompletions = () => {
   } else {
     const { messages, ...restParams } = samplingParams.value as SamplingRequest
     restParams.target = samplingResults.value
-    createCompletion(messages, restParams)
+    createCompletion(messages, historyStore.getDate(), restParams)
   }
 }
 
@@ -98,7 +101,7 @@ SamplingTransfer.request(handleProgress)
 <template>
   <!-- For UI visualization without chat -->
   <!-- <v-btn @click="samplingDialog = true" color="surface-variant" text="Open Dialog" variant="flat"></v-btn> -->
-  <v-dialog v-model="samplingDialog" persistent>
+  <v-dialog v-model="samplingDialog" persistent max-width="80vw" max-height="80vh" scrollable>
     <v-card :title="$t('sampling.title')">
       <v-card-text>
         <ConfigSamplingCard v-model="samplingParams" @on-error="handleError"></ConfigSamplingCard>
@@ -160,6 +163,15 @@ SamplingTransfer.request(handleProgress)
           variant="plain"
           rounded="lg"
           @click="tryCompletions"
+        ></v-icon-btn>
+        <v-icon-btn
+          v-if="samplingResults.length > 0"
+          v-tooltip:top="$t('sampling.confirm-last')"
+          icon="mdi-hand-okay"
+          color="success"
+          variant="plain"
+          rounded="lg"
+          @click="finishSampling(samplingResults.length - 1)"
         ></v-icon-btn>
       </v-card-actions>
     </v-card>

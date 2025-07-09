@@ -16,7 +16,7 @@ interface MessageStoreState {
   conversation: ChatConversationMessage[]
   historyId: string
   base64: string
-  generating: boolean
+  generating: string
 }
 
 export const useMessageStore = defineStore('messageStore', {
@@ -25,7 +25,7 @@ export const useMessageStore = defineStore('messageStore', {
     conversation: [],
     historyId: '',
     base64: '',
-    generating: false
+    generating: ''
   }),
   actions: {
     init() {
@@ -43,7 +43,7 @@ export const useMessageStore = defineStore('messageStore', {
     },
     stop() {
       const snackbarStore = useSnackbarStore()
-      this.generating = false
+      this.generating = ''
       snackbarStore.showInfoMessage('snackbar.stopped')
     },
     clear() {
@@ -93,15 +93,22 @@ export const useMessageStore = defineStore('messageStore', {
         this.startInference()
       }
     },
-    syncHistory: function () {
+    syncHistory: function (): string {
       const historyStore = useHistoryStore()
       if (!this.historyId) {
-        this.historyId = historyStore.init(this.conversation)
-        return
+        const historyId = historyStore.init(this.conversation)
+        this.historyId = historyId
+        return historyId
       }
 
-      if (!historyStore.find(this.historyId)) {
-        this.historyId = historyStore.init(this.conversation)
+      const foundHistoryId = historyStore.find(this.historyId)?.id
+
+      if (!foundHistoryId) {
+        const historyId = historyStore.init(this.conversation)
+        this.historyId = historyId
+        return historyId
+      } else {
+        return foundHistoryId
       }
     },
     applyPrompt: function (messages) {
@@ -109,9 +116,9 @@ export const useMessageStore = defineStore('messageStore', {
       // this.syncHistory()
     },
     startInference: async function () {
-      this.syncHistory()
+      const historyId = this.syncHistory()
       this.clear()
-      await createCompletion(this.conversation)
+      await createCompletion(this.conversation, historyId)
       await this.postToolCall()
     },
     postToolCall: async function () {

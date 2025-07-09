@@ -74,7 +74,7 @@ const closeDialog = () => {
 </script>
 
 <template>
-  <v-dialog v-model="internalDialog" persistent max-width="80vw">
+  <v-dialog v-model="internalDialog" persistent max-width="80vw" max-height="80vh" scrollable>
     <v-card>
       <v-card-title class="d-flex align-center">
         <div> {{ $t('dxt.title') }} </div>

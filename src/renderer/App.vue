@@ -24,20 +24,25 @@ body {
 }
 
 ::-webkit-scrollbar {
-  display: block;
-  block-size: 5px;
-  inline-size: 5px;
+  width: 13px;
+  height: 13px;
+  background: transparent;
 }
 
 ::-webkit-scrollbar-track {
-  background-color: transparent;
+  background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: lightgrey;
+  background-color: rgba(0, 0, 0, 0.3);
+  border-radius: 13px;
+  border: 5px solid transparent;
+  background-clip: content-box;
+  transition: background-color 0.3s;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background-color: grey;
+  background-color: rgba(0, 0, 0, 0.4);
+  border-color: rgba(0, 0, 0, 0.1);
 }
 </style>

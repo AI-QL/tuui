@@ -81,7 +81,8 @@
     "title": "采样",
     "comp": "开始采样",
     "reject": "拒绝采样",
-    "confirm": "确认生成"
+    "confirm": "确认使用采样",
+    "confirm-last": "确认使用最新采样"
   },
   "setting": {
     "title-api": "API 设置",
