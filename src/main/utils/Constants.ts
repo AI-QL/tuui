@@ -18,6 +18,7 @@ export interface AssetsPaths {
   icon: string
   config: string
   dxt: string
+  llm: string
 }
 
 export default class Constants {
@@ -62,9 +63,10 @@ export default class Constants {
   }
 
   static ASSETS_PATH: AssetsPaths = {
-    icon: Constants._buildAssetsPath('icon16.png'),
     config: Constants._buildAssetsPath('config.json'),
-    dxt: Constants._buildAssetsPath('dxt')
+    dxt: Constants._buildAssetsPath('dxt'),
+    icon: Constants._buildAssetsPath('icon16.png'),
+    llm: Constants._buildAssetsPath('llm.json')
   }
 
   static getPosixPath(inputPath) {

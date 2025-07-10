@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
-import { ChatbotConfig, REASONING_EFFORT } from '@/renderer/types'
+import { REASONING_EFFORT } from '@/renderer/types'
 import { useI18n } from 'vue-i18n'
 import { useLayoutStore } from '@/renderer/store/layout'
 import { v4 as uuidv4 } from 'uuid'
 import { getApiToken, listenStdioProgress, removeListenStdioProgress } from '@/renderer/utils'
+
+import type { ChatbotConfig } from '@/preload/llm'
 
 const layoutStore = useLayoutStore()
 const { t } = useI18n()

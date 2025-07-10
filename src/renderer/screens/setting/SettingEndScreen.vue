@@ -2,7 +2,7 @@
 import { ref, watch } from 'vue'
 import { useChatbotStore } from '@/renderer/store/chatbot'
 import { useSnackbarStore } from '@/renderer/store/snackbar'
-import { ChatbotConfig } from '@/renderer/types'
+import type { ChatbotConfig } from '@/preload/llm'
 
 const chatbotStore = useChatbotStore()
 const snackbarStore = useSnackbarStore()

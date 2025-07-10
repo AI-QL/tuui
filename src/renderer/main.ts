@@ -10,12 +10,16 @@ import i18n from '@/renderer/plugins/i18n'
 import Vue3Lottie from 'vue3-lottie'
 
 import type { MCPAPI, DXTAPI } from '@/preload/types'
+import type { ChatbotConfig } from '@/preload/llm'
 
 // Add API key defined in contextBridge to window object type
 declare global {
   // eslint-disable-next-line no-unused-vars
   interface Window {
     mainApi?: any
+    llmApis?: {
+      get: () => ChatbotConfig[]
+    }
     mcpServers?: {
       get: () => MCPAPI
       refresh: () => Promise<{}>

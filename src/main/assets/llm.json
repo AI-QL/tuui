@@ -1,0 +1,28 @@
+[
+  {
+    "name": "Chatbot Default",
+    "reasoningEffort": 1
+  },
+  {
+    "url": "https://dashscope.aliyuncs.com/compatible-mode",
+    "urlList": ["https://dashscope.aliyuncs.com/compatible-mode"],
+    "name": "Qwen",
+    "model": "qwen-turbo",
+    "modelList": ["qwen-turbo", "qwen-plus", "qwen-max"]
+  },
+  {
+    "url": "https://api.openai.com",
+    "urlList": ["https://api.openai.com", "https://api.aiql.com"],
+    "name": "OpenAI & Proxy",
+    "model": "gpt-4-turbo",
+    "modelList": ["gpt-4-turbo", "gpt-4.1", "gpt-4o", "o1"]
+  },
+  {
+    "url": "https://api.deepinfra.com",
+    "urlList": ["https://api.deepinfra.com"],
+    "path": "/v1/openai/chat/completions",
+    "name": "DeepInfra",
+    "model": "Qwen/Qwen3-32B",
+    "modelList": ["Qwen/Qwen3-32B", "Qwen/Qwen3-30B-A3B", "meta-llama/Llama-3.3-70B-Instruct"]
+  }
+]

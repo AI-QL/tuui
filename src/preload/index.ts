@@ -1,5 +1,6 @@
 import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron'
 import type { AsyncFunction, MCPAPI, DXTAPI, McpMetadataDxt } from './types'
+import type { ChatbotConfig } from './llm'
 import { StdioServerParameters } from '@modelcontextprotocol/sdk/client/stdio.js'
 
 type CLIENT = {
@@ -87,6 +88,23 @@ contextBridge.exposeInMainWorld('mainApi', {
     throw new Error(`Unknown ipc channel name: ${channel}`)
   }
 })
+
+const llm = {
+  _currentAPI: [],
+  get: () => {
+    console.log('Preload currentLLM:', llm._currentAPI)
+    return llm._currentAPI
+  }
+}
+
+async function initLLM() {
+  const llms: ChatbotConfig[] = await ipcRenderer.invoke('list-llms')
+  llm._currentAPI = llms
+}
+
+initLLM()
+
+contextBridge.exposeInMainWorld('llmApis', llm)
 
 async function listClients(): Promise<CLIENT[]> {
   return await ipcRenderer.invoke('list-clients')

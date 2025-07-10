@@ -1,11 +1,6 @@
 import { defineStore } from 'pinia'
-import {
-  ChatbotConfig,
-  CHATBOT_DEFAULTS,
-  CHATBOT_QWEN,
-  CHATBOT_OPENAI,
-  CHATBOT_DEEPINFRA
-} from '@/renderer/types'
+import { CHATBOT_DEFAULTS } from '@/renderer/types'
+import type { ChatbotConfig } from '@/preload/llm'
 import { v4 as uuidv4 } from 'uuid'
 
 export interface ChatbotStoreState {
@@ -14,26 +9,24 @@ export interface ChatbotStoreState {
   selectedChatbotId: number // chatbots array index, being selected
 }
 
+export function getLLMs(): ChatbotConfig[] {
+  return window.llmApis?.get() || []
+}
+
 export const useChatbotStore = defineStore('chatbotStore', {
-  state: (): ChatbotStoreState => ({
-    chatbots: [
-      { ...CHATBOT_DEFAULTS, name: 'Chatbot Default', mcp: true, reasoningEffort: 1 },
-      {
-        ...CHATBOT_DEFAULTS,
-        ...CHATBOT_QWEN
-      },
-      {
-        ...CHATBOT_DEFAULTS,
-        ...CHATBOT_OPENAI
-      },
-      {
-        ...CHATBOT_DEFAULTS,
-        ...CHATBOT_DEEPINFRA
-      }
-    ],
-    currentChatbotId: 0, // points to first chatbot by default
-    selectedChatbotId: 0
-  }),
+  state: (): ChatbotStoreState => {
+    const llms = getLLMs()
+
+    const chatbots = llms
+      ? llms.map((llm) => ({ ...CHATBOT_DEFAULTS, ...llm }))
+      : [{ ...CHATBOT_DEFAULTS, name: 'Chatbot Default', mcp: true, reasoningEffort: 1 }]
+
+    return {
+      chatbots: chatbots,
+      currentChatbotId: 0, // points to first chatbot by default
+      selectedChatbotId: 0
+    }
+  },
 
   persist: {
     exclude: ['currentChatbotId']

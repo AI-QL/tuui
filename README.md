@@ -82,7 +82,9 @@ The configuration accepts either a JSON object (for a single chatbot) or a JSON 
 ]
 ```
 
-The full config and corresponding types could be found in: [Config Type](/src/renderer/types/index.ts)
+The full config and corresponding types could be found in: [Config Type](/src/preload/llm.d.ts) and [Default Config](/src/main/assets/llm.json).
+
+For the decomposable package, you can also modify the default configuration of the built release in `resources/assets/llm.json`
 
 Once you modify or import the LLM configuration, it will be stored in your localStorage by default. You can use the developer tools to view or clear the corresponding cache.
 

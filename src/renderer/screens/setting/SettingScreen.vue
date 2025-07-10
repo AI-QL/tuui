@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import SettingPage from '@/renderer/components/pages/SettingPage.vue'
 import { useChatbotStore } from '@/renderer/store/chatbot'
-import { ChatbotConfig } from '@/renderer/types'
 import { computed } from 'vue'
+
+import type { ChatbotConfig } from '@/preload/llm'
 
 const chatbotStore = useChatbotStore()
 

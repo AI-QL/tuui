@@ -12,6 +12,7 @@ import { pathToFileURL } from 'url'
 import { initClients } from './mcp/init'
 import { disconnect } from './mcp/connection'
 import { loadConfig } from './mcp/init'
+import { loadLlmFile } from './mcp/config'
 import { unpackDxt, getManifest } from './mcp/dxt'
 import { DxtManifest } from '@anthropic-ai/dxt'
 
@@ -200,6 +201,10 @@ export default class IPCs {
           error: err.message
         }
       }
+    })
+
+    ipcMain.handle('list-llms', () => {
+      return loadLlmFile(Constants.ASSETS_PATH.llm)
     })
   }
 
