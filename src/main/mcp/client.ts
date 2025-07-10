@@ -31,8 +31,7 @@ async function initializeStdioClient(
     env: {
       ...process.env,
       ...(config.env || {})
-    },
-    stderr: 'pipe'
+    }
   })
   const clientName = `${name}-client`
   const client = new Client(
