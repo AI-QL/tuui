@@ -33,12 +33,12 @@ jobs:
         with:
           name: build-artifacts-${{ matrix.os }}
           path: |
-            release/**/*.exe
-            release/**/*.appx
-            release/**/*.zip
-            release/**/*.deb
-            release/**/*.rpm
-            release/**/*.snap
-            release/**/*.dmg
+            release/*/*.exe
+            release/*/*.appx
+            release/*/*.zip
+            release/*/*.deb
+            release/*/*.rpm
+            release/*/*.snap
+            release/*/*.dmg
           retention-days: 3
           compression-level: 0
