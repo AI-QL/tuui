@@ -248,7 +248,7 @@ function getPlatformIcon(platform: string): string {
             class="mx-auto"
             :href="manifest.author.url"
             prepend-icon="mdi-account"
-            :subtitle="manifest.author.email"
+            :subtitle="manifest.author.url || manifest.author.email"
             target="_blank"
             :title="manifest.author.name"
           ></v-card>
