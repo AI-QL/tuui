@@ -8,7 +8,7 @@ const baseConfig = {
   asar: true,
   extends: null,
   compression: 'maximum',
-  artifactName: '${productName} ${version}_${arch}.${ext}',
+  artifactName: '${productName}__${version}_${os}_${arch}.${ext}',
   directories: {
     output: './release/${version}'
   },
