@@ -63,7 +63,7 @@ const baseConfig = {
     ]
   },
   portable: {
-    artifactName: '${productName} ${version}_${arch} Portable.${ext}'
+    artifactName: '${productName}__${version}_${os}_${arch}_Portable.${ext}'
   },
   nsis: {
     oneClick: true
