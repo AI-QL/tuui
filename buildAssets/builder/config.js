@@ -75,7 +75,8 @@ const baseConfig = {
     target: [
       {
         target: 'snap',
-        arch: 'x64'
+        arch: 'x64',
+        publish: ['github']
       },
       {
         target: 'deb',
