@@ -153,7 +153,7 @@ If you encounter any issues (please try to maintain OAuth auto-redirect to preve
 
 - [ISSUE 64 - MCP Servers Don't Work with NVM](https://github.com/modelcontextprotocol/servers/issues/64) (still open)
 
-When launching the MCP server, if you encounter spawn errors such as ENOENT, try installing the corresponding MCP server locally and invoking it using an absolute path. 
+When launching the MCP server, if you encounter spawn errors such as ENOENT, try installing the corresponding MCP server locally and invoking it using an absolute path.
 
 This is a common issue, and many cases remain unresolved to this day. The MCP SDK implements this workaround [ISSUE 101](https://github.com/modelcontextprotocol/typescript-sdk/issues/101) for Windows systems, but the problem still frequently occurs on other platforms.
 

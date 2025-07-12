@@ -9,7 +9,7 @@ export type McpMetadataStdio = {
   config: StdioServerParameters
 }
 
-export type userConfigValue = string | number | boolean
+export type userConfigValue = DxtUserConfigValues[string]
 
 export type McpMetadataDxt = {
   name: string

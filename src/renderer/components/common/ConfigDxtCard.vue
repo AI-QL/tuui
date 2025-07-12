@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { McpMetadataDxt } from '@/preload/types'
+import { DxtUserConfigurationOption } from '@anthropic-ai/dxt'
 import { getDxtUrl, openDxtFilePath } from '@/renderer/utils'
 import { useDxtStore } from '@/renderer/store/dxt'
 import type { userConfigValue } from '@/preload/types'
@@ -25,11 +26,6 @@ const props = defineProps({
 
 const { modelValue: metadata } = props
 const { config: manifest } = metadata
-
-// const rules = {
-//     required: (value: userConfigValue) => !!value || 'Field is required',
-//     number: (value: userConfigValue) => (typeof value) === 'number' || 'Must be number'
-//   }
 
 const showPassword = reactive({})
 
@@ -99,6 +95,17 @@ function getPlatformIcon(platform: string): string {
       return 'mdi-help-circle'
   }
 }
+
+const getErrorState = (para: DxtUserConfigurationOption, key: string) => {
+  const value = dynamicModel(metadata.name, key).get()
+  const isRequired = para.required
+  const isEmptyArray = Array.isArray(value) && value.length === 0
+  return isRequired && (!value || isEmptyArray)
+}
+
+const getErrorMessages = (para: DxtUserConfigurationOption, key: string) => {
+  return getErrorState(para, key) ? [t('dxt.required')] : []
+}
 </script>
 
 <template>
@@ -161,10 +168,8 @@ function getPlatformIcon(platform: string): string {
           :model-value="dynamicModel(metadata.name, key).get()"
           @update:model-value="dynamicModel(metadata.name, key).set($event)"
           clearable
-          :error="para.required && !dynamicModel(metadata.name, key).get()"
-          :error-messages="
-            para.required && !dynamicModel(metadata.name, key).get() ? [$t('dxt.required')] : []
-          "
+          :error="getErrorState(para, key)"
+          :error-messages="getErrorMessages(para, key)"
         >
         </v-text-field>
         <v-text-field
@@ -179,10 +184,8 @@ function getPlatformIcon(platform: string): string {
           :placeholder="para.default?.toString()"
           :rules="[validateNumberRange(para.min, para.max)]"
           clearable
-          :error="para.required && !dynamicModel(metadata.name, key).get()"
-          :error-messages="
-            para.required && !dynamicModel(metadata.name, key).get() ? [$t('dxt.required')] : []
-          "
+          :error="getErrorState(para, key)"
+          :error-messages="getErrorMessages(para, key)"
         ></v-text-field>
         <v-combobox
           v-else-if="para.type === 'directory' || para.type === 'file'"
@@ -196,6 +199,8 @@ function getPlatformIcon(platform: string): string {
           :placeholder="para.default?.toString()"
           :model-value="dynamicModel(metadata.name, key).get()"
           @update:model-value="dynamicModel(metadata.name, key).set($event)"
+          :error="getErrorState(para, key)"
+          :error-messages="getErrorMessages(para, key)"
         ></v-combobox>
 
         <v-text-field
@@ -208,10 +213,8 @@ function getPlatformIcon(platform: string): string {
           variant="outlined"
           :placeholder="para.default?.toString()"
           clearable
-          :error="para.required && !dynamicModel(metadata.name, key).get()"
-          :error-messages="
-            para.required && !dynamicModel(metadata.name, key).get() ? [$t('dxt.required')] : []
-          "
+          :error="getErrorState(para, key)"
+          :error-messages="getErrorMessages(para, key)"
         ></v-text-field>
       </v-row>
     </v-card-text>
