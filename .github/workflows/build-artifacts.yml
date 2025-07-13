@@ -23,10 +23,6 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Install rpm on Linux
-        if: matrix.os == 'ubuntu-latest'
-        run: sudo apt-get update && sudo apt-get install -y rpm
-
       - name: Build project
         run: npm run build:${{ fromJson('{"ubuntu-latest":"linux","macos-latest":"mac","windows-latest":"win"}')[matrix.os] }}
         env:

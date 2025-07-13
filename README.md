@@ -25,11 +25,24 @@ Given the considerations regarding the quality and safety of AI-generated conten
 
 To explore the project, please check wiki page: [TUUI.com](https://www.tuui.com)
 
-You can also check the documentation of the current project in sections: [Getting Started](docs/src/en/installation-and-build/getting-started.md) | [快速入门](/docs/src/zhHans/installation-and-build/getting-started.md)
+You can also check the **installation guide** in the project documentation: [Getting Started](docs/src/en/installation-and-build/getting-started.md) | [快速入门](/docs/src/zhHans/installation-and-build/getting-started.md)
 
 You can also ask the AI directly about project-related questions: [TUUI@DeepWiki](https://deepwiki.com/AI-QL/tuui)
 
-For features related to MCP, you'll need to set up your own LLM backend that supports tool calls.
+## :wrench: Core Requirements
+
+**To use MCP-related features, ensure the following preconditions are met for your environment:**
+
+- Set up an LLM backend (e.g., `ChatGPT`, `Claude`, `Qwen` or self-hosted) that supports tool/function calling.
+
+- For NPX/NODE-based servers: Install `Node.js` to execute JavaScript/TypeScript tools.
+
+- For UV/UVX-based servers: Install `Python` and the `UV` library.
+
+- For Docker-based servers: Install `DockerHub`.
+
+- For macOS/Linux systems: Modify the default MCP configuration (e.g., adjust CLI paths or permissions).
+  > Refer to the [MCP Server Issue](#mcp-server-issue) documentation for guidance
 
 For guidance on configuring the LLM, refer to the template(i.e.: Qwen):
 
@@ -143,7 +156,9 @@ If you encounter any issues (please try to maintain OAuth auto-redirect to preve
 
 ![](https://gcore.jsdelivr.net/gh/AI-QL/.github/public/tuui/7.png)
 
-## MCP Servers Error
+<a id="mcp-server-issue"></a>
+
+## MCP Server Issue
 
 ### Window
 
