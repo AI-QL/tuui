@@ -61,7 +61,7 @@
     "vue-i18n": "^11.1.9",
     "vue-router": "^4.5.1",
     "vue3-lottie": "^3.3.1",
-    "vuetify": "^3.9.0"
+    "vuetify": "^3.8.12"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.1",
