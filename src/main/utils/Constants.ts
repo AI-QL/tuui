@@ -65,7 +65,7 @@ export default class Constants {
   static ASSETS_PATH: AssetsPaths = {
     config: Constants._buildAssetsPath('config.json'),
     dxt: Constants._buildAssetsPath('dxt'),
-    icon: Constants._buildAssetsPath('icon16.png'),
+    icon: Constants._buildAssetsPath('icon.png'),
     llm: Constants._buildAssetsPath('llm.json')
   }
 
