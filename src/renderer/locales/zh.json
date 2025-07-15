@@ -28,6 +28,15 @@
       "too-big": "允许的最大值为{max}"
     }
   },
+  "elicitation": {
+    "title": "征询",
+    "accept": "确认",
+    "decline": "拒绝",
+    "string": {
+      "too-short": "允许的最小长度为{min}",
+      "too-long": "允许的最大长度为{max}"
+    }
+  },
   "title": {
     "main": "MCP 界面",
     "chat": "聊天界面",

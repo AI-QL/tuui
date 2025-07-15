@@ -113,6 +113,22 @@ export const SamplingTransfer = {
   response: Sampling.msgSamplingTransferResult
 }
 
+class Elicitation {
+  static async msgElicitationTransferInvoke(callback: any): Promise<any> {
+    return window.mainApi.on('msgElicitationTransferInvoke', callback)
+  }
+
+  // Channel format: "msgElicitationTransferResult-uuid4()"
+  static async msgElicitationTransferResult(channel: string, response: any): Promise<void> {
+    await window.mainApi.send(channel, response)
+  }
+}
+
+export const ElicitationTransfer = {
+  request: Elicitation.msgElicitationTransferInvoke,
+  response: Elicitation.msgElicitationTransferResult
+}
+
 class File {
   static async sendFileToMainRequest(file: { name: string; data: ArrayBuffer }): Promise<void> {
     await window.mainApi.send('msgFileTransferRequest', file)

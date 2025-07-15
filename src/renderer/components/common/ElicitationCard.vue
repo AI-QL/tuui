@@ -1,0 +1,235 @@
+<script setup lang="ts">
+import { ref, toRaw } from 'vue'
+import { ElicitationTransfer } from '@/renderer/utils'
+import type { ElicitRequest, ElicitResult } from '@modelcontextprotocol/sdk/types'
+
+import { useI18n } from 'vue-i18n'
+const { t } = useI18n()
+
+type ElicitRequestParams = ElicitRequest['params']
+
+// type ElicitationProperty = ElicitRequestParams['requestedSchema']['properties'][string]['type']
+
+type ElicitationProperty = string | number | boolean | null
+
+const elicitationResults = ref<Record<string, ElicitationProperty>>({})
+
+const elicitationDialog = ref(false)
+
+const elicitationParams = ref<ElicitRequestParams | {}>({})
+
+const elicitationChannel = ref('')
+
+const getConfigAttribute = (name: string) => {
+  return elicitationResults.value[name] ?? null
+}
+
+const updateConfigAttribute = (name: string, value: ElicitationProperty) => {
+  elicitationResults.value[name] = value
+}
+
+const dynamicModel = (name: string) => ({
+  get: () => getConfigAttribute(name),
+  set: (val: ElicitationProperty) => updateConfigAttribute(name, val)
+})
+
+const declineElicitation = () => {
+  const response: ElicitResult = {
+    action: 'decline'
+  }
+  ElicitationTransfer.response(elicitationChannel.value, response)
+  clearSampling()
+  return
+}
+
+// const cancelElicitation = () => {
+//   const response: ElicitResult = {
+//     "action": "cancel"
+//   }
+//   ElicitationTransfer.response(elicitationChannel.value, response)
+//   clearSampling()
+//   return
+// }
+
+const acceptElicitation = () => {
+  const response: ElicitResult = {
+    action: 'accept',
+    content: toRaw(elicitationResults.value)
+  }
+  ElicitationTransfer.response(elicitationChannel.value, response)
+  clearSampling()
+  return
+}
+
+const clearSampling = () => {
+  elicitationDialog.value = false
+  elicitationParams.value = {}
+  elicitationChannel.value = ''
+  elicitationResults.value = {}
+  return
+}
+
+const getErrorState = (key: string): boolean => {
+  const value = elicitationParams.value
+
+  if (value && typeof value === 'object' && 'requestedSchema' in value) {
+    const isRequired = value.requestedSchema.required
+
+    if (isRequired && isRequired.length > 0) {
+      return isRequired.includes(key)
+    } else {
+      return false
+    }
+  } else {
+    return false
+  }
+}
+
+const getErrorMessages = (key: string) => {
+  return getErrorState(key) ? [t('dxt.required')] : []
+}
+
+const validateNumberRange = (min: number | undefined, max: number | undefined) => {
+  return (value: string | number | null): boolean | string => {
+    if (!value && value !== 0) return true
+
+    const num = Number(value)
+    if (isNaN(num)) return t('dxt.number.invalid')
+
+    if (min !== undefined && num < Number(min)) {
+      return t('dxt.number.too-small', { min })
+    }
+
+    if (max !== undefined && num > Number(max)) {
+      return t('dxt.number.too-big', { max })
+    }
+
+    return true
+  }
+}
+
+const validateStringLength = (
+  min: number | undefined | unknown,
+  max: number | undefined | unknown
+) => {
+  return (value: string | null | unknown): boolean | string => {
+    if (!value || typeof value !== 'string') return true
+
+    const num = value.length
+
+    if (min !== undefined && num < Number(min)) {
+      return t('elicitation.string.too-short', { min })
+    }
+
+    if (max !== undefined && num > Number(max)) {
+      return t('elicitation.string.too-long', { max })
+    }
+
+    return true
+  }
+}
+
+const handleProgress = (_event, progress) => {
+  console.log('Elicitation', progress)
+  elicitationDialog.value = true
+  elicitationParams.value = progress.args[0].params
+  elicitationChannel.value = progress.responseChannel
+}
+
+ElicitationTransfer.request(handleProgress)
+</script>
+
+<template>
+  <!-- For UI visualization without chat -->
+  <!-- <v-btn @click="elicitationDialog = true" color="surface-variant" text="Open Dialog" variant="flat"></v-btn> -->
+  <v-dialog v-model="elicitationDialog" persistent max-width="80vw" max-height="80vh" scrollable>
+    <v-card :title="$t('elicitation.title')">
+      <v-divider></v-divider>
+      <v-card-text>
+        {{ 'message' in elicitationParams ? elicitationParams?.message : null }}
+      </v-card-text>
+      <v-card-text
+        v-if="
+          elicitationParams &&
+          'requestedSchema' in elicitationParams &&
+          typeof elicitationParams.requestedSchema === 'object' &&
+          'properties' in elicitationParams.requestedSchema
+        "
+      >
+        <v-row
+          class="mx-3 mb-3"
+          v-for="(para, key) in elicitationParams.requestedSchema.properties"
+        >
+          <v-select
+            v-if="para.enum"
+            prepend-icon="mdi-list-box-outline"
+            :label="para.title || para.description"
+            variant="outlined"
+            density="compact"
+            :items="para.enum as string[]"
+            :model-value="dynamicModel(key).get() as string"
+            @update:model-value="dynamicModel(key).set($event)"
+            clearable
+          ></v-select>
+          <v-text-field
+            v-else-if="para.type === 'string'"
+            prepend-icon="mdi-alphabetical"
+            :label="para.title || para.description"
+            density="compact"
+            variant="outlined"
+            :placeholder="para.description"
+            :rules="[validateStringLength(para.minLength, para.maxLength)]"
+            :model-value="dynamicModel(key).get()"
+            @update:model-value="dynamicModel(key).set($event)"
+            clearable
+            :error="getErrorState(key)"
+            :error-messages="getErrorMessages(key)"
+          >
+          </v-text-field>
+          <v-text-field
+            v-else-if="para.type === 'integer'"
+            prepend-icon="mdi-numeric"
+            type="number"
+            :model-value="dynamicModel(key).get()"
+            @update:model-value="dynamicModel(key).set($event)"
+            :label="para.title || para.description"
+            density="compact"
+            variant="outlined"
+            :placeholder="para.description"
+            :rules="[validateNumberRange(para.minimum, para.maximum)]"
+            clearable
+            :error="getErrorState(key)"
+            :error-messages="getErrorMessages(key)"
+          ></v-text-field>
+
+          <v-checkbox
+            v-else-if="para.type === 'boolean'"
+            :model-value="dynamicModel(key).get()"
+            @update:model-value="dynamicModel(key).set($event)"
+            :label="para.title"
+            v-tooltip:top="para.description"
+          ></v-checkbox>
+        </v-row>
+      </v-card-text>
+      <v-card-actions>
+        <v-spacer></v-spacer>
+        <v-icon-btn
+          v-tooltip:top="$t('elicitation.decline')"
+          icon="mdi-cancel"
+          color="error"
+          variant="plain"
+          rounded="lg"
+          @click="declineElicitation"
+        ></v-icon-btn>
+        <v-icon-btn
+          v-tooltip:top="$t('elicitation.accept')"
+          icon="mdi-hand-okay"
+          color="success"
+          variant="plain"
+          rounded="lg"
+          @click="acceptElicitation()"
+        ></v-icon-btn>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
+</template>

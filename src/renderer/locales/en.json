@@ -28,6 +28,15 @@
       "too-big": "Maximium allowed value is {max}"
     }
   },
+  "elicitation": {
+    "title": "Elicitation",
+    "accept": "Accept",
+    "decline": "Decline",
+    "string": {
+      "too-short": "Minimum allowed length is {min}",
+      "too-long": "Maximium allowed length is {max}"
+    }
+  },
   "title": {
     "main": "MCP Screen",
     "chat": "Chat Screen",

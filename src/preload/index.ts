@@ -23,13 +23,18 @@ const mainAvailChannels: string[] = [
   'msgInitAllMcpServers',
   'msgWindowReload'
 ]
+
 const rendererAvailChannels: string[] = [
   'renderListenStdioProgress',
   'msgSamplingTransferInvoke',
+  'msgElicitationTransferInvoke',
   'msgFileTransferResponse'
 ]
 
-const rendererDynamicChannels: string[] = ['msgSamplingTransferResult']
+const rendererDynamicChannels: string[] = [
+  'msgSamplingTransferResult',
+  'msgElicitationTransferResult'
+]
 
 contextBridge.exposeInMainWorld('mainApi', {
   send: (channel: string, ...data: any[]): void => {

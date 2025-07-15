@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from 'uuid'
 import Constants from './utils/Constants'
 import { createErrorWindow, createMainWindow } from './MainRunner'
 
-import { IpcSamplingEvents } from './mcp/types'
+import { IpcSamplingEvents, IpcElicitationEvents } from './mcp/types'
 
 import { responseToRenderer } from './IPCs'
 
@@ -111,6 +111,28 @@ export function samplingTransferInvoke<T extends keyof IpcSamplingEvents>(
     responseToRenderer(responseChannel, resolve)
 
     mainWindow.webContents.send('msgSamplingTransferInvoke', {
+      args,
+      responseChannel
+    })
+  })
+}
+
+const msgElicitationTransferResultChannel = 'msgElicitationTransferResult'
+
+export function elicitationTransferInvoke<T extends keyof IpcElicitationEvents>(
+  ...args: Parameters<IpcElicitationEvents[T]>
+): Promise<any> {
+  return new Promise((resolve) => {
+    if (!mainWindow || mainWindow.isDestroyed()) {
+      resolve(null)
+      return
+    }
+
+    const responseChannel = `${msgElicitationTransferResultChannel}-${uuidv4()}`
+
+    responseToRenderer(responseChannel, resolve)
+
+    mainWindow.webContents.send('msgElicitationTransferInvoke', {
       args,
       responseChannel
     })

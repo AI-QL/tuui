@@ -1,11 +1,14 @@
-import { CreateMessageRequestSchema } from '@modelcontextprotocol/sdk/types.js'
+import {
+  CreateMessageRequestSchema as SamplingRequestSchema,
+  ElicitRequestSchema
+} from '@modelcontextprotocol/sdk/types.js'
 import { Client } from '@modelcontextprotocol/sdk/client/index.js'
 import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js'
 
 import { ServerConfig, McpClientTransport } from './types'
 import { connect } from './connection'
 
-import { samplingTransferInvoke } from '../index'
+import { samplingTransferInvoke, elicitationTransferInvoke } from '../index'
 import Constants from '../utils/Constants'
 
 export async function initializeClient(
@@ -41,7 +44,8 @@ async function initializeStdioClient(
     },
     {
       capabilities: {
-        sampling: {}
+        sampling: {},
+        elicitation: {}
       }
     }
   )
@@ -55,10 +59,27 @@ async function initializeStdioClient(
   await connect(client, transport)
   console.log(`${clientName} connected.`)
 
-  client.setRequestHandler(CreateMessageRequestSchema, async (request) => {
+  client.setRequestHandler(SamplingRequestSchema, async (request) => {
     console.log('Sampling request received:\n', request)
     const response = await samplingTransferInvoke(request)
     console.log(response)
+    return response
+  })
+
+  client.setRequestHandler(ElicitRequestSchema, async (request) => {
+    const response = await elicitationTransferInvoke(request)
+
+    console.log('Elicitation request received:\n', JSON.stringify(response, null, 2))
+
+    // return {
+    //   "action": "accept",
+    //   "content": {
+    //     "color": "blue",
+    //     "number": 20,
+    //     "pets": "cats"
+    //   }
+    // }
+
     return response
   })
 

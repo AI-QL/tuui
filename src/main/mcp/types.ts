@@ -10,7 +10,8 @@ import {
   ListResourcesResultSchema,
   ReadResourceResultSchema,
   ListResourceTemplatesResultSchema,
-  CreateMessageResult
+  CreateMessageResult as SamplingResult,
+  ElicitRequest
 } from '@modelcontextprotocol/sdk/types.js'
 
 import { DxtUserConfigValues, DxtManifest } from '@anthropic-ai/dxt'
@@ -76,5 +77,9 @@ export type ClientObj = {
 }
 
 export interface IpcSamplingEvents {
-  msgSamplingTransferInvoke: (_message: CreateMessageResult) => void
+  msgSamplingTransferInvoke: (_message: SamplingResult) => void
+}
+
+export interface IpcElicitationEvents {
+  msgElicitationTransferInvoke: (_message: ElicitRequest) => void
 }
