@@ -1,4 +1,4 @@
-# TUUI - Tool Unitary User Interface
+# <img src="https://cdn.jsdelivr.net/gh/AI-QL/tuui@main/buildAssets/icons/icon.png" alt="Logo" width="24"/> TUUI - Tool Unitary User Interface
 
 [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/AI-QL/tuui) ![](https://camo.githubusercontent.com/077907eb137aa9b2d46ca4af30b77714cb69225eb8be49ad89f3e0ae668c90ca/68747470733a2f2f62616467652e6d6370782e6465763f747970653d636c69656e74) [![](https://img.shields.io/badge/Vue3-brightgreen.svg)](https://vuejs.org) [![](https://img.shields.io/badge/Vuetify-blue.svg)](https://vuetifyjs.com) [![LICENSE](https://img.shields.io/github/license/AI-QL/tuui)](https://github.com/AI-QL/tuui/blob/main/LICENSE)
 
