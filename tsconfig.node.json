@@ -3,11 +3,12 @@
     "target": "esnext",
     "module": "esnext",
     "jsx": "preserve",
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "composite": true,
     "resolveJsonModule": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
+    "emitDeclarationOnly": true,
     "allowImportingTsExtensions": true
   },
   "include": [
