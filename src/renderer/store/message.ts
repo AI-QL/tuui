@@ -4,12 +4,11 @@ import { useMcpStore } from '@/renderer/store/mcp'
 import { useHistoryStore } from '@/renderer/store/history'
 import { createCompletion, isEmptyTools } from '@/renderer/composables/chatCompletions'
 
-import type {
-  ToolCall,
-  ToolMessage,
-  UserMessage,
-  ChatConversationMessage
-} from '@/renderer/types/message'
+import type { CallToolResult } from '@modelcontextprotocol/sdk/types.js'
+
+type CallToolResultContent = CallToolResult['content']
+
+import type { ToolMessage, UserMessage, ChatConversationMessage } from '@/renderer/types/message'
 
 interface MessageStoreState {
   userMessage: string
@@ -137,14 +136,8 @@ export const useMessageStore = defineStore('messageStore', {
       let toolCalled = false
       console.log(last.tool_calls)
 
-      const callNextTool = async (toolCalls: ToolCall[], index: number) => {
-        if (index >= toolCalls.length) {
-          return
-        }
-
-        const toolCall = toolCalls[index]
-
-        let result
+      for (const toolCall of last.tool_calls) {
+        let result: CallToolResult
 
         try {
           result = await mcpStore.callTool(toolCall.function.name, toolCall.function.arguments)
@@ -153,7 +146,7 @@ export const useMessageStore = defineStore('messageStore', {
           result = mcpStore.packReturn(`Error calling tool: ${error}`)
         }
 
-        if (result.content) {
+        if (result?.content) {
           this.contentConvert(result.content, toolCall.id).forEach((item) => {
             this.conversation.push(item)
           })
@@ -161,13 +154,14 @@ export const useMessageStore = defineStore('messageStore', {
         }
       }
 
-      await callNextTool(last.tool_calls, 0)
-
       if (toolCalled) {
         this.startInference()
       }
     },
-    contentConvert: function (content, toolCallId): Array<UserMessage | ToolMessage> {
+    contentConvert: function (
+      content: CallToolResultContent,
+      toolCallId: string
+    ): Array<UserMessage | ToolMessage> {
       const mcpStore = useMcpStore()
       const msg = content.map((item) => mcpStore.convertItem(item))
       console.log(msg)
