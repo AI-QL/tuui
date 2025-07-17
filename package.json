@@ -72,7 +72,7 @@
     "@vitejs/plugin-vue": "^6.0.0",
     "@vitejs/plugin-vue-jsx": "^5.0.1",
     "dotenv": "^17.2.0",
-    "electron": "^37.2.2",
+    "electron": "^37.2.3",
     "electron-builder": "^26.0.15",
     "eslint": "^9.31.0",
     "eslint-config-prettier": "^10.1.5",
