@@ -1,4 +1,4 @@
-import { Notification } from 'electron'
+import { showNotification } from '../utils//notification'
 import { getCachedText, putCachedText } from './utils'
 import Automator from './automator'
 import Automation from './automation'
@@ -24,30 +24,10 @@ export default class Commander {
     const text = await Automation.grabSelectedText(automator, timeout)
 
     // error
-    if (text == null) {
-      try {
-        new Notification({
-          title: 'Witsy',
-          body: 'No Text Selected'
-        }).show()
-      } catch (error) {
-        console.error('Error showing notification', error)
-      }
-      return
-    }
-
-    // notify if no text
-    if (text.trim() === '') {
-      try {
-        new Notification({
-          title: 'Witsy',
-          body: 'Empty Text'
-        }).show()
-        console.log('No text selected')
-      } catch (error) {
-        console.error('Error showing notification', error)
-      }
-      return
+    if (text == null || text.trim() === '') {
+      showNotification({
+        body: 'No Text Selected'
+      })
     }
 
     // go on with a cached text id

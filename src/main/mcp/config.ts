@@ -1,12 +1,14 @@
+import { showNotification } from '../utils//notification'
 import fs from 'node:fs'
 import path from 'node:path'
 import { McpServersConfig } from './types'
+const { shell } = require('electron')
 
 export function loadConfigFile(configPath: string): McpServersConfig {
+  const resolvedConfigPath = path.isAbsolute(configPath)
+    ? configPath
+    : path.resolve(process.cwd(), configPath)
   try {
-    const resolvedConfigPath = path.isAbsolute(configPath)
-      ? configPath
-      : path.resolve(process.cwd(), configPath)
     if (!fs.existsSync(resolvedConfigPath)) {
       throw new Error(`Config file not found: ${resolvedConfigPath}`)
     }
@@ -18,6 +20,16 @@ export function loadConfigFile(configPath: string): McpServersConfig {
       return parsedConfig.mcpServers
     }
   } catch (err) {
+    showNotification(
+      {
+        body: 'MCP Config JSON parse failure'
+      },
+      {
+        onClick: () => {
+          shell.showItemInFolder(resolvedConfigPath)
+        }
+      }
+    )
     if (err instanceof SyntaxError) {
       throw new Error(`Invalid JSON in config file: ${err.message}`)
     }
@@ -26,10 +38,10 @@ export function loadConfigFile(configPath: string): McpServersConfig {
 }
 
 export function loadLlmFile(llmPath: string) {
+  const resolvedConfigPath = path.isAbsolute(llmPath)
+    ? llmPath
+    : path.resolve(process.cwd(), llmPath)
   try {
-    const resolvedConfigPath = path.isAbsolute(llmPath)
-      ? llmPath
-      : path.resolve(process.cwd(), llmPath)
     if (!fs.existsSync(resolvedConfigPath)) {
       throw new Error(`Config file not found: ${resolvedConfigPath}`)
     }
@@ -41,6 +53,17 @@ export function loadLlmFile(llmPath: string) {
       return parsedConfig
     }
   } catch (err) {
+    showNotification(
+      {
+        body: 'LLM Config JSON parse failure'
+      },
+
+      {
+        onClick: () => {
+          shell.showItemInFolder(resolvedConfigPath)
+        }
+      }
+    )
     if (err instanceof SyntaxError) {
       throw new Error(`Invalid JSON in llm file: ${err.message}`)
     }

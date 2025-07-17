@@ -16,6 +16,7 @@ export interface TrayOptions {
 
 export interface AssetsPaths {
   icon: string
+  icon_raw: string
   config: string
   dxt: string
   llm: string
@@ -66,6 +67,7 @@ export default class Constants {
     config: Constants._buildAssetsPath('config.json'),
     dxt: Constants._buildAssetsPath('dxt'),
     icon: Constants._buildAssetsPath('icon.png'),
+    icon_raw: Constants._buildAssetsPath('icon_raw.png'),
     llm: Constants._buildAssetsPath('llm.json')
   }
 
