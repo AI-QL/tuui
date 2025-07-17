@@ -7,7 +7,7 @@ const mcpNews = [
     title: 'Introducing the MCP',
     subtitle:
       'A new standard for connecting AI assistants to the systems where data lives, including content repositories, business tools, and development environments.',
-    duration: '5',
+    duration: '3',
     link: 'https://www.anthropic.com/news/model-context-protocol'
   },
   {
@@ -23,7 +23,7 @@ const mcpNews = [
     title: 'Remote MCP Servers',
     subtitle:
       'Build and deploy Remote Model Context Protocol (MCP) servers to Cloudflare. It creates the opportunity to reach a wider audience of Internet users who are not going to install and run MCP servers locally for use with desktop apps.',
-    duration: '20',
+    duration: '9',
     link: 'https://blog.cloudflare.com/remote-model-context-protocol-servers-mcp/'
   },
   {
@@ -35,7 +35,7 @@ const mcpNews = [
     link: 'https://github.com/modelcontextprotocol/servers'
   },
   {
-    img: 'https://github.com/user-attachments/assets/2bf3e3df-556c-49c6-ab7b-36c279d53bba',
+    img: 'https://gcore.jsdelivr.net/gh/idosal/git-mcp@main/public/img/cover.png',
     title: 'Git MCP',
     subtitle:
       'GitMCP is a free, open-source, remote Model Context Protocol (MCP) server that transforms any GitHub project (repositories or GitHub pages) into a documentation hub. It enables AI tools like Cursor to access up-to-date documentation and code, even if the LLM has never encountered them, thereby eliminating code hallucinations seamlessly.',
@@ -51,7 +51,7 @@ const mcpNews = [
     link: 'https://www.anthropic.com/engineering/desktop-extensions'
   },
   {
-    img: 'https://gcore.jsdelivr.net/gh/AI-QL/.github@main/public/tuui/0.png',
+    img: 'https://gcore.jsdelivr.net/gh/AI-QL/.github@main/public/tuui/index_news.png',
     title: 'TUUI',
     subtitle:
       'Official website for Tool Unitary UI. A desktop LLM chat client designed as MCP integration, accelerating AI adoption through the Model Context Protocol (MCP) and enabling cross-vendor LLM API orchestration',

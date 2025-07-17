@@ -7,7 +7,7 @@ titleTemplate: Tool Unitary UI
 hero:
   name: TUUI
   text: Tool Unitary UI
-  tagline: <strong>TUUI</strong> is a unified AI tool interface for developing `Model Context Protocol (MCP)` cross-platform desktop apps. It uses `Vue 3` and allows you to build a fast development environment with little effort.
+  tagline: TUUI is a unified AI tool interface for developing Model Context Protocol (MCP) cross-platform desktop applications. Powered by Vue3 and Electron, it delivers a streamlined development experience.
   actions:
     - theme: brand
       text: Getting Started
