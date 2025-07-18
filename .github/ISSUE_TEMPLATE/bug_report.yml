@@ -28,11 +28,17 @@ body:
     attributes:
       label: Your environment - System OS
       description: Please describe the full range of OSes you are experiencing the issue with, preferably including the version.
-      placeholder: Windows 11, macOS 15.x, Linux Ubuntu 24.04, Android 15, iOS 16...
+      placeholder: Windows 11, macOS 15.x, Linux Ubuntu 24.04...
     validations:
   - type: input
     attributes:
-      label: Your environment - Web Browser
-      description: If relevant, please describe the web browser you are currently using.
-      placeholder: Google Chrome, Microsoft Edge, Mozilla Firefox...
+      label: Your environment - Node.js
+      description: If relevant, please describe the version of Node.js you are currently using.
+      placeholder: 20.19.4, 22.17.0, 24.4.0...
+    validations:
+  - type: input
+    attributes:
+      label: Your environment - Python
+      description: If relevant, please describe the version of Python you are currently using.
+      placeholder: 3.10, 3.11, 3.12...
     validations:
