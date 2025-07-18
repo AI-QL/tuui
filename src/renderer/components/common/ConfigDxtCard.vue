@@ -1,13 +1,12 @@
 <script setup lang="ts">
+import { ref, watchEffect, reactive } from 'vue'
 import { McpMetadataDxt } from '@/preload/types'
 import { DxtUserConfigurationOption } from '@anthropic-ai/dxt'
 import { getDxtUrl, openDxtFilePath } from '@/renderer/utils'
-import { useDxtStore } from '@/renderer/store/dxt'
+import { useDxtStore, validateNumberRange } from '@/renderer/store/dxt'
 import type { userConfigValue } from '@/preload/types'
 import { useI18n } from 'vue-i18n'
 const { t } = useI18n()
-
-import { ref, watchEffect, reactive } from 'vue'
 
 const dxtStore = useDxtStore()
 
@@ -51,25 +50,6 @@ const dynamicModel = (name: string, key: string) => ({
   set: (val: userConfigValue) => dxtStore.updateConfigAttribute(name, key, val)
 })
 
-const validateNumberRange = (min: number | undefined, max: number | undefined) => {
-  return (value: string | number | null): boolean | string => {
-    if (!value && value !== 0) return true
-
-    const num = Number(value)
-    if (isNaN(num)) return t('dxt.number.invalid')
-
-    if (min !== undefined && num < Number(min)) {
-      return t('dxt.number.too-small', { min })
-    }
-
-    if (max !== undefined && num > Number(max)) {
-      return t('dxt.number.too-big', { max })
-    }
-
-    return true
-  }
-}
-
 function getPlatformColor(platform: string): string {
   switch (platform) {
     case 'darwin':
@@ -96,15 +76,15 @@ function getPlatformIcon(platform: string): string {
   }
 }
 
-const getErrorState = (para: DxtUserConfigurationOption, key: string) => {
-  const value = dynamicModel(metadata.name, key).get()
+const getErrorState = (para: DxtUserConfigurationOption, value: any) => {
   const isRequired = para.required
   const isEmptyArray = Array.isArray(value) && value.length === 0
   return isRequired && (!value || isEmptyArray)
 }
 
 const getErrorMessages = (para: DxtUserConfigurationOption, key: string) => {
-  return getErrorState(para, key) ? [t('dxt.required')] : []
+  const value = dynamicModel(metadata.name, key).get()
+  return getErrorState(para, value) ? [t('dxt.required')] : []
 }
 </script>
 
@@ -163,6 +143,7 @@ const getErrorMessages = (para: DxtUserConfigurationOption, key: string) => {
           density="compact"
           variant="outlined"
           :placeholder="para.default?.toString()"
+          persistent-placeholder
           @click:append-inner="toggleShowPassword(key)"
           :append-inner-icon="showPassword[key] ? 'mdi-eye-off' : 'mdi-eye'"
           :model-value="dynamicModel(metadata.name, key).get()"
@@ -172,21 +153,25 @@ const getErrorMessages = (para: DxtUserConfigurationOption, key: string) => {
           :error-messages="getErrorMessages(para, key)"
         >
         </v-text-field>
-        <v-text-field
+        <v-number-input
           v-else-if="para.type === 'number'"
           prepend-icon="mdi-numeric"
-          type="number"
-          :model-value="dynamicModel(metadata.name, key).get()"
+          :model-value="dynamicModel(metadata.name, key).get() as number"
           @update:model-value="dynamicModel(metadata.name, key).set($event)"
           :label="para.title"
           density="compact"
           variant="outlined"
           :placeholder="para.default?.toString()"
-          :rules="[validateNumberRange(para.min, para.max)]"
+          persistent-placeholder
+          :max="para.max"
+          :min="para.min"
+          :hint="validateNumberRange(para.min, para.max)"
           clearable
+          control-variant="stacked"
+          inset
           :error="getErrorState(para, key)"
           :error-messages="getErrorMessages(para, key)"
-        ></v-text-field>
+        ></v-number-input>
         <v-combobox
           v-else-if="para.type === 'directory' || para.type === 'file'"
           chips
@@ -197,6 +182,7 @@ const getErrorMessages = (para: DxtUserConfigurationOption, key: string) => {
           density="compact"
           :label="para.title"
           :placeholder="para.default?.toString()"
+          persistent-placeholder
           :model-value="dynamicModel(metadata.name, key).get()"
           @update:model-value="dynamicModel(metadata.name, key).set($event)"
           :error="getErrorState(para, key)"
@@ -212,6 +198,7 @@ const getErrorMessages = (para: DxtUserConfigurationOption, key: string) => {
           density="compact"
           variant="outlined"
           :placeholder="para.default?.toString()"
+          persistent-placeholder
           clearable
           :error="getErrorState(para, key)"
           :error-messages="getErrorMessages(para, key)"

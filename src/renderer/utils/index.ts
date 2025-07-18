@@ -1,6 +1,13 @@
 import type { MCPAPI } from '@/preload/types'
 import { useDxtStore } from '@/renderer/store/dxt'
 
+function isValidValue(value: any): boolean {
+  if (value === null || value === undefined) return false
+  if (typeof value === 'string' && value.trim() === '') return false
+  if (Array.isArray(value) && value.length === 0) return false
+  return true
+}
+
 export default class Utils {
   static getCurrentLocale(): string {
     return navigator?.language?.split('-')[0] || 'en'
@@ -53,17 +60,18 @@ export default class Utils {
 
         const userConfig = dxtStore.getConfig(key)
 
-        if (!userConfig) {
-          return [key, mcpMetadata]
-        }
+        const mergedConfig = Object.fromEntries(
+          Object.entries(userConfigObj).map(([configKey, configVal]) => {
+            const userValue = userConfig[configKey]
+
+            const value = isValidValue(userValue) ? userValue : configVal.default
+            return [configKey, value]
+          })
+        )
 
         const filteredUserConfig = Object.fromEntries(
-          Object.entries(userConfig).filter(([key, value]) => {
-            if (!(key in userConfigObj)) return false
-            if (value === null || value === undefined) return false
-            if (typeof value === 'string' && value === '') return false
-            if (Array.isArray(value) && value.length === 0) return false
-            return true
+          Object.entries(mergedConfig).filter(([, value]) => {
+            return isValidValue(value)
           })
         )
 

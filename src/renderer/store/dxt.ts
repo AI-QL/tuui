@@ -1,6 +1,14 @@
 import { defineStore } from 'pinia'
 import { ref, toRaw } from 'vue'
 import type { userConfigValue } from '@/preload/types'
+import { useI18n } from 'vue-i18n'
+
+export const validateNumberRange = (min: number | undefined, max: number | undefined) => {
+  const minNum = min ?? '-∞'
+  const maxNum = max ?? '+∞'
+  const { t } = useI18n()
+  return t('dxt.number-range', { min: minNum, max: maxNum })
+}
 
 export const useDxtStore = defineStore(
   'dxtStore',

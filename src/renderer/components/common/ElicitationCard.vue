@@ -2,7 +2,7 @@
 import { ref, toRaw } from 'vue'
 import { ElicitationTransfer } from '@/renderer/utils'
 import type { ElicitRequest, ElicitResult } from '@modelcontextprotocol/sdk/types'
-
+import { validateNumberRange } from '@/renderer/store/dxt'
 import { useI18n } from 'vue-i18n'
 const { t } = useI18n()
 
@@ -89,25 +89,6 @@ const getErrorMessages = (key: string) => {
   return getErrorState(key) ? [t('dxt.required')] : []
 }
 
-const validateNumberRange = (min: number | undefined, max: number | undefined) => {
-  return (value: string | number | null): boolean | string => {
-    if (!value && value !== 0) return true
-
-    const num = Number(value)
-    if (isNaN(num)) return t('dxt.number.invalid')
-
-    if (min !== undefined && num < Number(min)) {
-      return t('dxt.number.too-small', { min })
-    }
-
-    if (max !== undefined && num > Number(max)) {
-      return t('dxt.number.too-big', { max })
-    }
-
-    return true
-  }
-}
-
 const validateStringLength = (
   min: number | undefined | unknown,
   max: number | undefined | unknown
@@ -186,22 +167,22 @@ ElicitationTransfer.request(handleProgress)
             :error-messages="getErrorMessages(key)"
           >
           </v-text-field>
-          <v-text-field
+          <v-number-input
             v-else-if="para.type === 'integer'"
             prepend-icon="mdi-numeric"
-            type="number"
-            :model-value="dynamicModel(key).get()"
+            :model-value="dynamicModel(key).get() as number"
             @update:model-value="dynamicModel(key).set($event)"
             :label="para.title || para.description"
             density="compact"
             variant="outlined"
             :placeholder="para.description"
-            :rules="[validateNumberRange(para.minimum, para.maximum)]"
+            :max="para.maximum"
+            :min="para.minimum"
+            :hint="validateNumberRange(para.minimum, para.maximum)"
             clearable
             :error="getErrorState(key)"
             :error-messages="getErrorMessages(key)"
-          ></v-text-field>
-
+          ></v-number-input>
           <v-checkbox
             v-else-if="para.type === 'boolean'"
             :model-value="dynamicModel(key).get()"

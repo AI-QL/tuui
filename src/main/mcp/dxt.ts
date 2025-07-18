@@ -4,7 +4,8 @@ import {
   DxtManifestSchema,
   DxtManifest,
   DxtUserConfigValues,
-  McpServerConfig
+  McpServerConfig,
+  Logger
 } from '@anthropic-ai/dxt'
 
 import { existsSync, readFileSync, statSync } from 'fs'
@@ -19,16 +20,29 @@ export async function getMcpConfigForDxt(
   basePath: string,
   baseManifest: DxtManifest,
   userConfig: DxtUserConfigValues
-): Promise<McpServerConfig | undefined> {
-  return getMcpConfigForManifest({
+): Promise<McpServerConfig> {
+  const logMessages: string[] = []
+  const logger: Logger = {
+    log: (...args: unknown[]) => logMessages.push(args.join(' ')),
+    warn: (...args: unknown[]) => logMessages.push(args.join(' ')),
+    error: (...args: unknown[]) => logMessages.push(args.join(' '))
+  }
+
+  const mcpConfig = await getMcpConfigForManifest({
     manifest: baseManifest,
     extensionPath: basePath,
     systemDirs: mockSystemDirs,
     userConfig: userConfig,
-    pathSeparator: sep
+    pathSeparator: sep,
+    logger
   })
-}
 
+  if (mcpConfig === undefined) {
+    throw new Error(logMessages.join('\n'))
+  } else {
+    return mcpConfig
+  }
+}
 export async function unpackDxt(dxtUnpackOption: {
   dxtPath: string
   outputDir: string
