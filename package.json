@@ -45,14 +45,14 @@
     "@anthropic-ai/dxt": "^0.2.5",
     "@el3um4s/run-vbs": "^1.1.2",
     "@mdi/font": "^7.4.47",
-    "@modelcontextprotocol/sdk": "^1.15.1",
+    "@modelcontextprotocol/sdk": "^1.16.0",
     "@nut-tree-fork/nut-js": "^4.2.6",
     "applescript": "^1.0.0",
     "highlight.js": "^11.11.1",
     "iconify-icon": "^3.0.0",
     "katex": "^0.16.22",
     "localforage": "^1.10.0",
-    "md-editor-v3": "^5.8.1",
+    "md-editor-v3": "^5.8.2",
     "mermaid": "^11.9.0",
     "pinia": "^3.0.3",
     "pinia-plugin-state-persistence": "^1.10.2",
@@ -83,12 +83,12 @@
     "globals": "^16.3.0",
     "prettier": "^3.6.2",
     "typescript": "^5.8.3",
-    "vite": "^7.0.4",
+    "vite": "^7.0.5",
     "vite-plugin-electron": "^0.29.0",
     "vite-plugin-electron-renderer": "^0.14.6",
     "vite-plugin-vuetify": "^2.1.1",
     "vue-eslint-parser": "^10.2.0",
-    "vue-tsc": "^3.0.1"
+    "vue-tsc": "^3.0.2"
   },
   "overrides": {
     "vite-plugin-electron": {
