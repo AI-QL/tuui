@@ -1,10 +1,11 @@
 import { withSidebar } from 'vitepress-sidebar'
-import { name, repository, homepage } from '../../../package.json'
+import pkg from '../../../package.json' with { type: 'json' };
 import { defineConfig, UserConfig } from 'vitepress'
 import { withI18n } from 'vitepress-i18n'
 import type { VitePressSidebarOptions } from 'vitepress-sidebar/types'
 import type { VitePressI18nOptions } from 'vitepress-i18n/types'
 
+const { name, repository, homepage } = pkg
 const capitalizeFirst = (str: string): string => str.charAt(0).toUpperCase() + str.slice(1)
 const supportLocales = ['en', 'zhHans']
 const defaultLocale: string = supportLocales[0]
@@ -37,7 +38,7 @@ const vitePressI18nConfigs: VitePressI18nOptions = {
   }
 }
 
-const vitePressSidebarConfigs: VitePressSidebarOptions = [
+const vitePressSidebarConfigs: VitePressSidebarOptions[] = [
   ...supportLocales.map((lang) => {
     return {
       collapsed: false,
