@@ -72,8 +72,13 @@ export type ConfigMcpMetadata = {
 
 export type ClientObj = {
   name: string
+  configJson?: ServerConfig
   connection?: McpClientTransport
-  configJson?: Record<string, any>
+}
+
+export type FeatureObj = {
+  name: string
+  config: ClientObj['configJson']
 }
 
 export interface IpcSamplingEvents {

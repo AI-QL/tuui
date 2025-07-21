@@ -1,6 +1,6 @@
 import { ipcMain, shell, IpcMainEvent, dialog, BrowserWindow } from 'electron'
 import Constants from './utils/Constants'
-import { capabilitySchemas, ClientObj, ConfigMcpMetadata } from './mcp/types'
+import { capabilitySchemas, ClientObj, FeatureObj, ConfigMcpMetadata } from './mcp/types'
 
 import { manageRequests } from './mcp/client'
 
@@ -208,7 +208,7 @@ export default class IPCs {
     })
   }
 
-  static updateMCP(newFeatures): void {
+  static updateMCP(newFeatures: FeatureObj[]): void {
     this.currentFeatures = newFeatures
   }
 
@@ -220,7 +220,7 @@ export default class IPCs {
     handlerRegistry.clear()
   }
 
-  static initializeMCP(initialFeatures): void {
+  static initializeMCP(initialFeatures: FeatureObj[]): void {
     this.currentFeatures = initialFeatures
     ipcMain.handle('list-clients', () => {
       return this.currentFeatures
@@ -234,8 +234,8 @@ export function responseToRenderer(responseChannel, resolve) {
   })
 }
 
-export function registerIpcHandlers({ name, connection, configJson = {} }: ClientObj) {
-  const feature: { [key: string]: any } = {
+export function registerIpcHandlers({ name, connection, configJson }: ClientObj): FeatureObj {
+  const feature: FeatureObj = {
     name,
     config: configJson
   }

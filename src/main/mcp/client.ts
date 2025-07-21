@@ -29,13 +29,7 @@ async function initializeStdioClient(
   name: String,
   config: ServerConfig
 ): Promise<McpClientTransport> {
-  const transport = new StdioClientTransport({
-    ...config,
-    env: {
-      ...process.env,
-      ...(config.env || {})
-    }
-  })
+  const transport = new StdioClientTransport(config)
   const clientName = `${name}-client`
   const client = new Client(
     {
@@ -70,15 +64,6 @@ async function initializeStdioClient(
     const response = await elicitationTransferInvoke(request)
 
     console.log('Elicitation request received:\n', JSON.stringify(response, null, 2))
-
-    // return {
-    //   "action": "accept",
-    //   "content": {
-    //     "color": "blue",
-    //     "number": 20,
-    //     "pets": "cats"
-    //   }
-    // }
 
     return response
   })

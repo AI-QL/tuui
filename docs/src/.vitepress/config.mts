@@ -1,5 +1,5 @@
 import { withSidebar } from 'vitepress-sidebar'
-import pkg from '../../../package.json' with { type: 'json' };
+import pkg from '../../../package.json' with { type: 'json' }
 import { defineConfig, UserConfig } from 'vitepress'
 import { withI18n } from 'vitepress-i18n'
 import type { VitePressSidebarOptions } from 'vitepress-sidebar/types'
