@@ -8,7 +8,7 @@ const mcpStore = useMcpStore()
 </script>
 
 <template>
-  <div v-if="mcpStore.getSelected">
+  <div v-if="mcpStore.getSelected" :key="mcpStore.version">
     <div v-if="mcpStore.getSelected.primitive === 'tools'">
       <v-data-table
         hover

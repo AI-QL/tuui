@@ -12,8 +12,15 @@ const dxtStore = useDxtStore()
 
 const iconPrefix = ref('')
 
-watchEffect(async () => {
-  iconPrefix.value = await getDxtUrl()
+watchEffect(() => {
+  getDxtUrl()
+    .then((url) => {
+      iconPrefix.value = url
+    })
+    .catch((error) => {
+      console.error('Failed to fetch icon prefix:', error)
+      iconPrefix.value = ''
+    })
 })
 
 const props = defineProps({
