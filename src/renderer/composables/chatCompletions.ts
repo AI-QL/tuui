@@ -181,16 +181,19 @@ export const createCompletion = async (
 
     // Handle errors
     if (!completion.ok) {
-      const errorData = await completion.json()
-      console.log(errorData.error?.message)
-      if (errorData.error?.message)
-        snackbarStore.showErrorMessage(`${completion.status}: ${errorData.error.message}`)
-      else if (errorData.detail[0]?.msg)
-        snackbarStore.showErrorMessage(
-          `${completion.status}${' - ' + errorData.detail[0]?.loc + ':' || ':'} ${errorData.detail[0]?.msg}`
-        )
-      else snackbarStore.showErrorMessage(`${completion.status}: ${completion.statusText}`)
-      return
+      let errMessage = `${completion.status}: ${completion.statusText} ${completion.url}`
+      try {
+        const errorData = await completion.json()
+        if (errorData.error?.message) {
+          errMessage = `${completion.status}: ${errorData.error.message}`
+        } else if (errorData.detail[0]?.msg) {
+          const loc = errorData.detail[0]?.loc ? ` - ${errorData.detail[0].loc}:` : ':'
+          errMessage = `${completion.status}${loc} ${errorData.detail[0].msg}`
+        }
+      } finally {
+        snackbarStore.showErrorMessage(errMessage)
+        return
+      }
     }
 
     // Create a reader
