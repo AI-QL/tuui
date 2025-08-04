@@ -41,10 +41,10 @@ watchEffect(() => {
       @click.stop="layoutStore.sidebar = !layoutStore.sidebar"
     >
     </v-app-bar-nav-icon>
-    <v-app-bar-title class="text-button">{{ $t(titleKey.toString()) }}</v-app-bar-title>
+    <v-app-bar-title class="text-button title">{{ $t(titleKey.toString()) }}</v-app-bar-title>
 
     <v-btn-toggle
-      class="no-drag"
+      class="no-drag ml-2"
       v-model="layoutStore.screen"
       data-testid="main-menu"
       mandatory
@@ -83,5 +83,15 @@ watchEffect(() => {
 }
 .no-drag {
   app-region: no-drag;
+}
+
+.title {
+  display: block;
+}
+
+@media (max-width: 600px) {
+  .title {
+    display: none;
+  }
 }
 </style>
