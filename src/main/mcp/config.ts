@@ -2,7 +2,7 @@ import { showNotification } from '../utils//notification'
 import fs from 'node:fs'
 import path from 'node:path'
 import { McpServersConfig } from './types'
-const { shell } = require('electron')
+import { shell } from 'electron'
 
 export function loadConfigFile(configPath: string): McpServersConfig {
   const resolvedConfigPath = path.isAbsolute(configPath)

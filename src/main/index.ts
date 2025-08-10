@@ -22,6 +22,14 @@ const registerShortcuts = () => {
   })
 }
 
+async function createWindow() {
+  try {
+    mainWindow = await createMainWindow()
+  } catch {
+    app.exit()
+  }
+}
+
 app.on('ready', async () => {
   // Disable special menus on macOS by uncommenting the following, if necessary
   /*
@@ -31,13 +39,13 @@ app.on('ready', async () => {
   }
   */
 
-  mainWindow = await createMainWindow()
+  createWindow()
   registerShortcuts()
 })
 
 app.on('activate', async () => {
   if (!mainWindow) {
-    mainWindow = await createMainWindow()
+    createWindow()
   }
 })
 
