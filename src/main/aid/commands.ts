@@ -86,9 +86,17 @@ export const openCommandPicker = (params: anyDict): void => {
 
   // and at right location
   cursorAtOpen = screen.getCursorScreenPoint()
+
+  const screenBounds = screen.getDisplayNearestPoint(cursorAtOpen).bounds
+  const adjustedX = Math.max(0, Math.min(cursorAtOpen.x - width / 2, screenBounds.width - width))
+  const adjustedY = Math.max(
+    0,
+    Math.min(cursorAtOpen.y - (params.sourceApp ? 64 : 24), screenBounds.height - height)
+  )
+
   commandPicker.setBounds({
-    x: cursorAtOpen.x - width / 2,
-    y: cursorAtOpen.y - (params.sourceApp ? 64 : 24),
+    x: adjustedX,
+    y: adjustedY,
     width: width,
     height: height
   })
