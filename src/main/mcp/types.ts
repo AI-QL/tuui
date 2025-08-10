@@ -66,6 +66,11 @@ type McpMetadataDxt = {
   user_config?: DxtUserConfigValues
 }
 
+type CommandRequest = {
+  prompt: string
+  input: string
+}
+
 export type ConfigMcpMetadata = {
   [key: string]: McpMetadataStdio | McpMetadataDxt
 }
@@ -87,4 +92,8 @@ export interface IpcSamplingEvents {
 
 export interface IpcElicitationEvents {
   msgElicitationTransferInvoke: (_message: ElicitRequest) => void
+}
+
+export interface IpcCommandEvents {
+  msgCommandSelectionInvoke: (_message: CommandRequest) => void
 }

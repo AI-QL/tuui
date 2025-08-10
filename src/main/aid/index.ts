@@ -1,4 +1,4 @@
-import { CreateWindowOpts, ReleaseFocusOpts } from './window'
+import { CreateWindowOpts, ReleaseFocusOpts, BrowserWindowCommandOptions } from './window'
 import {
   app,
   BrowserWindow,
@@ -110,6 +110,12 @@ export const createWindow = (opts: CreateWindowOpts = {}) => {
   // to log network traffic
   // interceptNetwork(window);
 
+  loadWindowUrl(window, opts)
+
+  return window
+}
+
+export function loadWindowUrl(window: BrowserWindow, opts: BrowserWindowCommandOptions) {
   let queryParams = ''
   if (opts.queryParams) {
     queryParams =
@@ -120,18 +126,15 @@ export const createWindow = (opts: CreateWindowOpts = {}) => {
   }
 
   let url: string
-
   if (Constants.IS_DEV_ENV) {
     url = `${Constants.APP_INDEX_URL_DEV}#${opts.hash || ''}${queryParams}`
   } else {
     url = `${Constants.APP_INDEX_URL_PROD}#${opts.hash || ''}${queryParams}`
   }
+
   // const url = `${MAIN_WINDOW_VITE_DEV_SERVER_URL}${queryParams}#${opts.hash||''}`;
   console.log('Load URL:', url)
   window.loadURL(url)
-
-  // done
-  return window
 }
 
 export const undockWindow = (window: BrowserWindow, preventQuit: boolean = false) => {

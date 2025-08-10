@@ -11,6 +11,10 @@ export const getCachedText = (id: string): string => {
 }
 
 export const putCachedText = (text: string): string => {
+  Object.keys(textCache).forEach((key) => {
+    delete textCache[key]
+  })
+
   const id = uuidv4()
   textCache[id] = text
   return id

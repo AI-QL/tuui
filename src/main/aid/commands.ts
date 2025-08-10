@@ -1,6 +1,6 @@
 import { Application } from './types'
 import { app, BrowserWindow, screen } from 'electron'
-import { createWindow, ensureOnCurrentScreen, releaseFocus } from './index'
+import { createWindow, ensureOnCurrentScreen, releaseFocus, loadWindowUrl } from './index'
 //import MacosAutomator from '../../automations/macos';
 //import WindowsAutomator from '../../automations/windows';
 //import Computer from '../../automations/computer_nut';
@@ -11,6 +11,8 @@ export let commandPicker: BrowserWindow = null
 const width = 300
 const height = 320
 
+const COMMAND_HASH = '/commands'
+
 let commanderStartTime: number | undefined
 let sourceApp: Application | undefined
 let cursorAtOpen: { x: number; y: number } | undefined
@@ -20,7 +22,7 @@ export const prepareCommandPicker = (queryParams?: anyDict): void => {
 
   // open a new one
   commandPicker = createWindow({
-    hash: '/commands',
+    hash: COMMAND_HASH,
     title: 'TuuiCommandPicker',
     x: 0,
     y: 0,
@@ -41,6 +43,7 @@ export const prepareCommandPicker = (queryParams?: anyDict): void => {
   commandPicker.on('show', () => {
     // macos can use app.focus which is more elegant
     // windows will use activateCommandPicker
+
     if (macOS) {
       app.focus({ steal: true })
     }
@@ -74,7 +77,8 @@ export const openCommandPicker = (params: anyDict): void => {
   if (!commandPicker || commandPicker.isDestroyed()) {
     prepareCommandPicker(params)
   } else {
-    commandPicker.webContents.send('show', params)
+    loadWindowUrl(commandPicker, { queryParams: params, hash: COMMAND_HASH })
+    // commandPicker.webContents.send('show', params)
   }
 
   // check prompt is on the right screen

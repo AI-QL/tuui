@@ -16,6 +16,11 @@ import { loadLlmFile } from './mcp/config'
 import { unpackDxt, getManifest } from './mcp/dxt'
 import { DxtManifest } from '@anthropic-ai/dxt'
 
+import { closeCommandPicker } from './aid/commands'
+
+import { commandSelectionInvoke } from './index'
+import { getCachedText } from './aid/utils'
+
 const handlerRegistry = new Map<string, Function>()
 
 interface ManifestResponse {
@@ -171,6 +176,12 @@ export default class IPCs {
       } catch (err) {
         event.reply('msgFileTransferResponse', { name, success: false, reason: err.message })
       }
+    })
+
+    ipcMain.on('msgCommandSelectionNotify', async (event: IpcMainEvent, { id, prompt }) => {
+      closeCommandPicker()
+      const args = { id, prompt, input: getCachedText(id) }
+      commandSelectionInvoke(args)
     })
 
     ipcMain.handle('list-manifests', async (_event: IpcMainEvent): Promise<ManifestResponse> => {

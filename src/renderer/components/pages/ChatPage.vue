@@ -4,6 +4,7 @@ import ImgDialog from '../common/ImgDialog.vue'
 import ChatCard from '../common/ChatCard.vue'
 import SamplingCard from '../common/SamplingCard.vue'
 import ElicitationCard from '../common/ElicitationCard.vue'
+
 import { isEmptyTools } from '@/renderer/composables/chatCompletions'
 import { MdPreview, config } from 'md-editor-v3'
 import 'md-editor-v3/lib/style.css'

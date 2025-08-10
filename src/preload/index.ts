@@ -19,6 +19,7 @@ const mainAvailChannels: string[] = [
   'msgOpenDxtFilePath',
   'msgOpenFile',
   'msgFileTransferRequest',
+  'msgCommandSelectionNotify',
   'msgGetApiToken',
   'msgInitAllMcpServers',
   'msgWindowReload'
@@ -28,6 +29,7 @@ const rendererAvailChannels: string[] = [
   'renderListenStdioProgress',
   'msgSamplingTransferInvoke',
   'msgElicitationTransferInvoke',
+  'msgCommandSelectionInvoke',
   'msgFileTransferResponse'
 ]
 

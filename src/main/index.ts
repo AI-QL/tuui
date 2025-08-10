@@ -3,12 +3,14 @@ import { v4 as uuidv4 } from 'uuid'
 import Constants from './utils/Constants'
 import { createErrorWindow, createMainWindow } from './MainRunner'
 
-import { IpcSamplingEvents, IpcElicitationEvents } from './mcp/types'
+import { IpcSamplingEvents, IpcElicitationEvents, IpcCommandEvents } from './mcp/types'
 
 import { responseToRenderer } from './IPCs'
 
 import * as shortcuts from './aid/shortcuts'
 import Commander, { notEditablePrompts } from './aid/commander'
+
+import { showWindow } from './tray'
 
 let mainWindow
 let errorWindow
@@ -144,5 +146,27 @@ export function elicitationTransferInvoke<T extends keyof IpcElicitationEvents>(
       args,
       responseChannel
     })
+  })
+}
+
+export async function commandSelectionInvoke<T extends keyof IpcCommandEvents>(
+  ...args: Parameters<IpcCommandEvents[T]>
+) {
+  if (Constants.IS_DEV_ENV) {
+    await mainWindow.loadURL(Constants.APP_INDEX_URL_DEV + '#/chat')
+  } else {
+    await mainWindow.loadFile(Constants.APP_INDEX_URL_PROD + '#/chat')
+  }
+
+  showWindow(mainWindow)
+
+  if (!mainWindow || mainWindow.isDestroyed()) {
+    return
+  }
+
+  console.log(args)
+
+  mainWindow.webContents.send('msgCommandSelectionInvoke', {
+    args
   })
 }

@@ -159,3 +159,18 @@ export const FileTransfer = {
   request: File.sendFileToMainRequest,
   response: File.sendFileToMainResponse
 }
+
+class Command {
+  static async msgSendCommandToMainNotify(command: { id: string; prompt: string }): Promise<void> {
+    await window.mainApi.send('msgCommandSelectionNotify', command)
+  }
+
+  static async msgCommandToChatInvoke(callback: any): Promise<any> {
+    return window.mainApi.on('msgCommandSelectionInvoke', callback)
+  }
+}
+
+export const CommandEvent = {
+  notify: Command.msgSendCommandToMainNotify,
+  callback: Command.msgCommandToChatInvoke
+}

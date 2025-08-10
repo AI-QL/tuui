@@ -17,12 +17,14 @@ export * from './commands'
 // export * from './windows/studio';
 // export * from './windows/debug';
 
-export type CreateWindowOpts = BrowserWindowConstructorOptions & {
+export type BrowserWindowCommandOptions = {
   showInDock?: boolean
   keepHidden?: boolean
   queryParams?: anyDict
   hash?: string
 }
+
+export type CreateWindowOpts = BrowserWindowConstructorOptions & BrowserWindowCommandOptions
 
 export type ReleaseFocusOpts = {
   sourceApp?: Application

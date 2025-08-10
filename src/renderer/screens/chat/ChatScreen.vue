@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
 import ChatPage from '@/renderer/components/pages/ChatPage.vue'
+import CommandCard from '@/renderer/components/common/CommandCard.vue'
 import { useMessageStore } from '@/renderer/store/message'
 import RobotJSON from '@/public/lotties/robot.json'
 
@@ -10,6 +11,7 @@ const { locale } = useI18n()
 </script>
 
 <template>
+  <CommandCard></CommandCard>
   <ChatPage
     v-if="messageStore.conversation.length > 0"
     :messages="messageStore.conversation"
