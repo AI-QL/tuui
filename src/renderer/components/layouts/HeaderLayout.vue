@@ -1,13 +1,18 @@
 <script setup lang="tsx">
-import { watchEffect } from 'vue'
+import { watchEffect, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useLayoutStore, getScreenFromPath } from '@/renderer/store/layout'
 // import { useTheme } from 'vuetify'
+import { useDisplay } from 'vuetify'
 import LocaleBtn from '@/renderer/components/common/LocaleBtn.vue'
 import { useRouteFeatures } from '@/renderer/composables/useRouteFeatures'
 // import { useMcpStore } from '@/renderer/store/mcp'
+import { useI18n } from 'vue-i18n'
+const { t } = useI18n()
 
 const { titleKey, hasComponent } = useRouteFeatures()
+
+const { xs, smAndUp } = useDisplay()
 
 // const { hasComponent } = useRouteFeatures()
 
@@ -27,9 +32,29 @@ watchEffect(() => {
   layoutStore.screen = getScreenFromPath(route.path)
 })
 
-// const handleChangeTheme = (): void => {
-//   theme.global.name.value = theme.global.current.value.dark ? 'light' : 'dark'
-// }
+const items = computed(() => {
+  return [
+    { title: t('title.main'), testid: 'btn-menu-mcp', route: '/', icon: 'mdi-view-dashboard' },
+    {
+      title: t('title.chat'),
+      testid: 'btn-menu-chat',
+      route: '/chat',
+      icon: 'mdi-comment-text-outline'
+    },
+    {
+      title: t('title.agent'),
+      testid: 'btn-menu-agent',
+      route: '/agent',
+      icon: 'mdi-account-multiple'
+    },
+    {
+      title: t('title.setting'),
+      testid: 'btn-menu-setting',
+      route: '/setting',
+      icon: 'mdi-cog-transfer-outline'
+    }
+  ]
+})
 </script>
 <template>
   <v-app-bar class="drag" block :order="-1" color="primary" height="36" rounded="be-lg">
@@ -44,6 +69,7 @@ watchEffect(() => {
     <v-app-bar-title class="text-button title">{{ $t(titleKey.toString()) }}</v-app-bar-title>
 
     <v-btn-toggle
+      v-if="smAndUp"
       class="no-drag ml-2"
       v-model="layoutStore.screen"
       data-testid="main-menu"
@@ -51,22 +77,34 @@ watchEffect(() => {
       variant="text"
       base-color="white"
     >
-      <v-btn :key="0" data-testid="btn-menu-mcp" @click="handleRoute('/')">
-        <v-icon>mdi-view-dashboard</v-icon>
-      </v-btn>
-
-      <v-btn :key="1" data-testid="btn-menu-chat" @click="handleRoute('/chat')">
-        <v-icon>mdi-comment-text-outline</v-icon>
-      </v-btn>
-
-      <v-btn :key="2" data-testid="btn-menu-agent" @click="handleRoute('/agent')">
-        <v-icon>mdi-account-multiple</v-icon>
-      </v-btn>
-
-      <v-btn :key="3" data-testid="btn-menu-setting" @click="handleRoute('/setting')">
-        <v-icon>mdi-cog-transfer-outline</v-icon>
+      <v-btn
+        v-for="(item, index) in items"
+        :key="index"
+        :data-testid="item.testid"
+        @click="handleRoute(item.route)"
+      >
+        <v-icon> {{ item.icon }} </v-icon>
       </v-btn>
     </v-btn-toggle>
+    <v-menu v-if="xs">
+      <template v-slot:activator="{ props }">
+        <v-btn color="white" v-bind="props" class="no-drag ml-2" icon="mdi-apps" rounded="lg">
+        </v-btn>
+      </template>
+      <v-list nav>
+        <v-list-item
+          v-for="(item, index) in items"
+          :key="index"
+          :value="index"
+          @click="handleRoute(item.route)"
+        >
+          <template v-slot:prepend>
+            <v-icon :icon="item.icon"></v-icon>
+          </template>
+          <v-list-item-title>{{ item.title }}</v-list-item-title>
+        </v-list-item>
+      </v-list>
+    </v-menu>
 
     <v-spacer></v-spacer>
 
@@ -81,6 +119,7 @@ watchEffect(() => {
 .drag {
   app-region: drag;
 }
+
 .no-drag {
   app-region: no-drag;
 }
