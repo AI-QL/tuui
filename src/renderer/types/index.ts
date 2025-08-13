@@ -15,7 +15,7 @@ export const CHATBOT_DEFAULTS = {
   ],
 
   model: 'Qwen/Qwen3-32B',
-  modelList: ['Qwen/Qwen3-32B', 'Qwen/Qwen3-30B-A3B'],
+  modelList: ['Qwen/Qwen3-32B', 'Qwen/Qwen3-Coder-480B-A35B-Instruct-Turbo', 'openai/gpt-oss-120b'],
 
   authPrefix: 'Bearer',
   authPrefixList: ['Bearer', 'Base', 'Token'],

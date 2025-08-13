@@ -1,29 +1,26 @@
-<script setup lang="tsx">
-// import { useRoute } from 'vue-router'
-// import { computed } from 'vue'
+<script setup lang="ts">
 import { useLayoutStore } from '@/renderer/store/layout'
+
+import { useDisplay } from 'vuetify'
+
+const mobileBreakpoint = 600
+const { mobile } = useDisplay({ mobileBreakpoint: mobileBreakpoint })
 
 const layoutStore = useLayoutStore()
 
-// const router = useRouter()
-// const route: any = useRoute()
-
-// const titleKey: string = (route?.meta?.titleKey || 'title.main') as string
-
-// const handleRoute = (path: string): void => {
-//   router.push(path)
-// }
-
-// const isCurrentRoute = (path: string): boolean => {
-//   return path === route.path
-// }
-
-// const hasSidebar = computed(() => {
-//   return route.matched.some(record => Boolean(record.components?.sidebar))
-// })
+function handleDrawerClick() {
+  if (mobile.value) {
+    layoutStore.sidebar = false
+  }
+}
 </script>
 <template>
-  <v-navigation-drawer width="273" v-model="layoutStore.sidebar" permanent>
+  <v-navigation-drawer
+    :permanent="!mobile"
+    :width="mobile ? mobileBreakpoint : 273"
+    v-model="layoutStore.sidebar"
+    @click="handleDrawerClick"
+  >
     <slot />
     <template #append>
       <slot name="append" />

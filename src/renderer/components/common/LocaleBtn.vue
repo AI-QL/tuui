@@ -19,7 +19,7 @@ const handleChangeLanguage = (val): void => {
 }
 </script>
 <template>
-  <v-badge location="top left" :offset-y="7" :offset-x="5" class="click-through-badge">
+  <v-badge location="top right" :offset-y="7" :offset-x="5" class="click-through-badge">
     <template #badge>
       <iconify-icon :icon="localeStore.getIcon2()"></iconify-icon>
     </template>

@@ -66,6 +66,7 @@ const items = computed(() => {
       @click.stop="layoutStore.sidebar = !layoutStore.sidebar"
     >
     </v-app-bar-nav-icon>
+    <LocaleBtn class="no-drag ml-3" data-testid="select-language" />
     <v-app-bar-title class="text-button title">{{ $t(titleKey.toString()) }}</v-app-bar-title>
 
     <v-btn-toggle
@@ -109,9 +110,7 @@ const items = computed(() => {
     <v-spacer></v-spacer>
 
     <template #append>
-      <LocaleBtn class="no-drag" data-testid="select-language" />
-
-      <v-col style="flex: 0 0 130px"></v-col>
+      <v-col style="flex: 0 0 100px"></v-col>
     </template>
   </v-app-bar>
 </template>
