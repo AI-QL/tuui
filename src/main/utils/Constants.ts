@@ -1,5 +1,5 @@
 import { join, dirname, normalize, sep } from 'path'
-import { name, version, debug } from '../../../package.json'
+import { name, version, debug, homepage } from '../../../package.json'
 import { fileURLToPath } from 'url'
 import { app } from 'electron'
 
@@ -24,9 +24,14 @@ export interface AssetsPaths {
 
 export default class Constants {
   // Display app name (uppercase first letter)
-  static APP_NAME = name.charAt(0).toUpperCase() + name.slice(1)
+  // static APP_NAME = name.charAt(0).toUpperCase() + name.slice(1)
+
+  // Display app name (uppercase all letters)
+  static APP_NAME = name.toUpperCase()
 
   static APP_VERSION = version
+
+  static APP_HOME_PAGE = homepage
 
   static IS_DEV_ENV = process.env.NODE_ENV === 'development'
 

@@ -13,7 +13,7 @@ type CLIENT = {
 
 // Whitelist of valid channels used for IPC communication (Send message from Renderer to Main)
 const mainAvailChannels: string[] = [
-  'msgRequestGetVersion',
+  'msgRequestAppInfo',
   'msgRequestGetDxtUrl',
   'msgOpenExternalLink',
   'msgOpenDxtFilePath',

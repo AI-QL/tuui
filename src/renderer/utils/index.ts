@@ -13,6 +13,10 @@ export default class Utils {
     return navigator?.language?.split('-')[0] || 'en'
   }
 
+  static async getAppInfo(): Promise<any> {
+    return window.mainApi.invoke('msgRequestAppInfo')
+  }
+
   static async getApiToken(cli: string): Promise<any> {
     return window.mainApi.invoke('msgGetApiToken', cli)
   }
@@ -95,6 +99,7 @@ export default class Utils {
 export const {
   getCurrentLocale,
   openExternal,
+  getAppInfo,
   openDxtFilePath,
   openFile,
   getApiToken,

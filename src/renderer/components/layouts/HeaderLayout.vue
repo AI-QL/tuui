@@ -1,11 +1,12 @@
 <script setup lang="tsx">
-import { watchEffect, computed } from 'vue'
+import { watchEffect, computed, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useLayoutStore, getScreenFromPath } from '@/renderer/store/layout'
 // import { useTheme } from 'vuetify'
 import { useDisplay } from 'vuetify'
 import LocaleBtn from '@/renderer/components/common/LocaleBtn.vue'
 import { useRouteFeatures } from '@/renderer/composables/useRouteFeatures'
+import { getAppInfo } from '@/renderer/utils'
 // import { useMcpStore } from '@/renderer/store/mcp'
 import { useI18n } from 'vue-i18n'
 const { t } = useI18n()
@@ -30,6 +31,20 @@ const handleRoute = (path: string): void => {
 
 watchEffect(() => {
   layoutStore.screen = getScreenFromPath(route.path)
+  
+})
+
+const platform = ref('')
+
+watchEffect(() => {
+  getAppInfo()
+    .then((info) => {
+      platform.value = info.platform
+    })
+    .catch((error) => {
+      console.error('Failed to fetch app info:', error)
+      platform.value = ''
+    })
 })
 
 const items = computed(() => {
@@ -110,7 +125,7 @@ const items = computed(() => {
     <v-spacer></v-spacer>
 
     <template #append>
-      <v-col style="flex: 0 0 100px"></v-col>
+      <v-col v-if="platform === 'win32' || platform === 'linux'" style="flex: 0 0 100px"></v-col>
     </template>
   </v-app-bar>
 </template>

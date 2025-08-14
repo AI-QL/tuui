@@ -1,21 +1,14 @@
 {
   "workbench.settings.useSplitJSON": true,
-  "eslint.codeActionsOnSave.rules": null,
+  "css.lint.validProperties": [
+    "app-region"
+  ],
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": "explicit"
   },
-  "eslint.validate": [
-    "javascript"
-  ],
-  "eslint.workingDirectories": [
-    {
-      "mode": "auto"
-    }
-  ],
   "emmet.syntaxProfiles": {},
   "files.autoSave": "afterDelay",
   "editor.wordWrap": "on",
-  "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.formatOnSave": false,
   "editor.tabSize": 2,
   "[jsonc]": {

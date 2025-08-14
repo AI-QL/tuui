@@ -38,8 +38,12 @@ export default class IPCs {
 
   static initialize(): void {
     // Get application version
-    ipcMain.handle('msgRequestGetVersion', () => {
-      return Constants.APP_VERSION
+    ipcMain.handle('msgRequestAppInfo', () => {
+      return {
+        version: Constants.APP_VERSION,
+        homepage: Constants.APP_HOME_PAGE,
+        platform: process.platform
+      }
     })
 
     ipcMain.handle('msgRequestGetDxtUrl', () => {
