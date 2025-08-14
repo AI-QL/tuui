@@ -71,6 +71,7 @@ const agentStore = useAgentStore()
         <v-icon-btn
           v-if="messageStore.userMessage"
           color="primary"
+          variant="tonal"
           icon="mdi-arrow-up"
           rounded="lg"
           @click="messageStore.sendMessage"
@@ -78,16 +79,17 @@ const agentStore = useAgentStore()
         <v-icon-btn
           v-else-if="messageStore.generating"
           color="primary"
+          variant="tonal"
           icon="mdi-stop"
           rounded="lg"
           @click="messageStore.stop"
         ></v-icon-btn>
         <div v-else-if="messageStore.conversation.length > 0">
           <v-icon-btn
-            v-tooltip:start="$t('chat.new')"
-            color="primary"
-            variant="elevated"
-            icon="mdi-pencil-plus"
+            v-tooltip:start="$t('chat.wipe')"
+            color="error"
+            variant="tonal"
+            icon="mdi-delete-off-outline"
             rounded="lg"
             @click="messageStore.init()"
           ></v-icon-btn>
@@ -97,12 +99,19 @@ const agentStore = useAgentStore()
           <v-icon-btn
             v-tooltip:start="$t('chat.reg')"
             color="primary"
+            variant="tonal"
             icon="mdi-autorenew"
             rounded="lg"
             @click="messageStore.resendMessage"
           ></v-icon-btn>
         </div>
-        <v-icon-btn v-else color="grey" icon="mdi-account-edit" rounded="lg"></v-icon-btn>
+        <v-icon-btn
+          v-else
+          color="grey"
+          variant="tonal"
+          icon="mdi-account-edit"
+          rounded="lg"
+        ></v-icon-btn>
       </div>
     </v-col>
   </v-row>

@@ -59,7 +59,7 @@
     "title": "语言设置"
   },
   "chat": {
-    "new": "新对话",
+    "wipe": "清理对话",
     "reg": "重新生成",
     "select-model": "选择模型",
     "select-agent": "选择智能体",
@@ -118,7 +118,7 @@
     "number-range": "数值必须在 {min} 到 {max} 之间"
   },
   "snackbar": {
-    "addnew": "已添加新会话",
+    "addnew": "开始新会话",
     "addfail": "已处于最新会话",
     "stopped": "停止生成",
     "parse-stream-fail": "无法解析数据流",

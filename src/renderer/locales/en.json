@@ -59,8 +59,8 @@
     "title": "Language"
   },
   "chat": {
-    "new": "New Conversation",
-    "reg": "Regeneration",
+    "wipe": "Wipe",
+    "reg": "Regenerate",
     "select-model": "Select Model",
     "select-agent": "Select Agent",
     "delete": "Delete History",
@@ -118,7 +118,7 @@
     "number-range": "Value range should between {min} and {max}"
   },
   "snackbar": {
-    "addnew": "Added new session.",
+    "addnew": "New session Initiated.",
     "addfail": "Already in a fresh session.",
     "stopped": "Generating stopped.",
     "parse-stream-fail": "Cannot read the stream.",

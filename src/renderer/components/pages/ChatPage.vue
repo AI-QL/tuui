@@ -126,6 +126,7 @@ const groupMessages = computed<Group[]>(() => {
             class="mt-2 mr-3 mr-lg-6"
             :size="smAndUp ? 'default' : 'x-small'"
             color="primary"
+            variant="tonal"
             icon="mdi-account-circle"
           />
           <chat-card
@@ -178,6 +179,7 @@ const groupMessages = computed<Group[]>(() => {
             class="mt-2 mr-3 mr-lg-6"
             :size="smAndUp ? 'default' : 'x-small'"
             color="teal"
+            variant="tonal"
             icon="mdi-lightning-bolt-circle"
           />
           <chat-card
@@ -234,6 +236,7 @@ const groupMessages = computed<Group[]>(() => {
             class="mt-2 mr-3 mr-lg-6"
             :size="smAndUp ? 'default' : 'x-small'"
             color="brown"
+            variant="tonal"
             icon="mdi-swap-vertical-circle"
           />
           <chat-card

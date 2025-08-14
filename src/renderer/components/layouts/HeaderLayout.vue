@@ -31,7 +31,6 @@ const handleRoute = (path: string): void => {
 
 watchEffect(() => {
   layoutStore.screen = getScreenFromPath(route.path)
-  
 })
 
 const platform = ref('')
