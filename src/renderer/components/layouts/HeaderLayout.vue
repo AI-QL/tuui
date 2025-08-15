@@ -71,7 +71,14 @@ const items = computed(() => {
 })
 </script>
 <template>
-  <v-app-bar class="drag" block :order="-1" color="primary" height="36" rounded="be-lg">
+  <v-app-bar
+    class="drag gradient-main text-white"
+    block
+    :order="-1"
+    color="primary"
+    height="36"
+    rounded="be-lg"
+  >
     <v-app-bar-nav-icon
       class="ml-2 no-drag"
       density="compact"
@@ -145,5 +152,10 @@ const items = computed(() => {
   .title {
     display: none;
   }
+}
+
+.gradient-main {
+  background: linear-gradient(to right, #01579b, #344767 calc(100% - 120px), #344767) !important;
+  background-blend-mode: normal;
 }
 </style>

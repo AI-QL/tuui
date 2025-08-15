@@ -59,7 +59,7 @@ const commandNotify = (item: promptType) => {
   <v-app>
     <v-data-iterator :items="promptData" :items-per-page="-1" :search="search">
       <template #header>
-        <v-toolbar class="py-2 px-3 drag" density="compact">
+        <v-toolbar class="py-2 px-3 drag gradient-command" density="compact">
           <v-text-field
             v-model="search"
             class="no-drag"
@@ -103,5 +103,10 @@ const commandNotify = (item: promptType) => {
 
 ::-webkit-scrollbar {
   display: none;
+}
+
+.gradient-command {
+  background: linear-gradient(to right, #01579b, #344767) !important;
+  background-blend-mode: normal;
 }
 </style>
