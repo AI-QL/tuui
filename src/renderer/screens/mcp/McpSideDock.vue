@@ -61,19 +61,19 @@ document.addEventListener('dragenter', (_e) => {
   <v-container>
     <v-btn-group variant="outlined" divided>
       <v-btn
+        v-tooltip:top="$t('mcp.init')"
         icon="mdi-power"
         color="success"
         :loading="isLoading"
         @click="activeAllMcpServers()"
-        v-tooltip:top="$t('mcp.init')"
       >
       </v-btn>
       <v-btn
+        v-tooltip:top="$t('dxt.title')"
         icon="mdi-package-variant"
+        :class="{ 'drag-active': isDragActive }"
         @click="openDialog()"
         @dragenter.prevent="openDialog()"
-        v-tooltip:top="$t('dxt.title')"
-        :class="{ 'drag-active': isDragActive }"
       ></v-btn>
     </v-btn-group>
     <McpDxtPage v-model="dxtDialog"></McpDxtPage>

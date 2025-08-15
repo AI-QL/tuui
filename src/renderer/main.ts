@@ -23,12 +23,12 @@ declare global {
     mcpServers?: {
       get: () => MCPAPI
       refresh: () => Promise<{}>
-      update: (name: string) => Promise<{}>
+      update: (_name: string) => Promise<{}>
     }
     dxtManifest?: {
       get: () => DXTAPI
       refresh: () => Promise<{}>
-      update: (name: string) => Promise<{}>
+      update: (_name: string) => Promise<{}>
     }
   }
 }

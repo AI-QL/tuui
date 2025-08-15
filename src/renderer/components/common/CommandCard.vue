@@ -18,5 +18,3 @@ const handleProgress = (_event, progress) => {
 
 CommandEvent.callback(handleProgress)
 </script>
-
-<template></template>

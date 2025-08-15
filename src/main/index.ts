@@ -8,7 +8,7 @@ import { IpcSamplingEvents, IpcElicitationEvents, IpcCommandEvents } from './mcp
 import { responseToRenderer } from './IPCs'
 
 import * as shortcuts from './aid/shortcuts'
-import Commander, { notEditablePrompts } from './aid/commander'
+import Commander from './aid/commander'
 
 import { showWindow } from './tray'
 

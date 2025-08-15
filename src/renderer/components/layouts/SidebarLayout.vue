@@ -16,9 +16,9 @@ function handleDrawerClick() {
 </script>
 <template>
   <v-navigation-drawer
+    v-model="layoutStore.sidebar"
     :permanent="!mobile"
     :width="mobile ? mobileBreakpoint : 273"
-    v-model="layoutStore.sidebar"
     @click="handleDrawerClick"
   >
     <slot />

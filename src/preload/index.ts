@@ -213,6 +213,7 @@ const dxt = {
     return dxt._currentAPI
   },
   update: async (name: string) => {
+    void name
     // await updateAPI(name)
     return dxt._currentAPI
   }

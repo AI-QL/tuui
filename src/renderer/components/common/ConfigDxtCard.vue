@@ -141,7 +141,7 @@ const getErrorMessages = (para: DxtUserConfigurationOption, key: string) => {
   <v-card :title="$t('dxt.user-config')" class="mt-4">
     <v-divider></v-divider>
     <v-card-text>
-      <v-row class="mx-3 mt-4 mb-0" v-for="(para, key) in manifest.user_config" :key="key">
+      <v-row v-for="(para, key) in manifest.user_config" :key="key" class="mx-3 mt-4 mb-0">
         <v-text-field
           v-if="para.sensitive === true"
           prepend-icon="mdi-key-variant"
@@ -151,20 +151,19 @@ const getErrorMessages = (para: DxtUserConfigurationOption, key: string) => {
           variant="outlined"
           :placeholder="para.default?.toString()"
           persistent-placeholder
-          @click:append-inner="toggleShowPassword(key)"
           :append-inner-icon="showPassword[key] ? 'mdi-eye-off' : 'mdi-eye'"
           :model-value="dynamicModel(metadata.name, key).get()"
-          @update:model-value="dynamicModel(metadata.name, key).set($event)"
           clearable
           :error="getErrorState(para, key)"
           :error-messages="getErrorMessages(para, key)"
+          @click:append-inner="toggleShowPassword(key)"
+          @update:model-value="dynamicModel(metadata.name, key).set($event)"
         >
         </v-text-field>
         <v-number-input
           v-else-if="para.type === 'number'"
           prepend-icon="mdi-numeric"
           :model-value="dynamicModel(metadata.name, key).get() as number"
-          @update:model-value="dynamicModel(metadata.name, key).set($event)"
           :label="para.title"
           density="compact"
           variant="outlined"
@@ -178,6 +177,7 @@ const getErrorMessages = (para: DxtUserConfigurationOption, key: string) => {
           inset
           :error="getErrorState(para, key)"
           :error-messages="getErrorMessages(para, key)"
+          @update:model-value="dynamicModel(metadata.name, key).set($event)"
         ></v-number-input>
         <v-combobox
           v-else-if="para.type === 'directory' || para.type === 'file'"
@@ -191,16 +191,15 @@ const getErrorMessages = (para: DxtUserConfigurationOption, key: string) => {
           :placeholder="para.default?.toString()"
           persistent-placeholder
           :model-value="dynamicModel(metadata.name, key).get()"
-          @update:model-value="dynamicModel(metadata.name, key).set($event)"
           :error="getErrorState(para, key)"
           :error-messages="getErrorMessages(para, key)"
+          @update:model-value="dynamicModel(metadata.name, key).set($event)"
         ></v-combobox>
 
         <v-text-field
           v-else
           prepend-icon="mdi-alphabetical"
           :model-value="dynamicModel(metadata.name, key).get()"
-          @update:model-value="dynamicModel(metadata.name, key).set($event)"
           :label="para.title"
           density="compact"
           variant="outlined"
@@ -209,6 +208,7 @@ const getErrorMessages = (para: DxtUserConfigurationOption, key: string) => {
           clearable
           :error="getErrorState(para, key)"
           :error-messages="getErrorMessages(para, key)"
+          @update:model-value="dynamicModel(metadata.name, key).set($event)"
         ></v-text-field>
       </v-row>
     </v-card-text>
@@ -217,7 +217,7 @@ const getErrorMessages = (para: DxtUserConfigurationOption, key: string) => {
   <v-card :title="$t('dxt.description')" class="mt-4">
     <v-divider></v-divider>
     <v-card-text>
-      <v-row class="mx-2 mt-2 mb-4" v-if="manifest.compatibility?.platforms">
+      <v-row v-if="manifest.compatibility?.platforms" class="mx-2 mt-2 mb-4">
         <div class="d-flex align-center ga-4">
           <v-label style="width: 80px">{{ $t('dxt.platform') }}</v-label>
           <div v-for="platform in manifest.compatibility.platforms" :key="platform">
@@ -228,10 +228,15 @@ const getErrorMessages = (para: DxtUserConfigurationOption, key: string) => {
           </div>
         </div>
       </v-row>
-      <v-row class="mx-2 mt-2 mb-4" v-if="manifest.keywords">
+      <v-row v-if="manifest.keywords" class="mx-2 mt-2 mb-4">
         <div class="d-flex align-center ga-4">
           <v-label style="width: 80px">{{ $t('dxt.keywords') }}</v-label>
-          <v-chip color="light-green-darken-4" size="small" v-for="keyword in manifest.keywords">
+          <v-chip
+            v-for="keyword in manifest.keywords"
+            :key="keyword"
+            color="light-green-darken-4"
+            size="small"
+          >
             {{ keyword }}
           </v-chip>
         </div>

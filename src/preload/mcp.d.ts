@@ -16,7 +16,7 @@ import type {
 import { DxtManifest, DxtUserConfigValues } from '@anthropic-ai/dxt'
 import { StdioServerParameters } from '@modelcontextprotocol/sdk/client/stdio.js'
 
-export type TypedAsyncFunction<Args extends any[], Result> = (...args: Args) => Promise<Result>
+export type TypedAsyncFunction<Args extends any[], Result> = (..._args: Args) => Promise<Result>
 
 export type McpAsyncToolsList = TypedAsyncFunction<[ListToolsRequest], ListToolsResult>
 export type McpAsyncToolsCall = TypedAsyncFunction<[CallToolRequest], CallToolResult>

@@ -21,7 +21,7 @@ export const loadSettings = (): Configuration => {
   return {
     shortcuts: {
       command: {
-        key: 'p', // ctrl-alt-p
+        key: 'T', // Ctrl-Alt-T
         alt: true,
         ctrl: true
       }

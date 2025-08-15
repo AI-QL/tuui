@@ -94,12 +94,12 @@ const placeholderColor = computed(() => {
           <v-col v-for="(item, index) in items" :key="item.raw.title" cols="auto" md="4">
             <v-card class="pb-3" border flat>
               <v-img :src="item.raw.img" :height="142" cover :lazy-src="placeholderColor(index)">
-                <template v-slot:placeholder>
+                <template #placeholder>
                   <div class="d-flex align-center justify-center fill-height">
                     <v-progress-circular color="grey-lighten-4" indeterminate></v-progress-circular>
                   </div>
                 </template>
-                <template v-slot:error>
+                <template #error>
                   <v-img></v-img>
                 </template>
               </v-img>

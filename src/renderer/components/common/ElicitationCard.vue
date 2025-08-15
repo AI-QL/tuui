@@ -138,8 +138,9 @@ ElicitationTransfer.request(handleProgress)
         "
       >
         <v-row
-          class="mx-3 mb-3"
           v-for="(para, key) in elicitationParams.requestedSchema.properties"
+          :key="key"
+          class="mx-3 mb-3"
         >
           <v-select
             v-if="para.enum"
@@ -149,8 +150,8 @@ ElicitationTransfer.request(handleProgress)
             density="compact"
             :items="para.enum as string[]"
             :model-value="dynamicModel(key).get() as string"
-            @update:model-value="dynamicModel(key).set($event)"
             clearable
+            @update:model-value="dynamicModel(key).set($event)"
           ></v-select>
           <v-text-field
             v-else-if="para.type === 'string'"
@@ -161,17 +162,16 @@ ElicitationTransfer.request(handleProgress)
             :placeholder="para.description"
             :rules="[validateStringLength(para.minLength, para.maxLength)]"
             :model-value="dynamicModel(key).get()"
-            @update:model-value="dynamicModel(key).set($event)"
             clearable
             :error="getErrorState(key)"
             :error-messages="getErrorMessages(key)"
+            @update:model-value="dynamicModel(key).set($event)"
           >
           </v-text-field>
           <v-number-input
             v-else-if="para.type === 'integer'"
             prepend-icon="mdi-numeric"
             :model-value="dynamicModel(key).get() as number"
-            @update:model-value="dynamicModel(key).set($event)"
             :label="para.title || para.description"
             density="compact"
             variant="outlined"
@@ -182,13 +182,14 @@ ElicitationTransfer.request(handleProgress)
             clearable
             :error="getErrorState(key)"
             :error-messages="getErrorMessages(key)"
+            @update:model-value="dynamicModel(key).set($event)"
           ></v-number-input>
           <v-checkbox
             v-else-if="para.type === 'boolean'"
-            :model-value="dynamicModel(key).get()"
-            @update:model-value="dynamicModel(key).set($event)"
-            :label="para.title"
             v-tooltip:top="para.description"
+            :model-value="dynamicModel(key).get()"
+            :label="para.title"
+            @update:model-value="dynamicModel(key).set($event)"
           ></v-checkbox>
         </v-row>
       </v-card-text>

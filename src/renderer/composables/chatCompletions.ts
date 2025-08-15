@@ -81,6 +81,7 @@ export const createCompletion = async (
   const conversation = rawconversation.reduce((newConversation, item) => {
     if (item.role === 'assistant') {
       const { reasoning_content, ...rest } = item
+      void reasoning_content
       newConversation.push(rest)
     }
     // (item.role === "user" && item.content[0].type === "image_url") {

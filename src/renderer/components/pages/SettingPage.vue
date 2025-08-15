@@ -169,9 +169,9 @@ const validateNumberRange = (min: number, max: number) => {
 
       <v-row class="px-2">
         <v-switch
+          v-tooltip:start="$t('setting.auth-header')"
           min-width="170px"
           class="mt-0 mb-6 ml-4"
-          v-tooltip:start="$t('setting.auth-header')"
           :label="config.authorization ? 'Authorization' : 'X-Api-Key'"
           color="secondary"
           base-color="primary"
@@ -188,8 +188,8 @@ const validateNumberRange = (min: number, max: number) => {
             :label="$t('setting.auth-prefix')"
             :items="config.authPrefixList"
             :model-value="config.authPrefix"
-            @update:model-value="(v) => handleUpdate('authPrefix', v)"
             variant="outlined"
+            @update:model-value="(v) => handleUpdate('authPrefix', v)"
           >
           </v-combobox>
         </v-col>
@@ -291,7 +291,7 @@ const validateNumberRange = (min: number, max: number) => {
           variant="plain"
           @update:model-value="(v) => handleUpdate('reasoningEffort', v)"
         >
-          <v-btn v-for="level in REASONING_EFFORT">{{ level }}</v-btn>
+          <v-btn v-for="level in REASONING_EFFORT" :key="level">{{ level }}</v-btn>
         </v-btn-toggle>
       </v-field>
     </v-card-text>

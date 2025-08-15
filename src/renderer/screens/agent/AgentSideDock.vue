@@ -7,11 +7,11 @@ const agentStore = useAgentStore()
   <v-container>
     <v-btn-group variant="outlined" divided>
       <v-btn
+        v-tooltip:top="$t('agent.reset')"
         icon="mdi-refresh"
         @click="agentStore.resetState"
-        v-tooltip:top="$t('agent.reset')"
       ></v-btn>
-      <v-btn icon="mdi-plus" @click="agentStore.addAgent" v-tooltip:top="$t('agent.add')"></v-btn>
+      <v-btn v-tooltip:top="$t('agent.add')" icon="mdi-plus" @click="agentStore.addAgent"></v-btn>
     </v-btn-group>
   </v-container>
 </template>

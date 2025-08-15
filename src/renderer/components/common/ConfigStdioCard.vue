@@ -26,7 +26,7 @@ function formattedValue(value: string[], sep: string) {
   <v-card title="Stdio Config">
     <v-divider></v-divider>
     <v-card-text>
-      <div class="ma-2" v-for="(value, key) in metadata.config">
+      <div v-for="(value, key) in metadata.config" :key="key" class="ma-2">
         <div v-if="key === 'command'">
           <v-text-field
             prepend-icon="mdi-application-outline"
@@ -62,17 +62,18 @@ function formattedValue(value: string[], sep: string) {
           <v-divider class="mt-4"></v-divider>
 
           <v-text-field
-            class="mt-4"
             v-for="(envValue, envKey) in value as Record<string, string>"
+            :key="envKey"
+            class="mt-4"
             prepend-icon="mdi-application-braces-outline"
             :type="showPassword[envKey] ? 'text' : 'password'"
             density="compact"
             variant="outlined"
-            @click:append-inner="showPassword[envKey] = !showPassword[envKey]"
             :append-inner-icon="showPassword[envKey] ? 'mdi-eye-off' : 'mdi-eye'"
             :model-value="envValue"
             readonly
             hide-details
+            @click:append-inner="showPassword[envKey] = !showPassword[envKey]"
           >
           </v-text-field>
         </div>

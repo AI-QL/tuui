@@ -6,14 +6,14 @@ const historyStore = useHistoryStore()
   <v-container>
     <v-btn-group variant="outlined" divided>
       <v-btn
+        v-tooltip:top="$t('chat.delete')"
         icon="mdi-delete"
         @click="historyStore.resetState()"
-        v-tooltip:top="$t('chat.delete')"
       ></v-btn>
       <v-btn
+        v-tooltip:top="$t('chat.download')"
         icon="mdi-download"
         @click="historyStore.downloadHistory()"
-        v-tooltip:top="$t('chat.download')"
       ></v-btn>
     </v-btn-group>
   </v-container>

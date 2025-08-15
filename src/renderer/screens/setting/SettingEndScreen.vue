@@ -35,9 +35,9 @@ watch(configFile, (newValue, _oldValue) => {
   <v-container>
     <v-btn-group variant="outlined" divided>
       <v-btn
+        v-tooltip:top="$t('setting.config-file')"
         icon
         @click="($refs.fileInput as HTMLInputElement).click()"
-        v-tooltip:top="$t('setting.config-file')"
       >
         <v-icon>mdi-upload</v-icon>
         <v-file-input
@@ -51,14 +51,14 @@ watch(configFile, (newValue, _oldValue) => {
       </v-btn>
 
       <v-btn
+        v-tooltip:top="$t('setting.reset')"
         icon="mdi-refresh"
         @click="chatbotStore.resetState"
-        v-tooltip:top="$t('setting.reset')"
       ></v-btn>
       <v-btn
+        v-tooltip:top="$t('setting.add')"
         icon="mdi-plus"
         @click="chatbotStore.addChatbot"
-        v-tooltip:top="$t('setting.add')"
       ></v-btn>
     </v-btn-group>
   </v-container>

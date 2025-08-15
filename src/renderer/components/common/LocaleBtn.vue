@@ -26,10 +26,10 @@ const handleChangeLanguage = (val): void => {
     <v-menu transition="fade-transition" :offset="14">
       <template #activator="{ props }">
         <v-btn
+          v-tooltip:start="$t('locale.title')"
           class="ma-1"
           density="compact"
           rounded="lg"
-          v-tooltip:start="$t('locale.title')"
           icon="mdi-earth"
           v-bind="props"
         >

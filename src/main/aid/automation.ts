@@ -1,4 +1,4 @@
-import { Application } from './types'
+// import { Application } from './types'
 import { clipboard } from 'electron'
 import Automator from './automator'
 // import * as window from '../main/window'
@@ -6,10 +6,10 @@ import { wait } from './utils'
 
 const kWriteTextTimeout = 1000
 
-export enum AutomationAction {
-  INSERT_BELOW,
-  REPLACE
-}
+// export enum AutomationAction {
+//   INSERT_BELOW,
+//   REPLACE
+// }
 
 export default class Automation {
   static grabSelectedText = async (

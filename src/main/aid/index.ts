@@ -1,35 +1,18 @@
 import { CreateWindowOpts, ReleaseFocusOpts, BrowserWindowCommandOptions } from './window'
-import {
-  app,
-  BrowserWindow,
-  BrowserWindowConstructorOptions,
-  Menu,
-  nativeTheme,
-  Display,
-  screen,
-  shell
-} from 'electron'
-// import { promptAnywhereWindow } from './anywhere';
-// import { commandPicker } from './commands';
-// import { mainWindow } from './main';
-import { wait, strDict } from './utils'
+import { app, BrowserWindow, Menu, Display, screen, shell } from 'electron'
+
+import { wait } from './utils'
 import MacosAutomator from './macos'
 import WindowsAutomator from './windows'
-// import interceptNetwork from '../network';
-// import * as config from '../config';
-// import Store from 'electron-store';
-import process from 'node:process'
-import path from 'node:path'
-import os from 'node:os'
 
 import Constants from '../utils/Constants'
 
 const dockedWindows: Set<number> = new Set()
 
 export interface WindowListener {
-  onWindowCreated: (window: BrowserWindow) => void
-  onWindowTitleChanged: (window: BrowserWindow) => void
-  onWindowClosed: (window: BrowserWindow) => void
+  onWindowCreated: (_window: BrowserWindow) => void
+  onWindowTitleChanged: (_window: BrowserWindow) => void
+  onWindowClosed: (_window: BrowserWindow) => void
 }
 const listeners: WindowListener[] = []
 export const addWindowListener = (listener: WindowListener) => {
@@ -93,6 +76,8 @@ export const createWindow = (opts: CreateWindowOpts = {}) => {
 
   // web console to here
   window.webContents.on('console-message', ({ level, message, lineNumber, sourceId, frame }) => {
+    void level
+    void frame
     if (
       !message.includes('Electron Security Warning') &&
       !message.includes('Third-party cookie will be blocked')

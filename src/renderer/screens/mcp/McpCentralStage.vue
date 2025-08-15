@@ -11,8 +11,8 @@ const mcpStore = useMcpStore()
   <div v-if="mcpStore.getSelected" :key="mcpStore.version">
     <div v-if="mcpStore.getSelected.primitive === 'tools'">
       <v-data-table
-        hover
         :key="mcpStore.getSelected"
+        hover
         hide-default-footer
         hide-default-header
         hide-no-data

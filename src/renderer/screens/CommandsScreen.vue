@@ -58,11 +58,11 @@ const commandNotify = (item: promptType) => {
 <template>
   <v-app>
     <v-data-iterator :items="promptData" :items-per-page="-1" :search="search">
-      <template v-slot:header>
+      <template #header>
         <v-toolbar class="py-2 px-3 drag" density="compact">
           <v-text-field
-            class="no-drag"
             v-model="search"
+            class="no-drag"
             density="compact"
             placeholder="Search"
             prepend-inner-icon="mdi-magnify"
@@ -73,20 +73,19 @@ const commandNotify = (item: promptType) => {
         </v-toolbar>
       </template>
 
-      <template v-slot:default="{ items }">
+      <template #default="{ items }">
         <v-list density="compact" nav>
           <v-list-item
             v-for="(item, i) in items"
             :key="i"
             :value="item"
             color="primary"
+            :title="item.raw.title"
             @click="commandNotify(item.raw)"
           >
-            <template v-slot:prepend>
+            <template #prepend>
               <v-icon class="mx-0" :icon="item.raw.icon || 'mdi-file-outline'"></v-icon>
             </template>
-
-            <v-list-item-title v-text="item.raw.title"></v-list-item-title>
           </v-list-item>
         </v-list>
       </template>

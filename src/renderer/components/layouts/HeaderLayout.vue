@@ -85,8 +85,8 @@ const items = computed(() => {
 
     <v-btn-toggle
       v-if="smAndUp"
-      class="no-drag ml-2"
       v-model="layoutStore.screen"
+      class="no-drag ml-2"
       data-testid="main-menu"
       mandatory
       variant="text"
@@ -102,7 +102,7 @@ const items = computed(() => {
       </v-btn>
     </v-btn-toggle>
     <v-menu v-if="xs">
-      <template v-slot:activator="{ props }">
+      <template #activator="{ props }">
         <v-btn color="white" v-bind="props" class="no-drag ml-2" icon="mdi-apps" rounded="lg">
         </v-btn>
       </template>
@@ -113,7 +113,7 @@ const items = computed(() => {
           :value="index"
           @click="handleRoute(item.route)"
         >
-          <template v-slot:prepend>
+          <template #prepend>
             <v-icon :icon="item.icon"></v-icon>
           </template>
           <v-list-item-title>{{ item.title }}</v-list-item-title>

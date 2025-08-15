@@ -91,6 +91,7 @@ const closeDialog = () => {
         <slot></slot>
         <v-card variant="flat" :loading="loading">
           <v-file-upload
+            v-model="files"
             :disabled="loading"
             color="light-grey"
             class="mb-2"
@@ -100,7 +101,6 @@ const closeDialog = () => {
             show-size
             multiple
             scrim="primary"
-            v-model="files"
             @change="filterFiles"
           >
             <template #icon>

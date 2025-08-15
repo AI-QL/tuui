@@ -1,5 +1,5 @@
 import { showNotification } from '../utils//notification'
-import { getCachedText, putCachedText } from './utils'
+import { putCachedText } from './utils'
 import Automator from './automator'
 import Automation from './automation'
 import * as window from './window'

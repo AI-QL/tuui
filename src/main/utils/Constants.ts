@@ -17,7 +17,7 @@ export interface TrayOptions {
 export interface AssetsPaths {
   icon: string
   icon_raw: string
-  config: string
+  mcp: string
   dxt: string
   llm: string
 }
@@ -63,17 +63,19 @@ export default class Constants {
   static APP_INDEX_URL_DEV = `${debug.env.VITE_DEV_SERVER_URL}/index.html`
   static APP_INDEX_URL_PROD = join(__dirname, '../index.html')
 
-  private static _buildAssetsPath(relativePath: string) {
+  private static _buildAssetsPath(...paths: string[]) {
     const basePath = app.isPackaged ? process.resourcesPath : 'src/main'
-    return join(basePath, 'assets', relativePath)
+    return join(basePath, 'assets', ...paths)
   }
 
   static ASSETS_PATH: AssetsPaths = {
-    config: Constants._buildAssetsPath('config.json'),
+    icon: Constants._buildAssetsPath('icon', 'icon.png'),
+    icon_raw: Constants._buildAssetsPath('icon', 'icon_raw.png'),
+
     dxt: Constants._buildAssetsPath('dxt'),
-    icon: Constants._buildAssetsPath('icon.png'),
-    icon_raw: Constants._buildAssetsPath('icon_raw.png'),
-    llm: Constants._buildAssetsPath('llm.json')
+
+    mcp: Constants._buildAssetsPath('config', 'config.json'),
+    llm: Constants._buildAssetsPath('config', 'llm.json')
   }
 
   static getPosixPath(inputPath) {
