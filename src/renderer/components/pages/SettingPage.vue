@@ -95,14 +95,14 @@ const validateNumberRange = (min: number, max: number) => {
         <v-checkbox
           :model-value="config.mcp"
           :label="$t('setting.mcp')"
-          color="primary"
+          color="secondary"
           @update:model-value="(v) => handleUpdate('mcp', Boolean(v))"
         >
         </v-checkbox>
         <v-checkbox
           :model-value="config.stream"
           :label="$t('setting.stream')"
-          color="primary"
+          color="secondary"
           @update:model-value="(v) => handleUpdate('stream', Boolean(v))"
         >
         </v-checkbox>
@@ -169,10 +169,11 @@ const validateNumberRange = (min: number, max: number) => {
 
       <v-row class="px-2">
         <v-switch
+          min-width="170px"
           class="mt-0 mb-6 ml-4"
           v-tooltip:start="$t('setting.auth-header')"
           :label="config.authorization ? 'Authorization' : 'X-Api-Key'"
-          color="info"
+          color="secondary"
           base-color="primary"
           hide-details
           inset
@@ -285,7 +286,7 @@ const validateNumberRange = (min: number, max: number) => {
         </template>
         <v-btn-toggle
           class="mt-0"
-          color="info"
+          color="secondary"
           :model-value="config.reasoningEffort"
           variant="plain"
           @update:model-value="(v) => handleUpdate('reasoningEffort', v)"

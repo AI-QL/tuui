@@ -35,7 +35,7 @@ export default createVuetify({
           primary: '#344767',
           background: '#FFFFFF',
           surface: '#FFFFFF',
-          secondary: '#2B323B',
+          secondary: colors.lightBlue.darken4, // '#2B323B',
           alert: colors.brown.lighten1,
           'grey-0': '#F2F5F8',
           'grey-50': '#FAFAFA',

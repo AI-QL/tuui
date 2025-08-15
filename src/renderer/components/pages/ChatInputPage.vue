@@ -98,7 +98,7 @@ const agentStore = useAgentStore()
 
           <v-icon-btn
             v-tooltip:start="$t('chat.reg')"
-            color="primary"
+            color="teal"
             variant="tonal"
             icon="mdi-autorenew"
             rounded="lg"

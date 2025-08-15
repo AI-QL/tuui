@@ -39,7 +39,7 @@ const mcpStore = useMcpStore()
           :key="`${key}-${name}`"
           class="mr-1 my-1"
           label
-          color="info"
+          color="secondary"
           size="small"
         >
           {{ name }}
