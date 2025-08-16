@@ -95,9 +95,9 @@ The configuration accepts either a JSON object (for a single chatbot) or a JSON 
 ]
 ```
 
-The full config and corresponding types could be found in: [Config Type](/src/preload/llm.d.ts) and [Default Config](/src/main/assets/llm.json).
+The full config and corresponding types could be found in: [Config Type](/src/preload/llm.d.ts) and [Default Config](/src/main/assets/config/llm.json).
 
-For the decomposable package, you can also modify the default configuration of the built release in `resources/assets/llm.json`
+For the decomposable package, you can also modify the default configuration of the built release in `resources/assets/config/llm.json`
 
 Once you modify or import the LLM configuration, it will be stored in your localStorage by default. You can use the developer tools to view or clear the corresponding cache.
 
@@ -137,7 +137,7 @@ Once you modify or import the LLM configuration, it will be stored in your local
 
 ## Remote MCP server
 
-You can utilize Cloudflare's recommended [mcp-remote](https://github.com/geelen/mcp-remote) to implement the full suite of remote MCP server functionalities (including Auth). For example, simply add the following to your [config.json](src/main/assets/config.json) file:
+You can utilize Cloudflare's recommended [mcp-remote](https://github.com/geelen/mcp-remote) to implement the full suite of remote MCP server functionalities (including Auth). For example, simply add the following to your [config.json](src/main/assets/config/config.json) file:
 
 ```json
 {
