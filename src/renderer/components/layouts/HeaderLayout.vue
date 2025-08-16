@@ -73,7 +73,7 @@ const items = computed(() => {
 </script>
 <template>
   <v-app-bar
-    class="drag gradient-main text-white"
+    class="drag gradient-main text-white title-bar"
     block
     :order="-1"
     color="primary"
@@ -133,7 +133,7 @@ const items = computed(() => {
     <v-spacer></v-spacer>
 
     <template #append>
-      <v-col v-if="platform === 'win32' || platform === 'linux'" style="flex: 0 0 100px"></v-col>
+      <v-col style="flex: 0 0 100px"></v-col>
     </template>
   </v-app-bar>
 </template>
@@ -154,6 +154,10 @@ const items = computed(() => {
   .title {
     display: none;
   }
+}
+
+.title-bar {
+  padding-left: env(titlebar-area-x, 0);
 }
 
 .gradient-main {

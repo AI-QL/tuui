@@ -42,7 +42,7 @@ export const createMainWindow = async (): Promise<BrowserWindow> => {
     useContentSize: true,
     webPreferences: Constants.DEFAULT_WEB_PREFERENCES,
     frame: true,
-    ...(process.platform == 'win32' || process.platform == 'linux'
+    ...(process.platform == 'win32' || process.platform == 'linux' || process.platform == 'darwin'
       ? {
           titleBarStyle: 'hidden',
           titleBarOverlay: {
