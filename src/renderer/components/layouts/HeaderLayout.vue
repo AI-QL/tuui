@@ -27,6 +27,7 @@ const route = useRoute()
 
 const handleRoute = (path: string): void => {
   router.push(path)
+  return
 }
 
 watchEffect(() => {
@@ -118,12 +119,13 @@ const items = computed(() => {
           v-for="(item, index) in items"
           :key="index"
           :value="index"
+          slim
+          :title="item.title"
           @click="handleRoute(item.route)"
         >
           <template #prepend>
-            <v-icon :icon="item.icon"></v-icon>
+            <v-icon :icon="item.icon" color="secondary"></v-icon>
           </template>
-          <v-list-item-title>{{ item.title }}</v-list-item-title>
         </v-list-item>
       </v-list>
     </v-menu>

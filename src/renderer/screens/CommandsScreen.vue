@@ -80,6 +80,7 @@ const commandNotify = (item: promptType) => {
             :key="i"
             :value="item"
             color="primary"
+            slim
             :title="item.raw.title"
             @click="commandNotify(item.raw)"
           >
