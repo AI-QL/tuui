@@ -17,11 +17,13 @@ let errorWindow
 
 app.setAppUserModelId('TUUI')
 
-const registerShortcuts = () => {
-  shortcuts.registerShortcuts({
-    command: () => Commander.initCommand()
-    // command: () => console.log("hahahahaha"),
-  })
+const registerShortcuts = async () => {
+  const initState = await Commander.init()
+  if (initState) {
+    shortcuts.registerShortcuts({
+      command: () => Commander.initCommand()
+    })
+  }
 }
 
 async function createWindow() {

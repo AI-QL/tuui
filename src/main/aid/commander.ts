@@ -1,3 +1,4 @@
+import { clipboard } from 'electron'
 import { showNotification } from '../utils//notification'
 import { putCachedText } from './utils'
 import Automator from './automator'
@@ -9,6 +10,17 @@ const askMeAnythingId = '00000000-0000-0000-0000-000000000000'
 export const notEditablePrompts = [askMeAnythingId]
 
 export default class Commander {
+  static init = async (): Promise<boolean> => {
+    try {
+      const _automator = new Automator()
+      console.log('Nut Automator initiated.')
+      return true
+    } catch (error) {
+      const message = error instanceof Error ? error.message : String(error)
+      console.log(`Nut Automator cannot be initiated: ${message}`)
+      return false
+    }
+  }
   static initCommand = async (timeout?: number): Promise<void> => {
     // not available in mas
     if (process.mas) {
@@ -21,7 +33,12 @@ export default class Commander {
 
     // get selected text
     const automator = new Automator()
-    const text = await Automation.grabSelectedText(automator, timeout)
+
+    let text = await Automation.grabSelectedText(automator, timeout)
+
+    if (text == null || text.trim() === '') {
+      text = clipboard.readText()
+    }
 
     // error
     if (text == null || text.trim() === '') {

@@ -14,10 +14,10 @@ const kWriteTextTimeout = 1000
 export default class Automation {
   static grabSelectedText = async (
     automator: Automator,
-    timeout: number = 2000
+    timeout: number = 500
   ): Promise<string> => {
     // wait for focus
-    await wait(250)
+    await wait(10)
 
     // get started
     const start = new Date().getTime()
@@ -34,7 +34,7 @@ export default class Automation {
         console.log(`Grab text timeout after ${timeout}ms`)
         break
       }
-      await wait(100)
+      await wait(50)
     }
 
     // log
