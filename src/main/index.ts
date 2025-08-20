@@ -155,9 +155,9 @@ export async function commandSelectionInvoke<T extends keyof IpcCommandEvents>(
   ...args: Parameters<IpcCommandEvents[T]>
 ) {
   if (Constants.IS_DEV_ENV) {
-    await mainWindow.loadURL(Constants.APP_INDEX_URL_DEV + '#/chat')
+    await mainWindow.loadURL(`${Constants.APP_INDEX_URL_DEV}#/chat`)
   } else {
-    await mainWindow.loadFile(Constants.APP_INDEX_URL_PROD + '#/chat')
+    await mainWindow.loadFile(Constants.APP_INDEX_URL_PROD, { hash: 'chat' })
   }
 
   showWindow(mainWindow)
