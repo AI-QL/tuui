@@ -84,7 +84,11 @@ const baseConfig = {
       {
         target: 'rpm',
         arch: 'x64'
-      }
+      },
+      {
+        target: 'tar.gz',
+        arch: 'x64'
+      },
     ]
   }
 }
