@@ -205,7 +205,7 @@ ElicitationTransfer.request(handleProgress)
         ></v-icon-btn>
         <v-icon-btn
           v-tooltip:top="$t('elicitation.accept')"
-          icon="mdi-hand-okay"
+          icon="mdi-check-bold"
           color="success"
           variant="plain"
           rounded="lg"

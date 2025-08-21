@@ -133,7 +133,7 @@ SamplingTransfer.request(handleProgress)
                   <v-spacer></v-spacer>
                   <v-icon-btn
                     v-tooltip:start="$t('sampling.confirm')"
-                    icon="mdi-hand-okay"
+                    icon="mdi-check-bold"
                     color="success"
                     variant="plain"
                     rounded="lg"
@@ -158,7 +158,7 @@ SamplingTransfer.request(handleProgress)
         ></v-icon-btn>
         <v-icon-btn
           v-tooltip:top="$t('sampling.comp')"
-          icon="mdi-file-document-refresh-outline"
+          :icon=" samplingResults.length === 0 ? 'mdi-arrow-up' : 'mdi-autorenew'"
           color="primary"
           variant="plain"
           rounded="lg"
@@ -167,7 +167,7 @@ SamplingTransfer.request(handleProgress)
         <v-icon-btn
           v-if="samplingResults.length > 0"
           v-tooltip:top="$t('sampling.confirm-last')"
-          icon="mdi-hand-okay"
+          icon="mdi-check-bold"
           color="success"
           variant="plain"
           rounded="lg"
