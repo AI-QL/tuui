@@ -46,7 +46,8 @@ const promptData = [
   {
     icon: 'mdi-git',
     title: 'Generate Commit Message',
-    prompt: 'You are a code reviewer, you need to generate a short commit message according to provided git diff. \n---'
+    prompt:
+      'You are a code reviewer, you need to generate a short commit message according to provided git diff. \n---'
   }
 ]
 

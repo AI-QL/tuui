@@ -11,6 +11,13 @@
     "modelList": ["qwen-turbo", "qwen-plus", "qwen-max"]
   },
   {
+    "url": "https://api.deepseek.com",
+    "urlList": ["https://api.deepseek.com"],
+    "name": "DeepSeek",
+    "model": "deepseek-chat",
+    "modelList": ["deepseek-chat"]
+  },
+  {
     "url": "https://api.openai.com",
     "urlList": ["https://api.openai.com", "https://api.aiql.com"],
     "name": "OpenAI & Proxy",

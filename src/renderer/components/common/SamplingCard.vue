@@ -158,7 +158,7 @@ SamplingTransfer.request(handleProgress)
         ></v-icon-btn>
         <v-icon-btn
           v-tooltip:top="$t('sampling.comp')"
-          :icon=" samplingResults.length === 0 ? 'mdi-arrow-up' : 'mdi-autorenew'"
+          :icon="samplingResults.length === 0 ? 'mdi-arrow-up' : 'mdi-autorenew'"
           color="primary"
           variant="plain"
           rounded="lg"
