@@ -42,6 +42,11 @@ const promptData = [
     icon: 'mdi-language-python',
     title: '解决Python问题',
     prompt: '你是一个py代码助手，帮助解决python以及AI项目中遇到的问题。 \n---'
+  },
+  {
+    icon: 'mdi-git',
+    title: 'Generate Commit Message',
+    prompt: 'You are a code reviewer, you need to generate a short commit message according to provided git diff. \n---'
   }
 ]
 

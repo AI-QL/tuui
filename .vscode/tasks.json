@@ -1,0 +1,22 @@
+// Use 'Ctrl-Shift-P', select 'Tasks: Run Task' to show all diff and use AI tool to generate commit message.
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Run Git Diff on Staged Files",
+            "type": "shell",
+            "command": "git",
+            "args": ["--no-pager", "diff", "--staged"],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "dedicated",
+                "showReuseMessage": false,
+                "clear": false
+            },
+            "problemMatcher": []
+        }
+    ]
+}
