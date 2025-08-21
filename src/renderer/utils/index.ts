@@ -1,4 +1,4 @@
-import type { MCPAPI } from '@/preload/types'
+import type { MCPAPI } from '@/preload/mcp'
 import { useDxtStore } from '@/renderer/store/dxt'
 
 function isValidValue(value: any): boolean {

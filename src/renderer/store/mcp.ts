@@ -4,7 +4,7 @@ import type {
   ChatCompletionPromptMessage
 } from '@/renderer/types/message'
 
-import type { MCPAPI, McpObject, DXTAPI } from '@/preload/types'
+import type { MCPAPI, McpObject, ToolType, DXTAPI } from '@/preload/mcp'
 
 type McpPrimitiveType = 'tools' | 'resources' | 'prompts' | 'metadata'
 type AllowedPrimitive = Exclude<McpPrimitiveType, 'metadata'>
@@ -34,11 +34,7 @@ export function getDxtManifest(): DXTAPI | undefined {
 
 export interface FunctionType {
   type: 'function'
-  function: {
-    name: string
-    description: string
-    parameters: string
-  }
+  function: ToolType
 }
 
 export interface McpCoreType {
@@ -201,13 +197,13 @@ export const useMcpStore = defineStore('mcpStore', {
       for (const key of mcpKeys) {
         const toolsListFunction = mcpServers[key]?.tools?.list
         if (typeof toolsListFunction === 'function') {
-          const tools = await toolsListFunction()
+          const tools = await toolsListFunction({ method: 'tools/list' })
           // console.log(await mcpServers[key]?.prompts?.list())
           // console.log(await mcpServers[key]?.resources['templates/list']())
           // console.log(await mcpServers[key]?.resources?.list())
           if (tools && Array.isArray(tools.tools)) {
             for (const tool of tools.tools) {
-              mcpTools.push({
+              const mcpTool: FunctionType = {
                 type: 'function',
                 function: {
                   name: tool.name,
@@ -215,7 +211,8 @@ export const useMcpStore = defineStore('mcpStore', {
                   parameters: tool.inputSchema
                   // strict: true
                 }
-              })
+              }
+              mcpTools.push(mcpTool)
             }
           }
         }
@@ -232,7 +229,7 @@ export const useMcpStore = defineStore('mcpStore', {
         mcpKeys.map(async (key) => {
           const toolsListFunction = mcpServers[key]?.tools?.list
           if (typeof toolsListFunction === 'function') {
-            const tools = await toolsListFunction()
+            const tools = await toolsListFunction({ method: 'tools/list' })
             if (tools && Array.isArray(tools.tools)) {
               const foundTool = tools.tools.find((tool) => tool.name === toolName)
               if (foundTool) {
@@ -249,7 +246,7 @@ export const useMcpStore = defineStore('mcpStore', {
 
       return result
     },
-    callTool: async function (toolName, toolArgs) {
+    callTool: async function (toolName: string, toolArgs: string) {
       const tool = await this.getTool(toolName)
       if (!tool) {
         return this.packReturn(`Tool name '${toolName}' not found`)
@@ -273,7 +270,7 @@ export const useMcpStore = defineStore('mcpStore', {
       const mcpServerObj: McpObject | undefined = getServers()?.[tool.server]
 
       if (mcpServerObj && mcpServerObj.tools && mcpServerObj.tools.call) {
-        return await mcpServerObj.tools.call(params)
+        return await mcpServerObj.tools.call({ method: 'tools/call', params: params })
       } else {
         return null
       }

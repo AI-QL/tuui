@@ -78,6 +78,6 @@ export async function manageRequests(client: Client, method: string, schema: any
   }
 
   const result = await client.request(requestObject, schema)
-  console.log(result)
+  console.log('MCP Result', result)
   return result
 }

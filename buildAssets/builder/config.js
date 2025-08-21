@@ -88,7 +88,7 @@ const baseConfig = {
       {
         target: 'tar.gz',
         arch: 'x64'
-      },
+      }
     ]
   }
 }

@@ -9,7 +9,7 @@ import i18n from '@/renderer/plugins/i18n'
 
 import Vue3Lottie from 'vue3-lottie'
 
-import type { MCPAPI, DXTAPI } from '@/preload/types'
+import type { MCPAPI, DXTAPI } from '@/preload/mcp'
 import type { ChatbotConfig } from '@/preload/llm'
 
 // Add API key defined in contextBridge to window object type

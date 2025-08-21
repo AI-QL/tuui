@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { McpMetadataStdio } from '@/preload/types'
+import { McpMetadataStdio } from '@/preload/mcp'
 import { reactive } from 'vue'
 
 const showPassword = reactive({})

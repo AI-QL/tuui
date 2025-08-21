@@ -1,5 +1,5 @@
 import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron'
-import type { AsyncFunction, MCPAPI, DXTAPI, McpMetadataDxt } from './types'
+import type { AsyncFunction, MCPAPI, DXTAPI, McpMetadataDxt } from './mcp'
 import type { ChatbotConfig } from './llm'
 import { StdioServerParameters } from '@modelcontextprotocol/sdk/client/stdio.js'
 

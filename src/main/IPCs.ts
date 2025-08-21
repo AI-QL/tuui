@@ -262,8 +262,16 @@ export function registerIpcHandlers({ name, connection, configJson }: ClientObj)
   const registerHandler = (method: string, schema: any) => {
     const eventName = `${name}-${method}`
     console.log(`IPC Main ${eventName}`)
-    const handler = async (_event: Electron.IpcMainInvokeEvent, params: any) => {
-      return await manageRequests(connection.client, `${method}`, schema, params)
+    const handler = async (
+      _event: Electron.IpcMainInvokeEvent,
+      request: { method: string; params: any }
+    ) => {
+      if (request?.method !== method) {
+        console.log(
+          `Request method not registered: ${request?.method}, fallback to use ${method}, please double check the invoker in Renderer.`
+        )
+      }
+      return await manageRequests(connection.client, `${method}`, schema, request?.params)
     }
     ipcMain.handle(eventName, handler)
     handlerRegistry.set(eventName, handler)

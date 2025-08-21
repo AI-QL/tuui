@@ -1,10 +1,9 @@
 <script setup lang="ts">
 import { ref, watchEffect, reactive } from 'vue'
-import { McpMetadataDxt } from '@/preload/types'
 import { DxtUserConfigurationOption } from '@anthropic-ai/dxt'
 import { getDxtUrl, openDxtFilePath } from '@/renderer/utils'
 import { useDxtStore, validateNumberRange } from '@/renderer/store/dxt'
-import type { userConfigValue } from '@/preload/types'
+import type { McpMetadataDxt, userConfigValue } from '@/preload/mcp'
 import { useI18n } from 'vue-i18n'
 const { t } = useI18n()
 

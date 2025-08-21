@@ -27,6 +27,14 @@ export type McpAsyncPromptsGet = TypedAsyncFunction<[GetPromptRequest], GetPromp
 export type McpAsyncResourcesList = TypedAsyncFunction<[ListResourcesRequest], ListResourcesResult>
 export type McpAsyncResourcesRead = TypedAsyncFunction<[ReadResourceRequest], ReadResourceResult>
 
+export type AsyncFunction =
+  | McpAsyncToolsList
+  | McpAsyncToolsCall
+  | McpAsyncPromptsList
+  | McpAsyncPromptsGet
+  | McpAsyncResourcesList
+  | McpAsyncResourcesRead
+
 export type McpMetadataStdio = {
   name: string
   type: 'metadata__stdio_config'
@@ -58,6 +66,15 @@ export type McpObject = {
     list?: McpAsyncResourcesList
     read?: McpAsyncResourcesRead
   }
+}
+
+type McpTool = ListToolsResult['tools'][number]
+
+export type ToolType = {
+  name: McpTool['name']
+  description: McpTool['description']
+  // Rename inputSchema to parameters to comply with the OpenAI SDK
+  parameters: McpTool['inputSchema']
 }
 
 export type MCPAPI = Record<string, McpObject>

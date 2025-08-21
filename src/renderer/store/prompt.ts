@@ -2,20 +2,9 @@ import { defineStore } from 'pinia'
 import { useMcpStore } from '@/renderer/store/mcp'
 import { getServers } from './mcp'
 
-interface ParamsType {
-  name: string
-  arguments?: { [key: string]: any }
-}
+import type { Prompt as PromptType, GetPromptRequest } from '@modelcontextprotocol/sdk/types.d.ts'
 
-interface PromptType {
-  title: string
-  name: string
-  description: string
-  arguments: {
-    name: string
-    content: ParamsType
-  }[]
-}
+type ParamsType = GetPromptRequest['params']
 
 export const usePromptStore = defineStore('promptStore', {
   state: () => ({
@@ -61,7 +50,7 @@ export const usePromptStore = defineStore('promptStore', {
 
         if (func) {
           try {
-            const obj = await func()
+            const obj = await func({ method: 'prompts/list' })
             if (obj) {
               obj.prompts.forEach((prompt) => allPrompts.push({ title: key, ...prompt }))
             }
@@ -82,7 +71,11 @@ export const usePromptStore = defineStore('promptStore', {
     fetchSelect: async function () {
       const mcpStore = useMcpStore()
       const mcpServers = getServers()
-      const getFun = mcpServers?.[this.promptSelect.title]?.prompts?.get
+      const title = this.promptSelect.title
+      if (!title) {
+        return []
+      }
+      const getFun = mcpServers?.[title]?.prompts?.get
       if (!getFun) {
         return []
       }
@@ -95,13 +88,13 @@ export const usePromptStore = defineStore('promptStore', {
             if (!params.arguments) {
               params.arguments = {}
             }
-            params.arguments[argument.name] = argument.content
+            params.arguments[argument.name] = argument.content as string
           }
         }
       }
 
       console.log(params)
-      const prompts = await getFun(params)
+      const prompts = await getFun({ method: 'prompts/get', params })
 
       const conversations = prompts.messages.map((item) => {
         const content = mcpStore.convertItem(item.content)
