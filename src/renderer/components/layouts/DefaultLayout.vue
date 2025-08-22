@@ -19,7 +19,7 @@ const { hasComponent } = useRouteFeatures()
       >
         <div class="d-flex align-center">
           <v-icon class="mr-2">{{ snackbarStore.getIcon() }}</v-icon>
-          <span>{{ $t(snackbarStore.message) }}</span>
+          <span class="snack-span">{{ $t(snackbarStore.message) }}</span>
         </div>
 
         <template #actions>
@@ -51,5 +51,8 @@ const { hasComponent } = useRouteFeatures()
 <style scoped>
 .position-fixed {
   position: fixed;
+}
+.snack-span {
+  word-break: break-word;
 }
 </style>

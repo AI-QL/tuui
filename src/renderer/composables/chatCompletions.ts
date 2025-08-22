@@ -197,6 +197,10 @@ export const createCompletion = async (
       }
     }
 
+    if (completion.redirected) {
+      snackbarStore.showWarningMessage(`${completion.url}`)
+    }
+
     // Create a reader
     const reader = completion.body?.getReader()
     if (!reader) {
