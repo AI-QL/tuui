@@ -23,11 +23,15 @@ Given the considerations regarding the quality and safety of AI-generated conten
 
 ## :book: Getting Started
 
-To explore the project, please check wiki page: [TUUI.com](https://www.tuui.com)
+You can quickly get started with the project through a variety of options tailored to your role and needs:
 
-You can also check the **installation guide** in the project documentation: [Getting Started](docs/src/en/installation-and-build/getting-started.md) | [快速入门](/docs/src/zhHans/installation-and-build/getting-started.md)
+- To `explore` the project, visit the wiki page: [TUUI.com](https://www.tuui.com)
 
-You can also ask the AI directly about project-related questions: [TUUI@DeepWiki](https://deepwiki.com/AI-QL/tuui)
+- To `download` and use the application directly, go to the releases page: [Releases](https://github.com/AI-QL/tuui/releases)
+
+- For `developer` setup, refer to the installation guide: [Getting Started (English)](docs/src/en/installation-and-build/getting-started.md) | [快速入门 (中文)](docs/src/zhHans/installation-and-build/getting-started.md)
+
+- To `ask the AI` directly about the project, visit: [TUUI@DeepWiki](https://deepwiki.com/AI-QL/tuui)
 
 ## :wrench: Core Requirements
 
@@ -101,40 +105,6 @@ For the decomposable package, you can also modify the default configuration of t
 
 Once you modify or import the LLM configuration, it will be stored in your localStorage by default. You can use the developer tools to view or clear the corresponding cache.
 
-## :lipstick: Demo
-
-### MCP primitive visualization
-
-![](https://gcore.jsdelivr.net/gh/AI-QL/.github/public/tuui/1.png)
-
-### Desktop extensions (.dxt) support
-
-![](https://gcore.jsdelivr.net/gh/AI-QL/.github/public/tuui/dxt1.png)
-
-### Tool call tracing
-
-![](https://gcore.jsdelivr.net/gh/AI-QL/.github/public/tuui/2.png)
-
-### Specify tool selection
-
-![](https://gcore.jsdelivr.net/gh/AI-QL/.github/public/tuui/3.png)
-
-### LLM API setting
-
-![](https://gcore.jsdelivr.net/gh/AI-QL/.github/public/tuui/4.png)
-
-### Selectable sampling
-
-![](https://gcore.jsdelivr.net/gh/AI-QL/.github/public/tuui/8.png)
-
-### Data insights
-
-![](https://gcore.jsdelivr.net/gh/AI-QL/.github/public/tuui/9.png)
-
-### Native devtools
-
-![](https://gcore.jsdelivr.net/gh/AI-QL/.github/public/tuui/5.png)
-
 ## Remote MCP server
 
 You can utilize Cloudflare's recommended [mcp-remote](https://github.com/geelen/mcp-remote) to implement the full suite of remote MCP server functionalities (including Auth). For example, simply add the following to your [config.json](src/main/assets/config/config.json) file:
@@ -187,6 +157,36 @@ Before creating an issue, check if you are using the latest version of the proje
 ### :lock: Reporting Security Issues
 
 Review our [Security Policy](SECURITY.md). Do not file a public issue for security vulnerabilities.
+
+## :lipstick: Demo
+
+### MCP primitive visualization
+
+![](https://gcore.jsdelivr.net/gh/AI-QL/.github/public/tuui2/1_primitive.jpg)
+
+### Desktop extensions (.dxt) support
+
+![](https://gcore.jsdelivr.net/gh/AI-QL/.github/public/tuui2/2_dxt.jpg)
+
+### MCP Tool call tracing
+
+![](https://gcore.jsdelivr.net/gh/AI-QL/.github/public/tuui2/3_chat.jpg)
+
+### Agent with specified tool selection
+
+![](https://gcore.jsdelivr.net/gh/AI-QL/.github/public/tuui2/4_agent.jpg)
+
+### LLM API setting
+
+![](https://gcore.jsdelivr.net/gh/AI-QL/.github/public/tuui2/5_llmconfig.jpg)
+
+### MCP elicitation
+
+![](https://gcore.jsdelivr.net/gh/AI-QL/.github/public/tuui2/6_elicit.jpg)
+
+### Native devtools
+
+![](https://gcore.jsdelivr.net/gh/AI-QL/.github/public/tuui2/7_devtool.jpg)
 
 ## :pray: Credits
 
