@@ -2,11 +2,11 @@
 layout: home
 
 title: TUUI
-titleTemplate: Tool Unitary UI
+titleTemplate: MCP Tool Unitary UI
 
 hero:
   name: TUUI
-  text: MCP 智能交互界面
+  text: MCP 智能工具交互界面
   tagline: TUUI 是一款基于模型上下文协议（MCP）的跨平台 AI 桌面应用，采用 Vue3 和 Electron 框架，可帮助您快速构建高效开发环境。
   actions:
     - theme: brand

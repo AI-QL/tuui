@@ -15,8 +15,9 @@ const vitePressI18nConfigs: VitePressI18nOptions = {
   rootLocale: defaultLocale,
   searchProvider: 'local',
   description: {
-    en: 'A desktop application designed for AI Agentic systems, leveraging the Model Context Protocol.',
-    zhHans: '一款为 AI 代理系统设计的工具统一用户界面桌面应用程序，利用模型上下文协议.'
+    en: 'TUUI is a free and open-source desktop application designed for AI agentic systems, leveraging the Model Context Protocol.',
+    zhHans:
+      'TUUI 是一款基于模型上下文协议（Model Context Protocol）、专为AI智能体系统设计的免费开源桌面应用程序。'
   },
   themeConfig: {
     en: {
@@ -67,7 +68,15 @@ const vitePressConfigs: UserConfig = {
   outDir: '../dist',
   head: [
     ['link', { rel: 'icon', href: '/logo.png' }],
-    ['link', { rel: 'shortcut icon', href: '/favicon.ico' }]
+    ['link', { rel: 'shortcut icon', href: '/favicon.ico' }],
+    [
+      'meta',
+      {
+        name: 'keywords',
+        content:
+          'MCP, Model Context Protocol, Client, TUUI, AI, agent, LLM, 模型上下文协议, 桌面应用, 开源工具, AI代理, 开发者工具, AI开发, 工具调用'
+      }
+    ]
   ],
   cleanUrls: true,
   metaChunk: true,
