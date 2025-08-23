@@ -4,24 +4,24 @@
 
 #### TUUI is a desktop MCP client designed as a tool unitary utility integration, accelerating AI adoption through the Model Context Protocol (MCP) and enabling cross-vendor LLM API orchestration.
 
-## :bulb: Introduction
+## 📜 Introduction
 
 This repository is essentially an **LLM chat desktop application based on MCP**. It also represents a bold experiment in **creating a complete project using AI**. Many components within the project have been directly converted or generated from the prototype project through AI.
 
 Given the considerations regarding the quality and safety of AI-generated content, this project employs strict syntax checks and naming conventions. Therefore, for any further development, please ensure that you use the linting tools I've set up to check and automatically fix syntax issues.
 
-## :sparkles: Features
+## ✨ Features
 
-- :sparkles: Accelerate AI tool integration via MCP
-- :sparkles: Orchestrate cross-vendor LLM APIs through dynamic configuring
-- :sparkles: Automated application testing Support
-- :sparkles: TypeScript support
-- :sparkles: Multilingual support
-- :sparkles: Basic layout manager
-- :sparkles: Global state management through the Pinia store
-- :sparkles: Quick support through the GitHub community and official documentation
+- ✨ Accelerate AI tool integration via MCP
+- ✨ Orchestrate cross-vendor LLM APIs through dynamic configuring
+- ✨ Automated application testing Support
+- ✨ TypeScript support
+- ✨ Multilingual support
+- ✨ Basic layout manager
+- ✨ Global state management through the Pinia store
+- ✨ Quick support through the GitHub community and official documentation
 
-## :book: Getting Started
+## 🚀 Getting Started
 
 You can quickly get started with the project through a variety of options tailored to your role and needs:
 
@@ -33,7 +33,7 @@ You can quickly get started with the project through a variety of options tailor
 
 - To `ask the AI` directly about the project, visit: [TUUI@DeepWiki](https://deepwiki.com/AI-QL/tuui)
 
-## :wrench: Core Requirements
+## ⚙️ Core Requirements
 
 **To use MCP-related features, ensure the following preconditions are met for your environment:**
 
@@ -105,7 +105,7 @@ For the decomposable package, you can also modify the default configuration of t
 
 Once you modify or import the LLM configuration, it will be stored in your localStorage by default. You can use the developer tools to view or clear the corresponding cache.
 
-## Remote MCP server
+## 🌐 Remote MCP server
 
 You can utilize Cloudflare's recommended [mcp-remote](https://github.com/geelen/mcp-remote) to implement the full suite of remote MCP server functionalities (including Auth). For example, simply add the following to your [config.json](src/main/assets/config/config.json) file:
 
@@ -128,7 +128,7 @@ If you encounter any issues (please try to maintain OAuth auto-redirect to preve
 
 <a id="mcp-server-issue"></a>
 
-## MCP Server Issue
+## 🚸 MCP Server Issue
 
 When launching the MCP server, if you encounter spawn errors like `ENOENT`, try installing the corresponding MCP server locally and invoking it using an absolute path.
 
@@ -144,7 +144,7 @@ This is a known issue, and many cases remain unresolved. The MCP SDK includes a 
 
 The issue remains unresolved on other platforms, specifically `macOS`. Although several workarounds are available, this ticket consolidates the most effective ones and highlights the simplest method: [How to configure MCP on macOS](https://github.com/AI-QL/tuui/issues/2).
 
-## :inbox_tray: Contributing
+## 🤝 Contributing
 
 We welcome contributions of any kind to this project, including feature enhancements, UI improvements, documentation updates, test case completions, and syntax corrections. I believe that a real developer can write better code than AI, so if you have concerns about certain parts of the code implementation, feel free to share your suggestions or submit a pull request.
 
@@ -152,15 +152,15 @@ Please review our [Code of Conduct](CODE_OF_CONDUCT.md). It is in effect at all 
 
 For more information, please see [Contributing Guidelines](CONTRIBUTING.md)
 
-## :beetle: Opening an Issue
+## 🙋 Opening an Issue
 
 Before creating an issue, check if you are using the latest version of the project. If you are not up-to-date, see if updating fixes your issue first.
 
-### :lock: Reporting Security Issues
+### 🔒️ Reporting Security Issues
 
 Review our [Security Policy](SECURITY.md). Do not file a public issue for security vulnerabilities.
 
-## :lipstick: Demo
+## 🎉 Demo
 
 ### MCP primitive visualization
 
@@ -190,7 +190,7 @@ Review our [Security Policy](SECURITY.md). Do not file a public issue for securi
 
 ![](https://gcore.jsdelivr.net/gh/AI-QL/.github/public/tuui2/7_devtool.jpg)
 
-## :pray: Credits
+## 🙏 Credits
 
 Written by [@AIQL.com](https://github.com/AI-QL).
 
