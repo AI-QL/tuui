@@ -130,6 +130,10 @@ If you encounter any issues (please try to maintain OAuth auto-redirect to preve
 
 ## MCP Server Issue
 
+When launching the MCP server, if you encounter spawn errors like `ENOENT`, try installing the corresponding MCP server locally and invoking it using an absolute path.
+
+This is a known issue, and many cases remain unresolved. The MCP SDK includes a workaround specifically for `Windows` systems, as documented in [ISSUE 101](https://github.com/modelcontextprotocol/typescript-sdk/issues/101).
+
 ### Window
 
 - [ISSUE 40 - MCP servers fail to connect with npx on Windows](https://github.com/modelcontextprotocol/servers/issues/40) (fixed)
@@ -138,9 +142,7 @@ If you encounter any issues (please try to maintain OAuth auto-redirect to preve
 
 - [ISSUE 64 - MCP Servers Don't Work with NVM](https://github.com/modelcontextprotocol/servers/issues/64) (still open)
 
-When launching the MCP server, if you encounter spawn errors such as ENOENT, try installing the corresponding MCP server locally and invoking it using an absolute path.
-
-This is a common issue, and many cases remain unresolved to this day. The MCP SDK implements this workaround [ISSUE 101](https://github.com/modelcontextprotocol/typescript-sdk/issues/101) for Windows systems, but the problem still frequently occurs on other platforms.
+The issue remains unresolved on other platforms, specifically `macOS`. Although several workarounds are available, this ticket consolidates the most effective ones and highlights the simplest method: [How to configure MCP on macOS](https://github.com/AI-QL/tuui/issues/2).
 
 ## :inbox_tray: Contributing
 
