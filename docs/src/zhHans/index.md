@@ -10,11 +10,14 @@ hero:
   tagline: TUUI 是一款基于模型上下文协议（MCP）的跨平台 AI 桌面应用，采用 Vue3 和 Electron 框架，可帮助您快速构建高效开发环境。
   actions:
     - theme: brand
-      text: 入门
+      text: 快速入门
       link: /zhHans/installation-and-build/getting-started
     - theme: alt
       text: GitHub
       link: https://github.com/AI-QL/tuui
+    - theme: alt
+      text: 下载应用
+      link: https://github.com/AI-QL/tuui/releases
   image:
     src: /icon.png
     alt: Vue

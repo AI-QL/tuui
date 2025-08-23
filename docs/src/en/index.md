@@ -15,6 +15,9 @@ hero:
     - theme: alt
       text: GitHub
       link: https://github.com/AI-QL/tuui
+    - theme: alt
+      text: Download Application
+      link: https://github.com/AI-QL/tuui/releases
   image:
     src: /icon.png
     alt: Vue
