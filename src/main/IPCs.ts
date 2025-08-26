@@ -96,6 +96,10 @@ export default class IPCs {
       shell.openPath(resolve(join(Constants.ASSETS_PATH.dxt, name)))
     })
 
+    ipcMain.on('msgOpenPath', async (event: IpcMainEvent, name: string) => {
+      shell.openPath(resolve(join(Constants.ASSETS_PATH[name])))
+    })
+
     ipcMain.on('msgWindowReload', async (event: IpcMainEvent) => {
       BrowserWindow.fromWebContents(event.sender).reload()
     })

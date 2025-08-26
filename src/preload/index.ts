@@ -17,6 +17,7 @@ const mainAvailChannels: string[] = [
   'msgRequestGetDxtUrl',
   'msgOpenExternalLink',
   'msgOpenDxtFilePath',
+  'msgOpenPath',
   'msgOpenFile',
   'msgFileTransferRequest',
   'msgCommandSelectionNotify',

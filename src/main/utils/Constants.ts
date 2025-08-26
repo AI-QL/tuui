@@ -15,6 +15,7 @@ export interface TrayOptions {
 }
 
 export interface AssetsPaths {
+  config: string
   icon: string
   icon_raw: string
   mcp: string
@@ -69,6 +70,7 @@ export default class Constants {
   }
 
   static ASSETS_PATH: AssetsPaths = {
+    config: Constants._buildAssetsPath('config'),
     icon: Constants._buildAssetsPath('icon', 'icon.png'),
     icon_raw: Constants._buildAssetsPath('icon', 'icon_raw.png'),
 

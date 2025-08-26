@@ -45,6 +45,7 @@
     "init": "Init MCP Servers",
     "read": "Read",
     "minutes": "minutes",
+    "open": "Reveal in File Explorer",
     "updated": "MCP Severs Updated"
   },
   "menu": {

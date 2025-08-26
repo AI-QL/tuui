@@ -45,6 +45,7 @@
     "init": "初始化 MCP 服务端",
     "read": "阅读",
     "minutes": "分钟",
+    "open": "在文件管理器中打开",
     "updated": "MCP 服务端已更新"
   },
   "menu": {

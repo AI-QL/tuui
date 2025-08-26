@@ -3,6 +3,28 @@ import fs from 'node:fs'
 import path from 'node:path'
 import { McpServersConfig } from './types'
 import { shell } from 'electron'
+import { debounce } from 'lodash'
+
+let mcpConfig
+
+let timeoutId
+
+const DEBOUNCE_DELAY = 500
+
+function handleFileChange(configPath) {
+  try {
+    const parsedConfig = readConfig(configPath)
+    if (mcpConfig !== parsedConfig) {
+      console.log(`${configPath} changed`)
+    }
+  } catch {}
+}
+
+const debouncedHandleFileChange = debounce(handleFileChange, DEBOUNCE_DELAY)
+
+function readConfig(configPath: string) {
+  return JSON.parse(fs.readFileSync(configPath, 'utf8'))
+}
 
 export function loadConfigFile(configPath: string): McpServersConfig {
   const resolvedConfigPath = path.isAbsolute(configPath)
@@ -12,8 +34,12 @@ export function loadConfigFile(configPath: string): McpServersConfig {
     if (!fs.existsSync(resolvedConfigPath)) {
       throw new Error(`Config file not found: ${resolvedConfigPath}`)
     }
-    const configContent = fs.readFileSync(resolvedConfigPath, 'utf8')
-    const parsedConfig = JSON.parse(configContent)
+    const parsedConfig = readConfig(resolvedConfigPath)
+    mcpConfig = parsedConfig
+    fs.watch(resolvedConfigPath, () => {
+      if (timeoutId) clearTimeout(timeoutId)
+      timeoutId = setTimeout(() => debouncedHandleFileChange(resolvedConfigPath), DEBOUNCE_DELAY)
+    })
     if (!parsedConfig.mcpServers) {
       return {}
     } else {

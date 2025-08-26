@@ -1,9 +1,8 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { initAllMcpServers } from '@/renderer/utils'
+import { initAllMcpServers, openPath } from '@/renderer/utils'
 import { useMcpStore, getServers } from '@/renderer/store/mcp'
 import { useSnackbarStore } from '@/renderer/store/snackbar'
-
 import McpDxtPage from '@/renderer/components/pages/McpDxtPage.vue'
 
 const snackbarStore = useSnackbarStore()
@@ -68,6 +67,12 @@ document.addEventListener('dragenter', (_e) => {
         @click="activeAllMcpServers()"
       >
       </v-btn>
+      <v-btn
+        v-tooltip:top="$t('mcp.open')"
+        color="primary"
+        icon="mdi-open-in-new"
+        @click="openPath('config')"
+      ></v-btn>
       <v-btn
         v-tooltip:top="$t('dxt.title')"
         icon="mdi-package-variant"

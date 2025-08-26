@@ -41,6 +41,10 @@ export default class Utils {
     await window.mainApi.send('msgOpenDxtFilePath', name)
   }
 
+  static async openPath(name: string): Promise<void> {
+    await window.mainApi.send('msgOpenPath', name)
+  }
+
   static async windowReload(): Promise<void> {
     await window.mainApi.send('msgWindowReload')
   }
@@ -101,6 +105,7 @@ export const {
   openExternal,
   getAppInfo,
   openDxtFilePath,
+  openPath,
   openFile,
   getApiToken,
   getDxtUrl,
