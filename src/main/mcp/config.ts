@@ -32,7 +32,10 @@ export function loadConfigFile(configPath: string): McpServersConfig {
     : path.resolve(process.cwd(), configPath)
   try {
     if (!fs.existsSync(resolvedConfigPath)) {
-      throw new Error(`Config file not found: ${resolvedConfigPath}`)
+      showNotification({
+        body: `MCP Config Not Found.`
+      })
+      return {}
     }
     const parsedConfig = readConfig(resolvedConfigPath)
     mcpConfig = parsedConfig
@@ -48,7 +51,7 @@ export function loadConfigFile(configPath: string): McpServersConfig {
   } catch (err) {
     showNotification(
       {
-        body: 'MCP Config JSON parse failure'
+        body: `MCP Config JSON parse failure`
       },
       {
         onClick: () => {

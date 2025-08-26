@@ -76,7 +76,7 @@ export default class Constants {
 
     dxt: Constants._buildAssetsPath('dxt'),
 
-    mcp: Constants._buildAssetsPath('config', 'config.json'),
+    mcp: Constants._buildAssetsPath('config', 'mcp.json'),
     llm: Constants._buildAssetsPath('config', 'llm.json')
   }
 

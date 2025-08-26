@@ -107,7 +107,7 @@ Once you modify or import the LLM configuration, it will be stored in your local
 
 ## 🌐 Remote MCP server
 
-You can utilize Cloudflare's recommended [mcp-remote](https://github.com/geelen/mcp-remote) to implement the full suite of remote MCP server functionalities (including Auth). For example, simply add the following to your [config.json](src/main/assets/config/config.json) file:
+You can utilize Cloudflare's recommended [mcp-remote](https://github.com/geelen/mcp-remote) to implement the full suite of remote MCP server functionalities (including Auth). For example, simply add the following to your [mcp.json](src/main/assets/config/mcp.json) file:
 
 ```json
 {
