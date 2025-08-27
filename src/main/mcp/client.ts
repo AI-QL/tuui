@@ -22,7 +22,11 @@ export async function initializeClient(
   const resetTimer = () => {
     clearTimeout(idleTimer)
     idleTimer = setTimeout(() => {
-      rejectFn(new Error(`Initialization of client for ${name} timed out after ${idleTimeout} seconds of inactivity`))
+      rejectFn(
+        new Error(
+          `Initialization of client for ${name} timed out after ${idleTimeout} seconds of inactivity`
+        )
+      )
     }, idleTimeout * 1000)
   }
 
@@ -43,7 +47,7 @@ async function initializeStdioClient(
 ): Promise<McpClientTransport> {
   const transport = new StdioClientTransport({
     ...config,
-    stderr: "pipe",
+    stderr: 'pipe'
   })
   const clientName = `${name}-client`
   const client = new Client(

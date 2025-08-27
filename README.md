@@ -1,10 +1,12 @@
 # <img src="https://cdn.jsdelivr.net/gh/AI-QL/tuui@main/buildAssets/icons/icon.png" alt="Logo" width="24"/> TUUI - Tool Unitary User Interface
 
-[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/AI-QL/tuui) [![](https://camo.githubusercontent.com/077907eb137aa9b2d46ca4af30b77714cb69225eb8be49ad89f3e0ae668c90ca/68747470733a2f2f62616467652e6d6370782e6465763f747970653d636c69656e74)](https://modelcontextprotocol.io/clients#aiql-tuui) [![](https://img.shields.io/badge/Vue3-brightgreen.svg)](https://vuejs.org) [![](https://img.shields.io/badge/Vuetify-blue.svg)](https://vuetifyjs.com) [![LICENSE](https://img.shields.io/github/license/AI-QL/tuui)](https://github.com/AI-QL/tuui/blob/main/LICENSE)
-
 #### TUUI is a desktop MCP client designed as a tool unitary utility integration, accelerating AI adoption through the Model Context Protocol (MCP) and enabling cross-vendor LLM API orchestration.
 
+**Platform:** <img src="https://img.shields.io/badge/Windows-blue?logo=icloud" alt="Windows" style="vertical-align: middle;"> <img src="https://img.shields.io/badge/Linux-orange?logo=linux" alt="Linux" style="vertical-align: middle;"> <img src="https://img.shields.io/badge/macOS-lightgrey?logo=apple" alt="macOS" style="vertical-align: middle;">
+
 ## 📜 Introduction
+
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/AI-QL/tuui) [![](https://camo.githubusercontent.com/077907eb137aa9b2d46ca4af30b77714cb69225eb8be49ad89f3e0ae668c90ca/68747470733a2f2f62616467652e6d6370782e6465763f747970653d636c69656e74)](https://modelcontextprotocol.io/clients#aiql-tuui) [![](https://img.shields.io/badge/Vue3-brightgreen.svg)](https://vuejs.org) [![](https://img.shields.io/badge/Vuetify-blue.svg)](https://vuetifyjs.com) [![LICENSE](https://img.shields.io/github/license/AI-QL/tuui)](https://github.com/AI-QL/tuui/blob/main/LICENSE)
 
 This repository is essentially an **LLM chat desktop application based on MCP**. It also represents a bold experiment in **creating a complete project using AI**. Many components within the project have been directly converted or generated from the prototype project through AI.
 
