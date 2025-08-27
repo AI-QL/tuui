@@ -114,27 +114,20 @@ const getErrorMessages = (para: DxtUserConfigurationOption, key: string) => {
       ></v-btn>
     </v-card-title>
     <v-divider></v-divider>
-    <v-card class="ma-3" variant="text">
-      <div class="d-flex flex-no-wrap justify-space-between" style="align-items: center">
-        <div style="flex-shrink: 1; max-width: calc(100% - 140px)">
-          <v-card-title class="text-subtitle-1 meta-card-title">
-            {{ manifest.display_name }}
-          </v-card-title>
-          <v-card-subtitle class="meta-card-title">
-            {{ manifest.description }}
-          </v-card-subtitle>
-
-          <v-card-actions>
-            <div class="ma-2 text-medium-emphasis">
-              {{ manifest.long_description }}
-            </div>
-          </v-card-actions>
-        </div>
-
-        <v-avatar class="ma-3" rounded="lg" size="125">
+    <v-card
+      class="mx-auto"
+      variant="text"
+      :subtitle="manifest.description"
+      :title="manifest.display_name"
+    >
+      <template #prepend>
+        <v-avatar class="mr-2" rounded="lg" size="48">
           <v-img :src="getIcon(metadata)"></v-img>
         </v-avatar>
-      </div>
+      </template>
+      <v-card-text class="wrap-text">
+        {{ manifest.long_description }}
+      </v-card-text>
     </v-card>
   </v-card>
   <v-card :title="$t('dxt.user-config')" class="mt-4">
@@ -242,7 +235,7 @@ const getErrorMessages = (para: DxtUserConfigurationOption, key: string) => {
       </v-row>
 
       <v-row class="mx-1 mt-2 mb-2" dense>
-        <v-col v-if="manifest.author" cols="auto" md="6">
+        <v-col v-if="manifest.author" cols="12" md="6">
           <v-card
             color="blue-lighten-1"
             append-icon="mdi-open-in-new"
@@ -254,7 +247,7 @@ const getErrorMessages = (para: DxtUserConfigurationOption, key: string) => {
             :title="manifest.author.name"
           ></v-card>
         </v-col>
-        <v-col v-if="manifest.repository" cols="auto" md="6">
+        <v-col v-if="manifest.repository" cols="12" md="6">
           <v-card
             color="indigo-lighten-2"
             append-icon="mdi-open-in-new"
@@ -266,7 +259,7 @@ const getErrorMessages = (para: DxtUserConfigurationOption, key: string) => {
             :title="$t('dxt.repository') + ' - ' + manifest.repository.type"
           ></v-card>
         </v-col>
-        <v-col v-if="manifest.homepage" cols="auto" md="6">
+        <v-col v-if="manifest.homepage" cols="12" md="6">
           <v-card
             color="green-lighten-1"
             append-icon="mdi-open-in-new"
@@ -278,7 +271,7 @@ const getErrorMessages = (para: DxtUserConfigurationOption, key: string) => {
             :title="$t('dxt.homepage')"
           ></v-card>
         </v-col>
-        <v-col v-if="manifest.documentation" cols="auto" md="6">
+        <v-col v-if="manifest.documentation" cols="12" md="6">
           <v-card
             color="brown-lighten-2"
             append-icon="mdi-open-in-new"
@@ -290,7 +283,7 @@ const getErrorMessages = (para: DxtUserConfigurationOption, key: string) => {
             :title="$t('dxt.documentation')"
           ></v-card>
         </v-col>
-        <v-col v-if="manifest.support" cols="auto" md="6">
+        <v-col v-if="manifest.support" cols="12" md="6">
           <v-card
             color="red-lighten-2"
             append-icon="mdi-open-in-new"
@@ -322,11 +315,8 @@ const getErrorMessages = (para: DxtUserConfigurationOption, key: string) => {
   </v-card>
 </template>
 <style scoped>
-.meta-card-title {
-  style {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
+.wrap-text {
+  white-space: pre-line;
+  overflow-wrap: break-word;
 }
 </style>

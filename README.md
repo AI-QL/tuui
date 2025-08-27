@@ -130,19 +130,31 @@ If you encounter any issues (please try to maintain OAuth auto-redirect to preve
 
 ## 🚸 MCP Server Issue
 
-When launching the MCP server, if you encounter spawn errors like `ENOENT`, try installing the corresponding MCP server locally and invoking it using an absolute path.
+### General
 
-This is a known issue, and many cases remain unresolved. The MCP SDK includes a workaround specifically for `Windows` systems, as documented in [ISSUE 101](https://github.com/modelcontextprotocol/typescript-sdk/issues/101).
+When launching the MCP server, if you encounter any issues, first ensure that the corresponding command can run on your current system — for example, `uv`/`uvx`, `npx`, etc.
 
-### Window
+### ENOENT Spawn Errors
 
-- [ISSUE 40 - MCP servers fail to connect with npx on Windows](https://github.com/modelcontextprotocol/servers/issues/40) (fixed)
+When launching the MCP server, if you encounter spawn errors like `ENOENT`, try running the corresponding MCP server locally and invoking it using an absolute path.
 
-### MacOS
+If the command works but MCP initialization still returns spawn errors, this may be a known issue:
 
-- [ISSUE 64 - MCP Servers Don't Work with NVM](https://github.com/modelcontextprotocol/servers/issues/64) (still open)
+- **Windows**: The MCP SDK includes a workaround specifically for `Windows` systems, as documented in [ISSUE 101](https://github.com/modelcontextprotocol/typescript-sdk/issues/101).
 
-The issue remains unresolved on other platforms, specifically `macOS`. Although several workarounds are available, this ticket consolidates the most effective ones and highlights the simplest method: [How to configure MCP on macOS](https://github.com/AI-QL/tuui/issues/2).
+  > Details: [ISSUE 40 - MCP servers fail to connect with npx on Windows](https://github.com/modelcontextprotocol/servers/issues/40) (fixed)
+
+- **mscOS**: The issue remains unresolved on other platforms, specifically `macOS`. Although several workarounds are available, this ticket consolidates the most effective ones and highlights the simplest method: [How to configure MCP on macOS](https://github.com/AI-QL/tuui/issues/2).
+
+  > Details: [ISSUE 64 - MCP Servers Don't Work with NVM](https://github.com/modelcontextprotocol/servers/issues/64) (still open)
+
+### MCP Connection Timeout
+
+If initialization takes too long and triggers the 90-second timeout protection, it may be because the `uv`/`uvx`/`npx` runtime libraries are being installed or updated for the first time.
+
+When your connection to the respective `pip` or `npm` repository is slow, installation can take a long time.
+
+In such cases, first complete the installation manually with `pip` or `npm` in the relevant directory, and then start the MCP server again.
 
 ## 🤝 Contributing
 
