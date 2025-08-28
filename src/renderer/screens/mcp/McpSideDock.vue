@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { initAllMcpServers, openPath } from '@/renderer/utils'
+import { McpEvent, openPath } from '@/renderer/utils'
 import { useMcpStore, getServers } from '@/renderer/store/mcp'
 import { useSnackbarStore } from '@/renderer/store/snackbar'
 import McpDxtPage from '@/renderer/components/pages/McpDxtPage.vue'
@@ -19,7 +19,7 @@ async function activeAllMcpServers() {
   isLoading.value = true
   try {
     const configs = getServers()
-    const result = await initAllMcpServers(configs)
+    const result = await McpEvent.init(configs)
     console.log(result)
     await mcpStore.updateServers()
     if (result.status == 'error') {

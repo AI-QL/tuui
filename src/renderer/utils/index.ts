@@ -49,52 +49,6 @@ export default class Utils {
     await window.mainApi.send('msgWindowReload')
   }
 
-  static async initAllMcpServers(configs: MCPAPI | undefined): Promise<any> {
-    if (!configs) return
-    const dxtStore = useDxtStore()
-    const filteredConfigs = Object.fromEntries(
-      Object.entries(configs).map(([key, config]) => {
-        const mcpMetadata = config?.metadata
-
-        // Only dxt manifest need include user_config
-        if (!mcpMetadata || mcpMetadata.type !== 'metadata__dxt_manifest') {
-          return [key, mcpMetadata]
-        }
-
-        const userConfigObj = mcpMetadata.config.user_config
-        if (!userConfigObj) {
-          return [key, mcpMetadata]
-        }
-
-        const userConfig = dxtStore.getConfig(key)
-
-        const mergedConfig = Object.fromEntries(
-          Object.entries(userConfigObj).map(([configKey, configVal]) => {
-            const userValue = userConfig[configKey]
-
-            const value = isValidValue(userValue) ? userValue : configVal.default
-            return [configKey, value]
-          })
-        )
-
-        const filteredUserConfig = Object.fromEntries(
-          Object.entries(mergedConfig).filter(([, value]) => {
-            return isValidValue(value)
-          })
-        )
-
-        const mergedMetadata = {
-          ...mcpMetadata,
-          user_config: filteredUserConfig
-        }
-        return [key, mergedMetadata]
-      })
-    )
-
-    console.log(filteredConfigs)
-    return window.mainApi.invoke('msgInitAllMcpServers', filteredConfigs)
-  }
-
   static async openFile(type: string): Promise<any> {
     return window.mainApi.invoke('msgOpenFile', type)
   }
@@ -109,7 +63,6 @@ export const {
   openFile,
   getApiToken,
   getDxtUrl,
-  initAllMcpServers,
   listenStdioProgress,
   removeListenStdioProgress,
   windowReload
@@ -183,4 +136,61 @@ class Command {
 export const CommandEvent = {
   notify: Command.msgSendCommandToMainNotify,
   callback: Command.msgCommandToChatInvoke
+}
+
+class Mcp {
+  static async msgMcpServersInit(configs: MCPAPI | undefined): Promise<any> {
+    if (!configs) return
+    const dxtStore = useDxtStore()
+    const filteredConfigs = Object.fromEntries(
+      Object.entries(configs).map(([key, config]) => {
+        const mcpMetadata = config?.metadata
+
+        // Only dxt manifest need include user_config
+        if (!mcpMetadata || mcpMetadata.type !== 'metadata__dxt_manifest') {
+          return [key, mcpMetadata]
+        }
+
+        const userConfigObj = mcpMetadata.config.user_config
+        if (!userConfigObj) {
+          return [key, mcpMetadata]
+        }
+
+        const userConfig = dxtStore.getConfig(key)
+
+        const mergedConfig = Object.fromEntries(
+          Object.entries(userConfigObj).map(([configKey, configVal]) => {
+            const userValue = userConfig[configKey]
+
+            const value = isValidValue(userValue) ? userValue : configVal.default
+            return [configKey, value]
+          })
+        )
+
+        const filteredUserConfig = Object.fromEntries(
+          Object.entries(mergedConfig).filter(([, value]) => {
+            return isValidValue(value)
+          })
+        )
+
+        const mergedMetadata = {
+          ...mcpMetadata,
+          user_config: filteredUserConfig
+        }
+        return [key, mergedMetadata]
+      })
+    )
+
+    console.log(filteredConfigs)
+    return window.mainApi.invoke('msgMcpServersInit', filteredConfigs)
+  }
+
+  static async msgMcpServersWatch(callback: any): Promise<any> {
+    return window.mainApi.on('msgMcpServersWatch', callback)
+  }
+}
+
+export const McpEvent = {
+  init: Mcp.msgMcpServersInit,
+  watch: Mcp.msgMcpServersWatch
 }

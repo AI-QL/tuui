@@ -51,7 +51,7 @@ export default class IPCs {
     })
 
     ipcMain.handle(
-      'msgInitAllMcpServers',
+      'msgMcpServersInit',
       async (event: IpcMainEvent, metadata: ConfigMcpMetadata) => {
         this.clients.forEach((client: ClientObj) => {
           if (client.connection?.transport) {

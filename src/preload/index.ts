@@ -22,7 +22,7 @@ const mainAvailChannels: string[] = [
   'msgFileTransferRequest',
   'msgCommandSelectionNotify',
   'msgGetApiToken',
-  'msgInitAllMcpServers',
+  'msgMcpServersInit',
   'msgWindowReload'
 ]
 
