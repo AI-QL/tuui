@@ -1,6 +1,12 @@
 import { ipcMain, shell, IpcMainEvent, dialog, BrowserWindow } from 'electron'
 import Constants from './utils/Constants'
-import { capabilitySchemas, ClientObj, FeatureObj, ConfigMcpMetadata } from './mcp/types'
+import {
+  capabilitySchemas,
+  ClientObj,
+  FeatureObj,
+  ConfigMcpMetadata,
+  McpProgressCallback
+} from './mcp/types'
 
 import { manageRequests } from './mcp/client'
 
@@ -18,7 +24,7 @@ import { DxtManifest } from '@anthropic-ai/dxt'
 
 import { closeCommandPicker } from './aid/commands'
 
-import { commandSelectionInvoke } from './index'
+import { commandSelectionInvoke, mcpServersCallback } from './index'
 import { getCachedText } from './aid/utils'
 
 const handlerRegistry = new Map<string, Function>()
@@ -61,8 +67,12 @@ export default class IPCs {
 
         IPCs.removeAllHandlers()
 
+        const progressCallback: McpProgressCallback = (name, message, status) => {
+          mcpServersCallback({ name, message, status })
+        }
+
         try {
-          const newClients = await initClients(metadata)
+          const newClients = await initClients(metadata, progressCallback)
           const features = newClients.map((params) => {
             return registerIpcHandlers(params)
           })

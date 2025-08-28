@@ -31,6 +31,7 @@ const rendererAvailChannels: string[] = [
   'msgSamplingTransferInvoke',
   'msgElicitationTransferInvoke',
   'msgCommandSelectionInvoke',
+  'msgMcpServersWatch',
   'msgFileTransferResponse'
 ]
 

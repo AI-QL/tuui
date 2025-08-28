@@ -1,4 +1,4 @@
-import { ClientObj, ConfigMcpMetadata, ServerConfig } from './types'
+import { ClientObj, ConfigMcpMetadata, ServerConfig, McpProgressCallback } from './types'
 // import { Notification } from 'electron'
 import { initializeClient } from './client'
 import { loadConfigFile } from './config'
@@ -16,7 +16,10 @@ export async function loadConfig(): Promise<ClientObj[]> {
   return []
 }
 
-export async function initClients(metadata: ConfigMcpMetadata): Promise<ClientObj[]> {
+export async function initClients(
+  metadata: ConfigMcpMetadata,
+  callback?: McpProgressCallback
+): Promise<ClientObj[]> {
   if (!metadata) {
     console.log('NO clients initialized.')
     return []
@@ -28,7 +31,7 @@ export async function initClients(metadata: ConfigMcpMetadata): Promise<ClientOb
     const entries = Object.entries(metadata)
     const clientPromises = entries.map(async ([name, object]) => {
       if (object.type === 'metadata__stdio_config') {
-        return initSingleClient(name, object.config)
+        return initSingleClient(name, object.config, callback)
       } else if (object.type === 'metadata__dxt_manifest') {
         const stdioConfig = await getMcpConfigForDxt(
           Constants.getPosixPath(path.join(Constants.ASSETS_PATH.dxt, name)),
@@ -36,7 +39,7 @@ export async function initClients(metadata: ConfigMcpMetadata): Promise<ClientOb
           object.user_config
         )
         console.log(stdioConfig)
-        return initSingleClient(name, stdioConfig)
+        return initSingleClient(name, stdioConfig, callback)
       } else {
         return { name }
       }
@@ -53,10 +56,11 @@ export async function initClients(metadata: ConfigMcpMetadata): Promise<ClientOb
 
 export async function initSingleClient(
   name: string,
-  serverConfig: ServerConfig
+  serverConfig: ServerConfig,
+  callback?: McpProgressCallback
 ): Promise<ClientObj> {
   console.log(`Initializing client for ${name} with config:`, serverConfig)
-  const connection = await initializeClient(name, serverConfig)
+  const connection = await initializeClient(name, serverConfig, callback)
   console.log(`${name} initialized.`)
   const configJson = serverConfig
   return { name, connection, configJson }

@@ -2,21 +2,22 @@
 import { ref } from 'vue'
 import { McpEvent, openPath } from '@/renderer/utils'
 import { useMcpStore, getServers } from '@/renderer/store/mcp'
+import { useLayoutStore } from '@/renderer/store/layout'
 import { useSnackbarStore } from '@/renderer/store/snackbar'
 import McpDxtPage from '@/renderer/components/pages/McpDxtPage.vue'
 
 const snackbarStore = useSnackbarStore()
 
-const mcpStore = useMcpStore()
+const layoutStore = useLayoutStore()
 
-const isLoading = ref(false)
+const mcpStore = useMcpStore()
 
 const dxtDialog = ref(false)
 
 const isDragActive = ref(false)
 
 async function activeAllMcpServers() {
-  isLoading.value = true
+  layoutStore.mcpLoading = true
   try {
     const configs = getServers()
     const result = await McpEvent.init(configs)
@@ -36,7 +37,7 @@ async function activeAllMcpServers() {
       snackbarStore.showErrorMessage('Unknown error, use devtool to check detailed console log')
     }
   } finally {
-    isLoading.value = false
+    layoutStore.mcpLoading = false
     mcpStore.version++
   }
 }
@@ -63,7 +64,7 @@ document.addEventListener('dragenter', (_e) => {
         v-tooltip:top="$t('mcp.init')"
         icon="mdi-power"
         color="success"
-        :loading="isLoading"
+        :loading="layoutStore.mcpLoading"
         @click="activeAllMcpServers()"
       >
       </v-btn>

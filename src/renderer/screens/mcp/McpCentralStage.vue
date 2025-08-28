@@ -4,10 +4,12 @@ import McpResourcePage from '@/renderer/components/pages/McpResourcePage.vue'
 import McpPromptPage from '@/renderer/components/pages/McpPromptPage.vue'
 import McpNewsPage from '@/renderer/components/pages/McpNewsPage.vue'
 import McpConfigPage from '@/renderer/components/pages/McpConfigPage.vue'
+import McpProcessPage from '@/renderer/components/pages/McpProcessPage.vue'
 const mcpStore = useMcpStore()
 </script>
 
 <template>
+  <McpProcessPage></McpProcessPage>
   <div v-if="mcpStore.getSelected" :key="mcpStore.version">
     <div v-if="mcpStore.getSelected.primitive === 'tools'">
       <v-data-table

@@ -71,6 +71,16 @@ type CommandRequest = {
   input: string
 }
 
+type McpCallback = {
+  name: string
+  message: string
+  status: 'pending' | 'error' | 'success'
+}
+
+export type McpProgressCallback = (
+  ..._args: [McpCallback['name'], McpCallback['message'], McpCallback['status']]
+) => void
+
 export type ConfigMcpMetadata = {
   [key: string]: McpMetadataStdio | McpMetadataDxt
 }
@@ -96,4 +106,8 @@ export interface IpcElicitationEvents {
 
 export interface IpcCommandEvents {
   msgCommandSelectionInvoke: (_message: CommandRequest) => void
+}
+
+export interface IpcMcpEvents {
+  msgMcpServersWatch: (_message: McpCallback) => void
 }

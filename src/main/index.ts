@@ -3,7 +3,12 @@ import { v4 as uuidv4 } from 'uuid'
 import Constants from './utils/Constants'
 import { createErrorWindow, createMainWindow } from './MainRunner'
 
-import { IpcSamplingEvents, IpcElicitationEvents, IpcCommandEvents } from './mcp/types'
+import {
+  IpcSamplingEvents,
+  IpcElicitationEvents,
+  IpcCommandEvents,
+  IpcMcpEvents
+} from './mcp/types'
 
 import { responseToRenderer } from './IPCs'
 
@@ -169,6 +174,14 @@ export async function commandSelectionInvoke<T extends keyof IpcCommandEvents>(
   console.log(args)
 
   mainWindow.webContents.send('msgCommandSelectionInvoke', {
+    args
+  })
+}
+
+export async function mcpServersCallback<T extends keyof IpcMcpEvents>(
+  ...args: Parameters<IpcMcpEvents[T]>
+) {
+  mainWindow.webContents.send('msgMcpServersWatch', {
     args
   })
 }

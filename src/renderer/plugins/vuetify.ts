@@ -37,6 +37,7 @@ export default createVuetify({
           surface: '#FFFFFF',
           secondary: colors.lightBlue.darken4, // '#2B323B',
           alert: colors.brown.lighten1,
+          pending: colors.yellow.base,
           'grey-0': '#F2F5F8',
           'grey-50': '#FAFAFA',
           'grey-100': '#F5F5F5',

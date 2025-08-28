@@ -20,6 +20,7 @@ export const useLayoutStore = defineStore('layoutStore', {
   state: () => ({
     sidebar: true,
     apiKeyShow: false,
+    mcpLoading: false,
     screen: 0 // The selected screen is a list: 0,1,2,...
   })
 })
