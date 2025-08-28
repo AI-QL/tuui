@@ -66,3 +66,13 @@ $ npm install
 ```
 
 **Pro Tip**: Always test your application after major updates to ensure compatibility.
+
+## Update NPM Version
+
+You can update the version info by:
+
+```shell
+$ npm version <version> --no-git-tag-version
+```
+
+**Pro Tip**: Update the version info in both the project and docs directories.
