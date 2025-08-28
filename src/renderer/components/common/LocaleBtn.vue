@@ -2,7 +2,6 @@
 import { useI18n } from 'vue-i18n'
 import { useLocaleStore } from '@/renderer/store/locale'
 import { onMounted } from 'vue'
-import 'iconify-icon'
 
 const { locale } = useI18n()
 const localeStore = useLocaleStore()
@@ -21,7 +20,7 @@ const handleChangeLanguage = (val): void => {
 <template>
   <v-badge location="top right" :offset-y="7" :offset-x="5" class="click-through-badge">
     <template #badge>
-      <iconify-icon :icon="localeStore.getIcon2()"></iconify-icon>
+      <v-img width="10" height="7" rounded="sm" :src="localeStore.getIcon()"></v-img>
     </template>
     <v-menu transition="fade-transition" :offset="14">
       <template #activator="{ props }">
@@ -42,10 +41,10 @@ const handleChangeLanguage = (val): void => {
           density="compact"
           @click="handleChangeLanguage(n.value)"
         >
-          <template #prepend>
-            <iconify-icon class="mr-3" :icon="localeStore.getIcon(n.name)"></iconify-icon>
-          </template>
           <v-list-item-title>{{ n.title }}</v-list-item-title>
+          <template #prepend>
+            <v-img class="mr-2" :src="n.src" width="20" height="15" rounded="sm"></v-img>
+          </template>
         </v-list-item>
       </v-list>
     </v-menu>

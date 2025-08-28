@@ -49,7 +49,6 @@
     "@nut-tree-fork/nut-js": "^4.2.6",
     "applescript": "^1.0.0",
     "highlight.js": "^11.11.1",
-    "iconify-icon": "^3.0.0",
     "katex": "^0.16.22",
     "localforage": "^1.10.0",
     "md-editor-v3": "^5.8.4",
