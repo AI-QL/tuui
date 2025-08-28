@@ -73,11 +73,13 @@ async function initializeStdioClient(
   }
 
   try {
+    callback(name, 'Staring...', 'pending')
     await connect(client, transport)
     console.log(`${clientName} connected.`)
     callback(name, 'Done', 'success')
   } catch (error) {
-    callback(name, '', 'error')
+    const errorMsg = error instanceof Error ? error.message : String(error)
+    callback(name, errorMsg, 'error')
     throw error
   }
 

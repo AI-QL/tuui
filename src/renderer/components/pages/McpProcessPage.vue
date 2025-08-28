@@ -30,7 +30,7 @@ const handleProgress = (_event, progress) => {
   if (message) {
     progressMap.value[name].messages.push(message)
   }
-  if (status) {
+  if (status !== 'pending') {
     progressMap.value[name].status = status
   }
 }
@@ -39,12 +39,20 @@ McpEvent.watch(handleProgress)
 
 const isLoading = computed(() => layoutStore.mcpLoading)
 
+const allSuccess = computed(() => {
+  return Object.values(progressMap.value).every((item) => item.status === 'success')
+})
+
 watch(isLoading, (newVal) => {
   if (newVal) {
     progressMap.value = {}
     mcpDialog.value = true
   } else {
-    mcpDialog.value = false
+    setTimeout(() => {
+      if (allSuccess.value) {
+        mcpDialog.value = false
+      }
+    }, 500)
   }
 })
 </script>
