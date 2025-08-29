@@ -152,11 +152,10 @@ class Mcp {
         }
 
         const userConfigObj = mcpMetadata.config.user_config
-        if (!userConfigObj) {
+        const userConfig = dxtStore.getConfig(key)
+        if (!userConfigObj || !userConfig) {
           return [key, mcpMetadata]
         }
-
-        const userConfig = dxtStore.getConfig(key)
 
         const mergedConfig = Object.fromEntries(
           Object.entries(userConfigObj).map(([configKey, configVal]) => {

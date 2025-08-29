@@ -29,13 +29,9 @@ async function activeAllMcpServers() {
       snackbarStore.showSuccessMessage('mcp.updated')
     }
   } catch (error) {
-    if (error instanceof Error) {
-      console.log(error.message)
-      snackbarStore.showErrorMessage(error.message)
-    } else {
-      console.log('Unknown Error', error)
-      snackbarStore.showErrorMessage('Unknown error, use devtool to check detailed console log')
-    }
+    const errorMsg = error instanceof Error ? error.message : String(error)
+    console.log(errorMsg)
+    snackbarStore.showErrorMessage(errorMsg)
   } finally {
     layoutStore.mcpLoading = false
     mcpStore.version++
