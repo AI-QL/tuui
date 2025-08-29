@@ -6,6 +6,7 @@
   {
     "url": "https://dashscope.aliyuncs.com/compatible-mode",
     "urlList": ["https://dashscope.aliyuncs.com/compatible-mode"],
+    "path": "/v1/chat/completions",
     "name": "Qwen",
     "model": "qwen-turbo",
     "modelList": ["qwen-turbo", "qwen-plus", "qwen-max"]

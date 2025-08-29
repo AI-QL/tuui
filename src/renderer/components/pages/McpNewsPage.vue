@@ -35,12 +35,20 @@ const mcpNews = [
     link: 'https://github.com/modelcontextprotocol/servers'
   },
   {
-    img: 'https://gcore.jsdelivr.net/gh/idosal/git-mcp@main/public/img/cover.png',
-    title: 'Git MCP',
+    img: 'https://cdn.jsdelivr.net/gh/astral-sh/uv@main/assets/svg/Astral.svg',
+    title: 'UV',
     subtitle:
-      'GitMCP is a free, open-source, remote Model Context Protocol (MCP) server that transforms any GitHub project (repositories or GitHub pages) into a documentation hub. It enables AI tools like Cursor to access up-to-date documentation and code, even if the LLM has never encountered them, thereby eliminating code hallucinations seamlessly.',
-    duration: '20',
-    link: 'https://github.com/idosal/git-mcp'
+      'An extremely fast Python package and project manager, written in Rust. A single tool to replace pip, pip-tools, pipx, poetry, pyenv, twine, virtualenv, and more.',
+    duration: '5',
+    link: 'https://docs.astral.sh/uv/getting-started/installation/'
+  },
+  {
+    img: 'https://nodejs.org/static/logos/nodejsDark.svg',
+    title: 'Node.js',
+    subtitle:
+      'Node.js® is a free, open-source, cross-platform JavaScript runtime environment that lets developers create servers, web apps, command line tools and scripts.',
+    duration: '5',
+    link: 'https://nodejs.org/'
   },
   {
     img: 'https://www.anthropic.com/_next/image?url=https%3A%2F%2Fwww-cdn.anthropic.com%2Fimages%2F4zrzovbb%2Fwebsite%2Fd48f3ea1218a4b90450b9ab8134fa0e24db5a167-720x542.png&w=1920&q=75',
@@ -93,7 +101,14 @@ const placeholderColor = computed(() => {
         <v-row dense>
           <v-col v-for="(item, index) in items" :key="item.raw.title" cols="auto" md="4">
             <v-card class="pb-3" border flat>
-              <v-img :src="item.raw.img" :height="142" cover :lazy-src="placeholderColor(index)">
+              <v-img
+                class="ma-2"
+                rounded="lg"
+                cover
+                :src="item.raw.img"
+                :height="140"
+                :lazy-src="placeholderColor(index)"
+              >
                 <template #placeholder>
                   <div class="d-flex align-center justify-center fill-height">
                     <v-progress-circular color="grey-lighten-4" indeterminate></v-progress-circular>

@@ -185,7 +185,6 @@ class Mcp {
   }
 
   static async msgMcpServersWatch(callback: any): Promise<any> {
-    console.log(callback)
     return window.mainApi.on('msgMcpServersWatch', callback)
   }
 }
