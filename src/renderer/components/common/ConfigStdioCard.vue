@@ -1,6 +1,12 @@
 <script setup lang="ts">
 import { McpMetadataStdio } from '@/preload/mcp'
-import { reactive } from 'vue'
+import { reactive, ref } from 'vue'
+import { useStdioStore } from '@/renderer/store/stdio'
+import { getRawServers } from '@/renderer/store/mcp'
+import McpEditPage from '@/renderer/components/pages/McpEditPage.vue'
+const stdioStore = useStdioStore()
+
+const editDialog = ref(false)
 
 const showPassword = reactive({})
 
@@ -19,6 +25,10 @@ function formattedValue(value: string[], sep: string) {
   } else {
     return value
   }
+}
+
+const editConfig = () => {
+  editDialog.value = true
 }
 </script>
 
@@ -91,5 +101,37 @@ function formattedValue(value: string[], sep: string) {
         </div>
       </div>
     </v-card-text>
+    <v-divider></v-divider>
+    <v-card-actions>
+      <v-spacer> </v-spacer>
+      <v-btn
+        v-if="metadata.name in (getRawServers() ?? {})"
+        v-tooltip:top="$t('general.reset')"
+        icon="mdi-refresh"
+        rounded="lg"
+        color="error"
+        @click="stdioStore.deleteConfig(metadata.name)"
+      >
+      </v-btn>
+      <v-btn
+        v-else
+        v-tooltip:top="$t('general.delete')"
+        icon="mdi-delete-outline"
+        rounded="lg"
+        color="error"
+        @click="stdioStore.deleteConfig(metadata.name)"
+      >
+      </v-btn>
+
+      <v-btn
+        v-tooltip:top="$t('general.edit')"
+        icon="mdi-lead-pencil"
+        rounded="lg"
+        color="primary"
+        @click="editConfig"
+      >
+      </v-btn>
+    </v-card-actions>
   </v-card>
+  <McpEditPage v-model="editDialog" v-model:name="metadata.name"></McpEditPage>
 </template>

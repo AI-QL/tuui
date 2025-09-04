@@ -23,8 +23,12 @@ const { hasComponent } = useRouteFeatures()
         </div>
 
         <template #actions>
-          <v-btn icon variant="text" @click="snackbarStore.isShow = false">
-            <v-icon>mdi-close</v-icon>
+          <v-btn
+            icon="mdi-close-box"
+            rounded="lg"
+            variant="plain"
+            @click="snackbarStore.isShow = false"
+          >
           </v-btn>
         </template>
       </v-snackbar>

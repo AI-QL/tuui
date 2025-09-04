@@ -1,30 +1,29 @@
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue'
-import type { CreateMessageRequest } from '@modelcontextprotocol/sdk/types'
-
-type SamplingRequest = CreateMessageRequest['params']
 
 const emit = defineEmits(['update:modelValue', 'onError'])
 
+type JSONValue = string | number | boolean | null | JSONValue[] | { [key: string]: JSONValue }
+
 const props = defineProps({
   modelValue: {
-    type: Object as () => SamplingRequest | {},
+    type: Object as () => {},
     required: true
   }
 })
 
-const json2Str = (json: SamplingRequest | {}) => {
+const json2Str = (json: JSONValue | {}) => {
   return JSON.stringify(json, null, 2)
 }
 
-const { modelValue: samplingParams } = props
+const { modelValue: jsonParams } = props
 
-const jsonString = ref(json2Str(samplingParams))
+const jsonString = ref(json2Str(jsonParams))
 
 const editableSamplingParams = computed({
   get: () => jsonString.value,
   set: (value) => {
-    console.log('Sampling value changed: ', value)
+    console.log('JSON changed: ', value)
     jsonString.value = value
     try {
       const parsed = JSON.parse(value)
@@ -41,7 +40,7 @@ const editableSamplingParams = computed({
 const jsonError = ref<string | null>(null)
 
 watch(
-  () => samplingParams,
+  () => jsonParams,
   (newVal) => {
     jsonString.value = json2Str(newVal)
   },
@@ -58,6 +57,7 @@ watch(
         outlined
         auto-grow
         :error-messages="jsonError"
+        :hide-details="!Boolean(jsonError ?? '')"
       ></v-textarea>
     </v-card-text>
   </v-card>

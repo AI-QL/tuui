@@ -7,7 +7,7 @@ const historyStore = useHistoryStore()
     <v-btn-group variant="outlined" divided>
       <v-btn
         v-tooltip:top="$t('chat.delete')"
-        icon="mdi-delete"
+        icon="mdi-delete-outline"
         @click="historyStore.resetState()"
       ></v-btn>
       <v-btn

@@ -41,7 +41,9 @@
     "error": "Unknown Error"
   },
   "mcp": {
+    "config": "Server Config",
     "file": "Archive File",
+    "new": "New MCP Server",
     "init": "Init MCP Servers",
     "read": "Read",
     "minutes": "minutes",
@@ -121,9 +123,16 @@
   "snackbar": {
     "addnew": "New session Initiated.",
     "addfail": "Already in a fresh session.",
+    "no-mcp-config": "Please provide a valid MCP Config JSON with server name",
     "stopped": "Generating stopped.",
     "parse-stream-fail": "Cannot read the stream.",
     "parse-config-fail": "Cannot parse the config file.",
     "copied": "Copied to clipboard."
+  },
+  "general": {
+    "edit": "Edit",
+    "example": "Example",
+    "delete": "Delete",
+    "reset": "Reset"
   }
 }

@@ -131,7 +131,7 @@ function createAPIMethods(methods: Record<string, string>) {
 const api = {
   _currentAPI: {},
   get: () => {
-    console.log('Preload currentAPI:', api._currentAPI)
+    // console.log('Preload currentAPI:', api._currentAPI)
     return api._currentAPI
   },
   refresh: async () => {

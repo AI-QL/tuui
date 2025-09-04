@@ -5,6 +5,7 @@ import { useMcpStore, getServers } from '@/renderer/store/mcp'
 import { useLayoutStore } from '@/renderer/store/layout'
 import { useSnackbarStore } from '@/renderer/store/snackbar'
 import McpDxtPage from '@/renderer/components/pages/McpDxtPage.vue'
+import McpAddPage from '@/renderer/components/pages/McpAddPage.vue'
 
 const snackbarStore = useSnackbarStore()
 
@@ -13,6 +14,8 @@ const layoutStore = useLayoutStore()
 const mcpStore = useMcpStore()
 
 const dxtDialog = ref(false)
+
+const addDialog = ref(false)
 
 const isDragActive = ref(false)
 
@@ -43,6 +46,10 @@ const openDialog = () => {
   isDragActive.value = false
 }
 
+const addConfig = () => {
+  addDialog.value = true
+}
+
 document.addEventListener('dragenter', (_e) => {
   if (!dxtDialog.value) {
     isDragActive.value = true
@@ -51,6 +58,11 @@ document.addEventListener('dragenter', (_e) => {
     }, 5000)
   }
 })
+
+const items = [
+  { title: 'dxt.title', exec: openDialog },
+  { title: 'mcp.config', exec: addConfig }
+]
 </script>
 
 <template>
@@ -70,15 +82,32 @@ document.addEventListener('dragenter', (_e) => {
         icon="mdi-open-in-new"
         @click="openPath('config')"
       ></v-btn>
-      <v-btn
-        v-tooltip:top="$t('dxt.title')"
-        icon="mdi-package-variant"
-        :class="{ 'drag-active': isDragActive }"
-        @click="openDialog()"
-        @dragenter.prevent="openDialog()"
-      ></v-btn>
+      <v-menu>
+        <template #activator="{ props }">
+          <v-btn
+            v-tooltip:top="$t('mcp.new')"
+            v-bind="props"
+            icon="mdi-upload"
+            :class="{ 'drag-active': isDragActive }"
+            @dragenter.prevent="openDialog()"
+          >
+          </v-btn>
+        </template>
+        <v-list>
+          <v-list-item
+            v-for="(item, index) in items"
+            :key="index"
+            :value="index"
+            @click="item.exec()"
+          >
+            <v-list-item-title>{{ $t(item.title) }}</v-list-item-title>
+          </v-list-item>
+        </v-list>
+      </v-menu>
     </v-btn-group>
     <McpDxtPage v-model="dxtDialog"></McpDxtPage>
+
+    <McpAddPage v-model="addDialog"></McpAddPage>
   </v-container>
 </template>
 

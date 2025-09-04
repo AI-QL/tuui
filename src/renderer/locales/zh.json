@@ -41,7 +41,9 @@
     "error": "未知错误"
   },
   "mcp": {
+    "config": "服务端配置",
     "file": "文件压缩包",
+    "new": "新的 MCP 服务端",
     "init": "初始化 MCP 服务端",
     "read": "阅读",
     "minutes": "分钟",
@@ -121,9 +123,16 @@
   "snackbar": {
     "addnew": "开始新会话",
     "addfail": "已处于最新会话",
+    "no-mcp-config": "请提供一个含有名字的 MCP JSON 配置",
     "stopped": "停止生成",
     "parse-stream-fail": "无法解析数据流",
     "parse-config-fail": "无法解析配置文件",
     "copied": "已复制到剪切板"
+  },
+  "general": {
+    "edit": "修改",
+    "example": "示例",
+    "delete": "删除",
+    "reset": "重置"
   }
 }

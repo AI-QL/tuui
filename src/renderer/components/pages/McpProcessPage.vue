@@ -81,7 +81,7 @@ watch(isLoading, (newVal) => {
       <v-card-actions>
         <v-spacer></v-spacer>
         <v-icon-btn
-          icon="mdi-close-box-outline"
+          icon="mdi-close-box"
           color="error"
           variant="plain"
           rounded="lg"

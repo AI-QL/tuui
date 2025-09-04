@@ -121,7 +121,7 @@ const copyToClipboard = async (msg: Message) => {
               <v-btn
                 v-if="showDelete"
                 color="error"
-                icon="mdi-delete-off-outline"
+                icon="mdi-delete-outline"
                 size="x-small"
                 variant="plain"
                 @click="emitDeleteMessage"

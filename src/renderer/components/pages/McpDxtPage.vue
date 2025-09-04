@@ -80,7 +80,8 @@ const closeDialog = () => {
         <div> {{ $t('dxt.title') }} </div>
         <v-spacer></v-spacer>
         <v-icon-btn
-          icon="mdi-close"
+          icon="mdi-close-box"
+          rounded="lg"
           color="error"
           variant="plain"
           @click="closeDialog"
@@ -120,7 +121,7 @@ const closeDialog = () => {
           variant="plain"
           rounded="lg"
           :disabled="files.length === 0"
-          icon="mdi-delete"
+          icon="mdi-delete-outline"
           color="error"
           @click="files.length = 0"
         ></v-btn>

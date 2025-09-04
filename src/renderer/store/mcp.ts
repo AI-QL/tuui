@@ -5,6 +5,9 @@ import type {
 } from '@/renderer/types/message'
 
 import type { MCPAPI, McpObject, ToolType, DXTAPI } from '@/preload/mcp'
+import { useStdioStore } from '@/renderer/store/stdio'
+
+import { merge, mapValues } from 'lodash'
 
 type McpPrimitiveType = 'tools' | 'resources' | 'prompts' | 'metadata'
 type AllowedPrimitive = Exclude<McpPrimitiveType, 'metadata'>
@@ -24,8 +27,27 @@ export function getAllowedPrimitive(item: McpObject): AllowedPrimitive[] {
   ) as AllowedPrimitive[]
 }
 
-export function getServers(): MCPAPI | undefined {
+export function getRawServers(): MCPAPI | undefined {
   return window.mcpServers?.get()
+}
+
+export function getServers(): MCPAPI | undefined {
+  const mcpServers = getRawServers()
+  const stdioServers = useStdioStore().configValues
+
+  const renamedStdioServers = mapValues(stdioServers, (v, k) => {
+    return {
+      metadata: {
+        name: k,
+        type: 'metadata__stdio_config',
+        config: v
+      }
+    }
+  })
+
+  merge(mcpServers, renamedStdioServers)
+
+  return mcpServers
 }
 
 export function getDxtManifest(): DXTAPI | undefined {

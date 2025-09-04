@@ -89,7 +89,7 @@ const agentStore = useAgentStore()
             v-tooltip:start="$t('chat.wipe')"
             color="error"
             variant="tonal"
-            icon="mdi-delete-off-outline"
+            icon="mdi-delete-outline"
             rounded="lg"
             @click="messageStore.init()"
           ></v-icon-btn>

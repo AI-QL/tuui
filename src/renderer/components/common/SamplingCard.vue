@@ -5,7 +5,7 @@ import { useSnackbarStore } from '@/renderer/store/snackbar'
 import { useChatbotStore } from '@/renderer/store/chatbot'
 import { useHistoryStore } from '@/renderer/store/history'
 import { createCompletion } from '@/renderer/composables/chatCompletions'
-import ConfigSamplingCard from './ConfigSamplingCard.vue'
+import ConfigJsonCard from './ConfigJsonCard.vue'
 
 import type { ChatCompletionResponseMessage } from '@/renderer/types/message'
 import type {
@@ -104,7 +104,7 @@ SamplingTransfer.request(handleProgress)
   <v-dialog v-model="samplingDialog" persistent max-width="80vw" max-height="80vh" scrollable>
     <v-card :title="$t('sampling.title')">
       <v-card-text>
-        <ConfigSamplingCard v-model="samplingParams" @on-error="handleError"></ConfigSamplingCard>
+        <ConfigJsonCard v-model="samplingParams" @on-error="handleError"></ConfigJsonCard>
         <v-data-iterator :items="samplingResults" :items-per-page="-1">
           <template #default="{ items }">
             <template v-for="(item, index) in items" :key="index">
