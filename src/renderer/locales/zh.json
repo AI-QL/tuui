@@ -88,6 +88,8 @@
   "sampling": {
     "title": "采样",
     "comp": "开始采样",
+    "pause": "暂停",
+    "continue": "继续",
     "reject": "拒绝采样",
     "confirm": "确认使用采样",
     "confirm-last": "确认使用最新采样"

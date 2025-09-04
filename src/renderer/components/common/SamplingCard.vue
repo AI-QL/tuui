@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import { SamplingTransfer } from '@/renderer/utils'
 import { useSnackbarStore } from '@/renderer/store/snackbar'
 import { useChatbotStore } from '@/renderer/store/chatbot'
 import { useHistoryStore } from '@/renderer/store/history'
+import { useMessageStore } from '@/renderer/store/message'
 import { createCompletion } from '@/renderer/composables/chatCompletions'
 import ConfigJsonCard from './ConfigJsonCard.vue'
 
@@ -18,6 +19,8 @@ type SamplingRequest = CreateMessageRequest['params']
 const snackbarStore = useSnackbarStore()
 
 const allChatbotStore = useChatbotStore()
+
+const messageStore = useMessageStore()
 
 const chatbotStore = allChatbotStore.chatbots[allChatbotStore.selectedChatbotId]
 
@@ -96,6 +99,65 @@ const handleProgress = (_event, progress) => {
 }
 
 SamplingTransfer.request(handleProgress)
+
+const valueDeterminate = ref(0)
+
+const autoSampling = ref(true)
+
+function startProgress(triggerEvent: Function) {
+  const duration = 5000
+  const increment = 100 / (duration / 100)
+  let current = valueDeterminate.value
+
+  const interval = setInterval(() => {
+    current += increment
+    if (current >= 100) {
+      current = 100
+      clearInterval(interval)
+      triggerEvent()
+    }
+    if (autoSampling.value) {
+      valueDeterminate.value = current
+    } else {
+      clearInterval(interval)
+    }
+  }, 100)
+}
+
+function triggerChatCompletion() {
+  if (autoSampling.value) tryCompletions()
+}
+
+function triggerSamplingReturn() {
+  if (autoSampling.value) finishSampling(samplingResults.value.length - 1)
+}
+
+watch(
+  () => samplingDialog.value,
+  (newVal) => {
+    if (newVal) {
+      valueDeterminate.value = 0
+      startAutoSampling()
+    }
+  }
+)
+
+function startAutoSampling() {
+  autoSampling.value = true
+  startProgress(() => {
+    triggerChatCompletion()
+    const unwatch = watch(
+      () => messageStore.generating,
+      (val) => {
+        if (!val) {
+          unwatch()
+          valueDeterminate.value = 0
+          startProgress(triggerSamplingReturn)
+        }
+      }
+    )
+  })
+}
 </script>
 
 <template>
@@ -103,12 +165,17 @@ SamplingTransfer.request(handleProgress)
   <!-- <v-btn @click="samplingDialog = true" color="surface-variant" text="Open Dialog" variant="flat"></v-btn> -->
   <v-dialog v-model="samplingDialog" persistent max-width="80vw" max-height="80vh" scrollable>
     <v-card :title="$t('sampling.title')">
+      <v-divider></v-divider>
       <v-card-text>
-        <ConfigJsonCard v-model="samplingParams" @on-error="handleError"></ConfigJsonCard>
+        <ConfigJsonCard
+          v-model="samplingParams"
+          @on-error="handleError"
+          @focus="autoSampling = false"
+        ></ConfigJsonCard>
         <v-data-iterator :items="samplingResults" :items-per-page="-1">
           <template #default="{ items }">
             <template v-for="(item, index) in items" :key="index">
-              <v-card>
+              <v-card class="mx-4">
                 <v-card-text>
                   <v-textarea
                     v-if="item.raw.reasoning_content"
@@ -146,25 +213,51 @@ SamplingTransfer.request(handleProgress)
           </template>
         </v-data-iterator>
       </v-card-text>
+      <v-divider></v-divider>
       <v-card-actions>
+        <v-progress-linear
+          class="ml-8 mr-4"
+          v-model="valueDeterminate"
+          color="primary"
+          rounded
+          @click="autoSampling = false"
+        ></v-progress-linear>
         <v-spacer></v-spacer>
-        <v-icon-btn
+        <v-btn
+          v-if="autoSampling"
+          v-tooltip:top="$t('sampling.pause')"
+          icon="mdi-pause"
+          color="primary"
+          variant="plain"
+          rounded="lg"
+          @click="autoSampling = false"
+        ></v-btn>
+        <v-btn
+          v-else
+          v-tooltip:top="$t('sampling.continue')"
+          icon="mdi-play"
+          color="primary"
+          variant="plain"
+          rounded="lg"
+          @click="startAutoSampling()"
+        ></v-btn>
+        <v-btn
           v-tooltip:top="$t('sampling.reject')"
           icon="mdi-cancel"
           color="error"
           variant="plain"
           rounded="lg"
           @click="rejectSampling"
-        ></v-icon-btn>
-        <v-icon-btn
+        ></v-btn>
+        <v-btn
           v-tooltip:top="$t('sampling.comp')"
           :icon="samplingResults.length === 0 ? 'mdi-arrow-up' : 'mdi-autorenew'"
           color="primary"
           variant="plain"
           rounded="lg"
           @click="tryCompletions"
-        ></v-icon-btn>
-        <v-icon-btn
+        ></v-btn>
+        <v-btn
           v-if="samplingResults.length > 0"
           v-tooltip:top="$t('sampling.confirm-last')"
           icon="mdi-check-bold"
@@ -172,7 +265,7 @@ SamplingTransfer.request(handleProgress)
           variant="plain"
           rounded="lg"
           @click="finishSampling(samplingResults.length - 1)"
-        ></v-icon-btn>
+        ></v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>

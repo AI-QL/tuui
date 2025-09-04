@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue'
 
-const emit = defineEmits(['update:modelValue', 'onError'])
+const emit = defineEmits(['update:modelValue', 'onError', 'focus', 'blur'])
 
 type JSONValue = string | number | boolean | null | JSONValue[] | { [key: string]: JSONValue }
 
@@ -11,6 +11,14 @@ const props = defineProps({
     required: true
   }
 })
+
+const handleFocus = () => {
+  emit('focus')
+}
+
+const handleBlur = () => {
+  emit('blur')
+}
 
 const json2Str = (json: JSONValue | {}) => {
   return JSON.stringify(json, null, 2)
@@ -58,6 +66,8 @@ watch(
         auto-grow
         :error-messages="jsonError"
         :hide-details="!Boolean(jsonError ?? '')"
+        @focus="handleFocus"
+        @blur="handleBlur"
       ></v-textarea>
     </v-card-text>
   </v-card>

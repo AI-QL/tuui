@@ -88,6 +88,8 @@
   "sampling": {
     "title": "Sampling",
     "comp": "Start completions",
+    "pause": "Pause",
+    "continue": "Continue",
     "reject": "Reject sampling",
     "confirm": "Confirm completions",
     "confirm-last": "Confirm completions with last sampling"
