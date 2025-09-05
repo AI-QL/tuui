@@ -100,14 +100,22 @@ const handleProgress = (_event, progress) => {
 
 SamplingTransfer.request(handleProgress)
 
-const valueDeterminate = ref(0)
+type SamplingProgress = {
+  auto: boolean
+  stage: 1 | 2 // completion -> finishing
+  percent: number
+}
 
-const autoSampling = ref(true)
+const samplingProgress = ref<SamplingProgress>({
+  auto: true,
+  stage: 1,
+  percent: 0
+})
 
 function startProgress(triggerEvent: Function) {
   const duration = 5000
   const increment = 100 / (duration / 100)
-  let current = valueDeterminate.value
+  let current = samplingProgress.value.percent
 
   const interval = setInterval(() => {
     current += increment
@@ -116,8 +124,8 @@ function startProgress(triggerEvent: Function) {
       clearInterval(interval)
       triggerEvent()
     }
-    if (autoSampling.value) {
-      valueDeterminate.value = current
+    if (samplingProgress.value.auto) {
+      samplingProgress.value.percent = current
     } else {
       clearInterval(interval)
     }
@@ -125,37 +133,56 @@ function startProgress(triggerEvent: Function) {
 }
 
 function triggerChatCompletion() {
-  if (autoSampling.value) tryCompletions()
+  if (samplingProgress.value.auto) {
+    tryCompletions()
+  }
 }
 
 function triggerSamplingReturn() {
-  if (autoSampling.value) finishSampling(samplingResults.value.length - 1)
+  if (samplingProgress.value.auto) finishSampling(samplingResults.value.length - 1)
 }
 
 watch(
   () => samplingDialog.value,
   (newVal) => {
     if (newVal) {
-      valueDeterminate.value = 0
-      startAutoSampling()
+      // Dialog opened, clean stage
+      samplingProgress.value.stage = 1
+      samplingProgress.value.percent = 0
+      continueAutoSampling()
     }
   }
 )
 
-function startAutoSampling() {
-  autoSampling.value = true
+function continueAutoSampling() {
+  samplingProgress.value.auto = true
   startProgress(() => {
-    triggerChatCompletion()
-    const unwatch = watch(
-      () => messageStore.generating,
-      (val) => {
-        if (!val) {
-          unwatch()
-          valueDeterminate.value = 0
-          startProgress(triggerSamplingReturn)
-        }
-      }
-    )
+    switch (samplingProgress.value.stage) {
+      case 1:
+        const unwatch = watch(
+          () => messageStore.generating,
+          (val) => {
+            if (val) {
+              // If next ChatCompletion triggered, goto stage 2
+              // and keep waiting for the finishing
+              samplingProgress.value.stage = 2
+            } else {
+              // If ChatCompletion generating finished, return result
+              unwatch()
+              samplingProgress.value.percent = 0
+              startProgress(triggerSamplingReturn)
+            }
+          }
+        )
+        triggerChatCompletion()
+        break
+      case 2:
+        startProgress(triggerSamplingReturn)
+        break
+      default:
+        // Should not happen
+        console.log('Undefined stage', samplingProgress.value)
+    }
   })
 }
 </script>
@@ -170,8 +197,9 @@ function startAutoSampling() {
         <ConfigJsonCard
           v-model="samplingParams"
           @on-error="handleError"
-          @focus="autoSampling = false"
-        ></ConfigJsonCard>
+          @focus="samplingProgress.auto = false"
+        >
+        </ConfigJsonCard>
         <v-data-iterator :items="samplingResults" :items-per-page="-1">
           <template #default="{ items }">
             <template v-for="(item, index) in items" :key="index">
@@ -217,20 +245,21 @@ function startAutoSampling() {
       <v-card-actions>
         <v-progress-linear
           class="ml-8 mr-4"
-          v-model="valueDeterminate"
+          v-model="samplingProgress.percent"
           color="primary"
+          :indeterminate="Boolean(messageStore.generating)"
           rounded
-          @click="autoSampling = false"
+          @click="samplingProgress.auto = false"
         ></v-progress-linear>
         <v-spacer></v-spacer>
         <v-btn
-          v-if="autoSampling"
+          v-if="samplingProgress.auto"
           v-tooltip:top="$t('sampling.pause')"
           icon="mdi-pause"
           color="primary"
           variant="plain"
           rounded="lg"
-          @click="autoSampling = false"
+          @click="samplingProgress.auto = false"
         ></v-btn>
         <v-btn
           v-else
@@ -239,7 +268,7 @@ function startAutoSampling() {
           color="primary"
           variant="plain"
           rounded="lg"
-          @click="startAutoSampling()"
+          @click="continueAutoSampling()"
         ></v-btn>
         <v-btn
           v-tooltip:top="$t('sampling.reject')"
