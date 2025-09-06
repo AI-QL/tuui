@@ -1,5 +1,5 @@
 import { join, dirname, normalize, sep } from 'path'
-import { name, version, debug, homepage } from '../../../package.json'
+import { name, version, debug, homepage, schemaVersion } from '../../../package.json'
 import { fileURLToPath } from 'url'
 import { app } from 'electron'
 
@@ -24,17 +24,19 @@ export interface AssetsPaths {
 }
 
 export default class Constants {
+  static IS_DEV_ENV = process.env.NODE_ENV === 'development'
+
   // Display app name (uppercase first letter)
   // static APP_NAME = name.charAt(0).toUpperCase() + name.slice(1)
 
   // Display app name (uppercase all letters)
-  static APP_NAME = name.toUpperCase()
+  static APP_NAME = `${name.toUpperCase()}${Constants.IS_DEV_ENV ? ' ' + process.env.NODE_ENV : ''}`
 
   static APP_VERSION = version
 
   static APP_HOME_PAGE = homepage
 
-  static IS_DEV_ENV = process.env.NODE_ENV === 'development'
+  static PARTITION_NAME = `persist:${name}-${process.env.NODE_ENV}-${schemaVersion}`
 
   // To show devtools at startup. It requires IS_DEV_ENV=true.
   // Note: For debugging purpose, window won't be closed if click elsewhere, if devtools is open.
@@ -47,6 +49,7 @@ export default class Constants {
     contextIsolation: true,
     enableRemoteModule: false,
     webSecurity: false,
+    partition: Constants.PARTITION_NAME,
     preload: join(__dirname, '../preload/index.js')
   }
 
@@ -54,7 +57,7 @@ export default class Constants {
     enabled: false,
     trayWindow: false,
     menu: false,
-    tooltip: 'TUUI App',
+    tooltip: Constants.APP_NAME,
     margin: { x: 0, y: 0 },
     showAtStartup: false
   }

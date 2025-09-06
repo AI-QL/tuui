@@ -1,7 +1,8 @@
 {
   "name": "tuui",
   "appId": "com.tuui.app",
-  "version": "0.9.1",
+  "version": "1.0.0-alpha",
+  "schemaVersion": "1.0",
   "description": "Tool Unitary User Interface",
   "homepage": "https://www.tuui.com",
   "author": "AIQL <contact@aiql.com>",

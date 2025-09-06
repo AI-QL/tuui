@@ -1,4 +1,4 @@
-import { app, screen, Menu, Tray, BrowserWindow } from 'electron'
+import { app, screen, session, Menu, Tray, BrowserWindow } from 'electron'
 import Constants from './utils/Constants.ts'
 import { debounce } from './utils/Util.ts'
 let tray
@@ -18,18 +18,6 @@ export function createTray(window: BrowserWindow, options) {
       debounce(() => toggleWindow(window), 100)
     })
     const contextMenu = Menu.buildFromTemplate([
-      // {
-      //   label: 'Show App',
-      //   click: () => {
-      //     showWindow(window)
-      //   }
-      // },
-      // {
-      //   label: 'Hide App',
-      //   click: () => {
-      //     hideWindow(window)
-      //   }
-      // },
       {
         label: 'Open Dev Tools',
         click: () => {
@@ -39,6 +27,16 @@ export function createTray(window: BrowserWindow, options) {
       {
         label: 'Force Reload',
         click: () => {
+          window.webContents.reloadIgnoringCache()
+        }
+      },
+      {
+        label: 'Clear Storage',
+        click: () => {
+          const sess = session.fromPartition(Constants.PARTITION_NAME)
+          sess.clearStorageData({
+            storages: ['cookies', 'cachestorage', 'localstorage', 'indexdb', 'serviceworkers']
+          })
           window.webContents.reloadIgnoringCache()
         }
       },

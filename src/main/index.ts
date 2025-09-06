@@ -20,7 +20,7 @@ import { showWindow } from './tray'
 let mainWindow
 let errorWindow
 
-app.setAppUserModelId('TUUI')
+app.setAppUserModelId(Constants.APP_NAME)
 
 const registerShortcuts = async () => {
   const initState = await Commander.init()

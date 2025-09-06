@@ -24,10 +24,10 @@ export function showNotification(
 
   try {
     const notification = new Notification({
-      title: options.title ?? 'TUUI',
+      title: options.title ?? Constants.APP_NAME,
       body: options.body,
       silent: options.silent ?? false,
-      icon: options.icon ?? Constants.ASSETS_PATH.icon_raw // 默认空图标
+      icon: options.icon ?? Constants.ASSETS_PATH.icon_raw
     })
 
     if (events?.onClick) {

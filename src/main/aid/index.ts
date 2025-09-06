@@ -25,14 +25,7 @@ export const createWindow = (opts: CreateWindowOpts = {}) => {
     ...opts,
     show: false,
     webPreferences: {
-      preload: Constants.DEFAULT_WEB_PREFERENCES.preload,
-      nodeIntegration: false,
-      contextIsolation: true,
-      webSecurity: false,
-      defaultEncoding: 'UTF-8',
-      // devTools: true,
-      devTools: process.env.DEBUG ? true : false,
-      sandbox: true
+      ...Constants.DEFAULT_WEB_PREFERENCES
     }
   })
 
