@@ -23,13 +23,19 @@ function handleFileChange(configPath) {
 const debouncedHandleFileChange = debounce(handleFileChange, DEBOUNCE_DELAY)
 
 function readConfig(configPath: string) {
-  return JSON.parse(fs.readFileSync(configPath, 'utf8'))
+  const fileString = fs.readFileSync(configPath, 'utf8')
+  if (fileString) {
+    return JSON.parse(fileString)
+  } else {
+    return {}
+  }
 }
 
 export function loadConfigFile(configPath: string): McpServersConfig {
   const resolvedConfigPath = path.isAbsolute(configPath)
     ? configPath
     : path.resolve(process.cwd(), configPath)
+
   try {
     if (!fs.existsSync(resolvedConfigPath)) {
       showNotification({
@@ -53,6 +59,7 @@ export function loadConfigFile(configPath: string): McpServersConfig {
       {
         body: `MCP Config JSON parse failure`
       },
+
       {
         onClick: () => {
           shell.showItemInFolder(resolvedConfigPath)

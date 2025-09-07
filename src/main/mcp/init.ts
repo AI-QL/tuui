@@ -7,13 +7,15 @@ import { getMcpConfigForDxt } from './dxt'
 import path from 'node:path'
 
 export async function loadConfig(): Promise<ClientObj[]> {
-  const config = loadConfigFile(Constants.ASSETS_PATH.mcp)
-  if (config) {
-    console.log('Config loaded:', config)
-    return Object.entries(config).map(([name, configJson]) => ({ name, configJson }))
+  try {
+    const config = loadConfigFile(Constants.ASSETS_PATH.mcp)
+    if (config) {
+      console.log('Config loaded:', config)
+      return Object.entries(config).map(([name, configJson]) => ({ name, configJson }))
+    }
+  } catch {
+    return []
   }
-  // You should also handle the case when config is falsy
-  return []
 }
 
 export async function initClients(
