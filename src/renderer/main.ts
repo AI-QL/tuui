@@ -11,6 +11,8 @@ import Vue3Lottie from 'vue3-lottie'
 
 import type { MCPAPI, DXTAPI } from '@/preload/mcp'
 import type { ChatbotConfig } from '@/preload/llm'
+import type { PopupConfig } from '@/preload/popup'
+import type { StartupConfig } from '@/preload/startup'
 
 // Add API key defined in contextBridge to window object type
 declare global {
@@ -19,6 +21,12 @@ declare global {
     mainApi?: any
     llmApis?: {
       get: () => ChatbotConfig[]
+    }
+    popupApis?: {
+      get: () => PopupConfig
+    }
+    startupApis?: {
+      get: () => StartupConfig
     }
     mcpServers?: {
       get: () => MCPAPI

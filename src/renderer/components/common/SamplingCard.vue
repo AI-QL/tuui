@@ -244,8 +244,8 @@ function continueAutoSampling() {
       <v-divider></v-divider>
       <v-card-actions>
         <v-progress-linear
-          class="ml-8 mr-4"
           v-model="samplingProgress.percent"
+          class="ml-8 mr-4"
           color="primary"
           :indeterminate="Boolean(messageStore.generating)"
           rounded

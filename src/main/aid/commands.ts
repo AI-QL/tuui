@@ -5,13 +5,15 @@ import { createWindow, ensureOnCurrentScreen, releaseFocus, loadWindowUrl } from
 //import WindowsAutomator from '../../automations/windows';
 //import Computer from '../../automations/computer_nut';
 import { wait, anyDict } from './utils'
+import Constants from '../utils/Constants'
 
 export let commandPicker: BrowserWindow = null
 
 const width = 300
 const height = 320
 
-const COMMAND_HASH = '/commands'
+const POPUP_NAME = 'popup'
+const POPUP_HASH = `/${POPUP_NAME}`
 
 let commanderStartTime: number | undefined
 let sourceApp: Application | undefined
@@ -22,8 +24,8 @@ export const prepareCommandPicker = (queryParams?: anyDict): void => {
 
   // open a new one
   commandPicker = createWindow({
-    hash: COMMAND_HASH,
-    title: 'TuuiCommandPicker',
+    hash: POPUP_HASH,
+    title: `${Constants.APP_NAME} - ${POPUP_NAME}`,
     x: 0,
     y: 0,
     width: width,
@@ -77,7 +79,7 @@ export const openCommandPicker = (params: anyDict): void => {
   if (!commandPicker || commandPicker.isDestroyed()) {
     prepareCommandPicker(params)
   } else {
-    loadWindowUrl(commandPicker, { queryParams: params, hash: COMMAND_HASH })
+    loadWindowUrl(commandPicker, { queryParams: params, hash: POPUP_HASH })
     // commandPicker.webContents.send('show', params)
   }
 

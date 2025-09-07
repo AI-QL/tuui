@@ -1,6 +1,8 @@
 import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron'
 import type { AsyncFunction, MCPAPI, DXTAPI, McpMetadataDxt } from './mcp'
 import type { ChatbotConfig } from './llm'
+import type { PopupConfig } from './popup'
+import type { StartupConfig } from './startup'
 import { StdioServerParameters } from '@modelcontextprotocol/sdk/client/stdio.js'
 
 type CLIENT = {
@@ -98,10 +100,11 @@ contextBridge.exposeInMainWorld('mainApi', {
   }
 })
 
+/* ------------------------------ LLM Config ------------------------------ */
+
 const llm = {
-  _currentAPI: [],
+  _currentAPI: [] as ChatbotConfig[],
   get: () => {
-    console.log('Preload currentLLM:', llm._currentAPI)
     return llm._currentAPI
   }
 }
@@ -114,6 +117,44 @@ async function initLLM() {
 initLLM()
 
 contextBridge.exposeInMainWorld('llmApis', llm)
+
+/* ------------------------------ Popup Config ------------------------------ */
+
+const popup = {
+  _currentAPI: {} as PopupConfig,
+  get: () => {
+    return popup._currentAPI
+  }
+}
+
+async function initPopup() {
+  const popups: PopupConfig = await ipcRenderer.invoke('list-popups')
+  popup._currentAPI = popups
+}
+
+initPopup()
+
+contextBridge.exposeInMainWorld('popupApis', popup)
+
+/* ------------------------------ LLM Config ------------------------------ */
+
+const startup = {
+  _currentAPI: {} as StartupConfig,
+  get: () => {
+    return startup._currentAPI
+  }
+}
+
+async function initStartup() {
+  const startups: StartupConfig = await ipcRenderer.invoke('list-startups')
+  startup._currentAPI = startups
+}
+
+initStartup()
+
+contextBridge.exposeInMainWorld('startupApis', startup)
+
+/* ------------------------------ MCP Client Config ------------------------------ */
 
 async function listClients(): Promise<CLIENT[]> {
   return await ipcRenderer.invoke('list-clients')

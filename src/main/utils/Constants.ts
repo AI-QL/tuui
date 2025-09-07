@@ -21,6 +21,8 @@ export interface AssetsPaths {
   mcp: string
   dxt: string
   llm: string
+  popup: string
+  startup: string
 }
 
 export default class Constants {
@@ -80,7 +82,9 @@ export default class Constants {
     dxt: Constants._buildAssetsPath('dxt'),
 
     mcp: Constants._buildAssetsPath('config', 'mcp.json'),
-    llm: Constants._buildAssetsPath('config', 'llm.json')
+    llm: Constants._buildAssetsPath('config', 'llm.json'),
+    popup: Constants._buildAssetsPath('config', 'popup.json'),
+    startup: Constants._buildAssetsPath('config', 'startup.json')
   }
 
   static getPosixPath(inputPath) {

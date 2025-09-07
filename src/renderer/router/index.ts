@@ -6,8 +6,8 @@ export default createRouter({
   history: createWebHashHistory(),
   routes: [
     {
-      path: '/commands',
-      component: () => import('@/renderer/screens/CommandsScreen.vue')
+      path: '/popup',
+      component: () => import('@/renderer/screens/PopupScreen.vue')
     },
 
     {

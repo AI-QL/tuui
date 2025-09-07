@@ -103,11 +103,22 @@ The configuration accepts either a JSON object (for a single chatbot) or a JSON 
 ]
 ```
 
-The full config and corresponding types could be found in: [Config Type](/src/preload/llm.d.ts) and [Default Config](/src/main/assets/config/llm.json).
+### 📕 Additional Configuration
 
-For the decomposable package, you can also modify the default configuration of the built release in `resources/assets/config/llm.json`
+| Configuration      | Description      | Location      | Note          |
+| ------------------ | ---------------- | ------------- | ------------- |
+| LLM Endpoints | Default LLM Chatbots config | [llm.json](/src/main/assets/config/llm.json) | Full config types could be found in [llm.d.ts](/src/preload/llm.d.ts) |
+| MCP Servers | Default MCP servers configs | [mcp.json](/src/main/assets/config/mcp.json) | For configuration syntax, see [MCP Servers](https://github.com/modelcontextprotocol/servers?tab=readme-ov-file#using-an-mcp-client) |
+| Startup Screen | Default News on Startup Screen | [startup.json](/src/main/assets/config/startup.json) | |
+| Popup Screen   | Default Prompts on Startup Screen | [popup.json](/src/main/assets/config/popup.json) | |
 
-Once you modify or import the LLM configuration, it will be stored in your localStorage by default. You can use the developer tools to view or clear the corresponding cache.
+For the decomposable package, you can also modify the default configuration of the built release: 
+
+For example, `src/main/assets/config/llm.json` will be located in `resources/assets/config/llm.json`
+
+Once you modify or import the configurations, it will be stored in your `localStorage` by default.
+
+Alternatively, you can clear all configurations from the `Tray Menu` by selecting `Clear Storage`.
 
 ## 🌐 Remote MCP server
 

@@ -235,6 +235,14 @@ export default class IPCs {
     ipcMain.handle('list-llms', () => {
       return loadLlmFile(Constants.ASSETS_PATH.llm)
     })
+
+    ipcMain.handle('list-popups', () => {
+      return loadLlmFile(Constants.ASSETS_PATH.popup)
+    })
+
+    ipcMain.handle('list-startups', () => {
+      return loadLlmFile(Constants.ASSETS_PATH.startup)
+    })
   }
 
   static updateMCP(newFeatures: FeatureObj[]): void {
