@@ -105,14 +105,14 @@ The configuration accepts either a JSON object (for a single chatbot) or a JSON 
 
 ### 📕 Additional Configuration
 
-| Configuration      | Description      | Location      | Note          |
-| ------------------ | ---------------- | ------------- | ------------- |
+| Configuration | Description | Location | Note |
+| --- | --- | --- | --- |
 | LLM Endpoints | Default LLM Chatbots config | [llm.json](/src/main/assets/config/llm.json) | Full config types could be found in [llm.d.ts](/src/preload/llm.d.ts) |
 | MCP Servers | Default MCP servers configs | [mcp.json](/src/main/assets/config/mcp.json) | For configuration syntax, see [MCP Servers](https://github.com/modelcontextprotocol/servers?tab=readme-ov-file#using-an-mcp-client) |
-| Startup Screen | Default News on Startup Screen | [startup.json](/src/main/assets/config/startup.json) | |
-| Popup Screen   | Default Prompts on Startup Screen | [popup.json](/src/main/assets/config/popup.json) | |
+| Startup Screen | Default News on Startup Screen | [startup.json](/src/main/assets/config/startup.json) |  |
+| Popup Screen | Default Prompts on Startup Screen | [popup.json](/src/main/assets/config/popup.json) |  |
 
-For the decomposable package, you can also modify the default configuration of the built release: 
+For the decomposable package, you can also modify the default configuration of the built release:
 
 For example, `src/main/assets/config/llm.json` will be located in `resources/assets/config/llm.json`
 

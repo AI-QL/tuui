@@ -10,7 +10,11 @@ export interface ChatbotStoreState {
 }
 
 export function getLLMs(): ChatbotConfig[] {
-  return window.llmApis?.get() || []
+  return window.llmApis?.get().custom || []
+}
+
+export function getDefaultLLM(): ChatbotConfig {
+  return window.llmApis?.get().default || CHATBOT_DEFAULTS
 }
 
 export const useChatbotStore = defineStore('chatbotStore', {
@@ -18,8 +22,8 @@ export const useChatbotStore = defineStore('chatbotStore', {
     const llms = getLLMs()
 
     const chatbots = llms
-      ? llms.map((llm) => ({ ...CHATBOT_DEFAULTS, ...llm }))
-      : [{ ...CHATBOT_DEFAULTS, name: 'Chatbot Default', mcp: true, reasoningEffort: 1 }]
+      ? llms.map((llm) => ({ ...getDefaultLLM(), ...llm }))
+      : [{ ...getDefaultLLM(), name: 'Chatbot Default', mcp: true, reasoningEffort: 1 }]
 
     return {
       chatbots: chatbots,
@@ -46,7 +50,7 @@ export const useChatbotStore = defineStore('chatbotStore', {
     },
 
     addChatbot() {
-      this.chatbots.push({ ...CHATBOT_DEFAULTS, name: 'Chatbot ' + uuidv4() })
+      this.chatbots.push({ ...getDefaultLLM(), name: 'Chatbot ' + uuidv4() })
     },
 
     removeChatbot(index: number) {
@@ -62,11 +66,11 @@ export const useChatbotStore = defineStore('chatbotStore', {
       this.chatbots = []
       if (Array.isArray(chatbotConfigJson)) {
         chatbotConfigJson.forEach((newChatbot, _index) => {
-          this.chatbots.push({ ...CHATBOT_DEFAULTS, ...newChatbot })
+          this.chatbots.push({ ...getDefaultLLM(), ...newChatbot })
         })
       } else {
         // Handle case when chatbots is a single object
-        this.chatbots.push({ ...CHATBOT_DEFAULTS, ...chatbotConfigJson })
+        this.chatbots.push({ ...getDefaultLLM(), ...chatbotConfigJson })
       }
     },
 

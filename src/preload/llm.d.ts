@@ -1,3 +1,8 @@
+export interface LlmConfig {
+  default: ChatbotConfig
+  custom: ChatbotConfig[]
+}
+
 export interface ChatbotConfig {
   name: string
 

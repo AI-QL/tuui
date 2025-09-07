@@ -1,6 +1,6 @@
 import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron'
 import type { AsyncFunction, MCPAPI, DXTAPI, McpMetadataDxt } from './mcp'
-import type { ChatbotConfig } from './llm'
+import type { LlmConfig } from './llm'
 import type { PopupConfig } from './popup'
 import type { StartupConfig } from './startup'
 import { StdioServerParameters } from '@modelcontextprotocol/sdk/client/stdio.js'
@@ -103,14 +103,14 @@ contextBridge.exposeInMainWorld('mainApi', {
 /* ------------------------------ LLM Config ------------------------------ */
 
 const llm = {
-  _currentAPI: [] as ChatbotConfig[],
+  _currentAPI: {} as LlmConfig,
   get: () => {
     return llm._currentAPI
   }
 }
 
 async function initLLM() {
-  const llms: ChatbotConfig[] = await ipcRenderer.invoke('list-llms')
+  const llms: LlmConfig = await ipcRenderer.invoke('list-llms')
   llm._currentAPI = llms
 }
 

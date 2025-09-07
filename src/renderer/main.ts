@@ -10,7 +10,7 @@ import i18n from '@/renderer/plugins/i18n'
 import Vue3Lottie from 'vue3-lottie'
 
 import type { MCPAPI, DXTAPI } from '@/preload/mcp'
-import type { ChatbotConfig } from '@/preload/llm'
+import type { LlmConfig } from '@/preload/llm'
 import type { PopupConfig } from '@/preload/popup'
 import type { StartupConfig } from '@/preload/startup'
 
@@ -20,7 +20,7 @@ declare global {
   interface Window {
     mainApi?: any
     llmApis?: {
-      get: () => ChatbotConfig[]
+      get: () => LlmConfig
     }
     popupApis?: {
       get: () => PopupConfig
