@@ -56,7 +56,7 @@
     "mermaid": "^11.11.0",
     "pinia": "^3.0.3",
     "pinia-plugin-state-persistence": "^1.10.3",
-    "uuid": "^11.1.0",
+    "uuid": "^12.0.0",
     "vue": "^3.5.21",
     "vue-i18n": "^11.1.12",
     "vue-router": "^4.5.1",
