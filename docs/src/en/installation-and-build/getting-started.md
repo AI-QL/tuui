@@ -67,6 +67,12 @@ $ npm install
 
 **Pro Tip**: Always test your application after major updates to ensure compatibility.
 
+5. (Optional) Enable the NPM mirror registry
+
+In some restricted regions, downloading Electron may not be possible through the default registry. In such cases, you can switch to a mirror registry (such as `npmmirror.com`) for Electron downloads.
+
+> An example configuration is provided in `npmrc.template`. You can rename this file to `.npmrc` to use the mirror.
+
 ## Update NPM Version
 
 You can update the version info by:

@@ -1,0 +1,7 @@
+# Copy or rename this file to .npmrc to enable the mirror registry
+# Example:
+#   cp npmrc.template .npmrc    (Linux / macOS)
+#   copy npmrc.template .npmrc  (Windows cmd)
+# WARNING: Do NOT commit authentication tokens or private credentials to the repo.
+ELECTRON_MIRROR=https://npmmirror.com/mirrors/electron/
+ELECTRON_BUILDER_BINARIES_MIRROR=https://npmmirror.com/mirrors/electron-builder-binaries/

@@ -67,6 +67,12 @@ $ npm install
 
 **温馨提示**：完成重要版本更新后，请务必测试您的应用以确保兼容性。
 
+5. (可选) 启用 NPM 镜像 registry
+
+在某些受限地区，可能无法通过默认 registry 下载 Electron。此时可将 registry 切换至 Electron 镜像下载源（例如 `npmmirror.com`）。
+
+> `npmrc.template` 文件中提供了示例配置，将其重命名为 `.npmrc` 即可使用镜像源。
+
 ## NPM 版本更新
 
 你可以通过以下方式更新项目版本信息:

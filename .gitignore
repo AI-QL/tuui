@@ -12,6 +12,7 @@ src/main/assets/dxt
 
 # dotenv environment variables file
 .env
+.npmrc
 
 # JetBrains IDEs
 .idea/
