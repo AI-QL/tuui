@@ -1,5 +1,6 @@
 <script setup lang="ts">
 // import { DefaultLayout } from '@/renderer/components/layouts'
+import '@fontsource/inter'
 </script>
 
 <template>

@@ -85,7 +85,6 @@
     "prettier": "^3.6.2",
     "terser": "^5.44.0",
     "typescript": "^5.9.2",
-    "unplugin-fonts": "^1.4.0",
     "vite": "^7.1.4",
     "vite-plugin-electron": "^0.29.0",
     "vite-plugin-electron-renderer": "^0.14.6",

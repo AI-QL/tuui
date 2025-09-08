@@ -8,7 +8,6 @@ import Vue from '@vitejs/plugin-vue'
 import { rmSync } from 'fs'
 import { resolve, dirname } from 'path'
 import { builtinModules } from 'module'
-import ViteFonts from 'unplugin-fonts/vite'
 
 const isDevEnv = process.env.NODE_ENV === 'development'
 
@@ -86,17 +85,6 @@ export default defineConfig(({ mode }) => {
     plugins: [
       Vue(),
       VueJsx(),
-      ViteFonts({
-        fontsource: {
-          families: [
-            {
-              name: 'Inter',
-              weights: [100, 200, 300, 400, 500, 600, 700, 800, 900],
-              styles: ['normal', 'italic']
-            }
-          ]
-        }
-      }),
       // Docs: https://github.com/vuetifyjs/vuetify-loader
       VuetifyPlugin({
         autoImport: true
