@@ -6,8 +6,9 @@ import App from '@/renderer/App.vue'
 import router from '@/renderer/router'
 import vuetify from '@/renderer/plugins/vuetify'
 import i18n from '@/renderer/plugins/i18n'
-
 import Vue3Lottie from 'vue3-lottie'
+
+import 'unfonts.css'
 
 import type { MCPAPI, DXTAPI } from '@/preload/mcp'
 import type { LlmConfig } from '@/preload/llm'

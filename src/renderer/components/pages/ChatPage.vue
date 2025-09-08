@@ -338,6 +338,7 @@ const groupMessages = computed<Group[]>(() => {
 
 .md-editor-preview {
   word-break: keep-all;
+  font-family: 'Inter';
 }
 
 .conversation-area {
