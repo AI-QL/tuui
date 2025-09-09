@@ -102,13 +102,11 @@ SamplingTransfer.request(handleProgress)
 
 type SamplingProgress = {
   auto: boolean
-  stage: 1 | 2 // completion -> finishing
   percent: number
 }
 
 const samplingProgress = ref<SamplingProgress>({
   auto: true,
-  stage: 1,
   percent: 0
 })
 
@@ -147,7 +145,6 @@ watch(
   (newVal) => {
     if (newVal) {
       // Dialog opened, clean stage
-      samplingProgress.value.stage = 1
       samplingProgress.value.percent = 0
       continueAutoSampling()
     }
@@ -157,31 +154,29 @@ watch(
 function continueAutoSampling() {
   samplingProgress.value.auto = true
   startProgress(() => {
-    switch (samplingProgress.value.stage) {
-      case 1:
-        const unwatch = watch(
-          () => messageStore.generating,
-          (val) => {
-            if (val) {
-              // If next ChatCompletion triggered, goto stage 2
-              // and keep waiting for the finishing
-              samplingProgress.value.stage = 2
-            } else {
-              // If ChatCompletion generating finished, return result
-              unwatch()
-              samplingProgress.value.percent = 0
-              startProgress(triggerSamplingReturn)
-            }
+    if (samplingResults.value.length > 0) {
+      startProgress(triggerSamplingReturn)
+    } else {
+      const timeout = setTimeout(() => {
+        // Set a timeout if no generation is initiated within a period
+        unwatch()
+      }, 30000) // 30 sec
+      const unwatch = watch(
+        () => messageStore.generating,
+        (val) => {
+          if (val) {
+            // Generation has started, the timer is no longer needed. The watch will track the progress.
+            clearTimeout(timeout)
+          } else {
+            clearTimeout(timeout)
+            // If ChatCompletion generating finished, return result
+            unwatch()
+            samplingProgress.value.percent = 0
+            startProgress(triggerSamplingReturn)
           }
-        )
-        triggerChatCompletion()
-        break
-      case 2:
-        startProgress(triggerSamplingReturn)
-        break
-      default:
-        // Should not happen
-        console.log('Undefined stage', samplingProgress.value)
+        }
+      )
+      triggerChatCompletion()
     }
   })
 }
