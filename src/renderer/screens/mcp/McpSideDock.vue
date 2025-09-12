@@ -26,6 +26,7 @@ async function stopAllMcpServers() {
     await mcpStore.updateServers()
   } finally {
     layoutStore.mcpLoading = false
+    mcpStore.selectedChips = {}
     mcpStore.version++
   }
 }
