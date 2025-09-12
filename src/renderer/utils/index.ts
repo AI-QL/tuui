@@ -184,6 +184,10 @@ class Mcp {
     return window.mainApi.invoke('msgMcpServersInit', filteredConfigs)
   }
 
+  static async msgMcpServersStop(): Promise<any> {
+    return window.mainApi.invoke('msgMcpServersStop')
+  }
+
   static async msgMcpServersWatch(callback: any): Promise<any> {
     return window.mainApi.on('msgMcpServersWatch', callback)
   }
@@ -191,5 +195,6 @@ class Mcp {
 
 export const McpEvent = {
   init: Mcp.msgMcpServersInit,
+  stop: Mcp.msgMcpServersStop,
   watch: Mcp.msgMcpServersWatch
 }

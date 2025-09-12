@@ -43,13 +43,16 @@ const allSuccess = computed(() => {
   return Object.values(progressMap.value).every((item) => item.status === 'success')
 })
 
-watch(isLoading, (newVal) => {
+watch(isLoading, (newVal, oldVal) => {
   if (newVal) {
     progressMap.value = {}
     mcpDialog.value = true
   } else {
     setTimeout(() => {
-      if (allSuccess.value) {
+      console.log(progressMap.value)
+      if (allSuccess.value || oldVal === 'stop') {
+        // If all server are started successful, or all servers are forced to stop
+        // no need to stick the dialog for process visualization
         mcpDialog.value = false
       }
     }, 500)

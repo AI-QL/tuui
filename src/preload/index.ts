@@ -25,6 +25,7 @@ const mainAvailChannels: string[] = [
   'msgCommandSelectionNotify',
   'msgGetApiToken',
   'msgMcpServersInit',
+  'msgMcpServersStop',
   'msgWindowReload'
 ]
 

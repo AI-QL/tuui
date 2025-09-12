@@ -40,7 +40,7 @@ interface ManifestResponse {
  * */
 export default class IPCs {
   static clients: ClientObj[] = []
-  static currentFeatures: any[] = []
+  static currentFeatures: FeatureObj[] = []
 
   static initialize(): void {
     // Get application version
@@ -56,16 +56,24 @@ export default class IPCs {
       return pathToFileURL(normalize(resolve(Constants.ASSETS_PATH.dxt))).toString()
     })
 
+    ipcMain.handle('msgMcpServersStop', async () => {
+      IPCs.stopAllServers()
+
+      const configs = await loadConfig()
+
+      const features = configs.map((params) => {
+        return registerIpcHandlers(params)
+      })
+
+      this.currentFeatures = features
+
+      return true
+    })
+
     ipcMain.handle(
       'msgMcpServersInit',
       async (event: IpcMainEvent, metadata: ConfigMcpMetadata) => {
-        this.clients.forEach((client: ClientObj) => {
-          if (client.connection?.transport) {
-            disconnect(client.connection.transport)
-          }
-        })
-
-        IPCs.removeAllHandlers()
+        IPCs.stopAllServers()
 
         const progressCallback: McpProgressCallback = (name, message, status) => {
           mcpServersCallback({ name, message, status })
@@ -247,6 +255,17 @@ export default class IPCs {
 
   static updateMCP(newFeatures: FeatureObj[]): void {
     this.currentFeatures = newFeatures
+  }
+
+  static stopAllServers() {
+    this.clients.forEach((client: ClientObj) => {
+      if (client.connection?.transport) {
+        disconnect(client.connection.transport)
+        delete client.connection.transport
+      }
+    })
+
+    IPCs.removeAllHandlers()
   }
 
   static removeAllHandlers() {

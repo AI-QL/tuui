@@ -19,8 +19,19 @@ const addDialog = ref(false)
 
 const isDragActive = ref(false)
 
+async function stopAllMcpServers() {
+  layoutStore.mcpLoading = 'stop'
+  try {
+    await McpEvent.stop()
+    await mcpStore.updateServers()
+  } finally {
+    layoutStore.mcpLoading = false
+    mcpStore.version++
+  }
+}
+
 async function activeAllMcpServers() {
-  layoutStore.mcpLoading = true
+  layoutStore.mcpLoading = 'start'
   try {
     const configs = getServers()
     const result = await McpEvent.init(configs)
@@ -74,6 +85,14 @@ const items = [
         color="success"
         :loading="layoutStore.mcpLoading"
         @click="activeAllMcpServers()"
+      >
+      </v-btn>
+      <v-btn
+        v-tooltip:top="$t('mcp.stop')"
+        icon="mdi-power-off"
+        color="error"
+        :loading="layoutStore.mcpLoading"
+        @click="stopAllMcpServers()"
       >
       </v-btn>
       <v-btn
