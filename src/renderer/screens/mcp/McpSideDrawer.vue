@@ -25,7 +25,7 @@ const mcpStore = useMcpStore()
             color="primary"
             icon="mdi-cog"
             variant="text"
-            @click="console.log((mcpStore.selectedChips[key] = undefined))"
+            @click="mcpStore.selectedChips[key] = undefined"
           ></v-btn>
         </div>
       </template>
