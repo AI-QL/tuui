@@ -60,7 +60,7 @@
       "url": "https://api.openai.com",
       "urlList": ["https://api.openai.com", "https://api.aiql.com"],
       "name": "OpenAI & Proxy",
-      "icon": "https://cdnjs.cloudflare.com/ajax/libs/simple-icons/15.14.0/openai.svg",
+      "icon": "https://openai.com/favicon.ico",
       "model": "gpt-5",
       "modelList": ["gpt-5", "gpt-4.1", "o1", "o3"],
       "maxTokensPrefix": "max_completion_tokens"

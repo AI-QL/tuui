@@ -9,6 +9,7 @@ const agentStore = useAgentStore()
       <v-btn
         v-tooltip:top="$t('agent.reset')"
         icon="mdi-refresh"
+        color="error"
         @click="agentStore.resetState"
       ></v-btn>
       <v-btn v-tooltip:top="$t('agent.add')" icon="mdi-plus" @click="agentStore.addAgent"></v-btn>

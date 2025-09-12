@@ -53,6 +53,7 @@ watch(configFile, (newValue, _oldValue) => {
       <v-btn
         v-tooltip:top="$t('setting.reset')"
         icon="mdi-refresh"
+        color="error"
         @click="chatbotStore.resetState"
       ></v-btn>
       <v-btn
