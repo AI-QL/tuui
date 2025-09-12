@@ -96,23 +96,27 @@ const getErrorMessages = (para: DxtUserConfigurationOption, key: string) => {
 
 <template>
   <v-card>
-    <v-card-title class="d-flex align-center">
-      <div> {{ $t('dxt.title') + ' - ' + metadata.name }} </div>
-      <v-chip size="small" class="ml-2 mt-1 font-weight-bold" color="blue-darken-4">
-        {{ manifest.dxt_version }}
-      </v-chip>
-      <v-chip size="small" class="ml-2 mt-1 font-weight-bold" color="blue">
-        {{ manifest.version }}
-      </v-chip>
-      <v-spacer></v-spacer>
+    <template #title>
+      <div class="d-flex">
+        {{ $t('dxt.title') + ' - ' + metadata.name }}
+        <v-chip size="small" class="ml-2 mt-1 font-weight-bold" color="blue-darken-4">
+          {{ manifest.dxt_version }}
+        </v-chip>
+        <v-chip size="small" class="ml-2 mt-1 font-weight-bold" color="blue">
+          {{ manifest.version }}
+        </v-chip>
+      </div>
+    </template>
+    <template #append>
       <v-btn
         color="primary"
         variant="text"
         size="small"
+        rounded="lg"
         icon="mdi-open-in-new"
         @click="openDxtFilePath(metadata.name)"
       ></v-btn>
-    </v-card-title>
+    </template>
     <v-divider></v-divider>
     <v-card
       class="mx-auto"
