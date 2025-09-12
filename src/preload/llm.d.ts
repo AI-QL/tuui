@@ -9,6 +9,8 @@ export interface ChatbotConfig {
   apiKey: string
   apiCli: string
 
+  icon: string
+
   url: string
   urlList: string[]
 

@@ -2,7 +2,7 @@ export const CHATBOT_DEFAULTS = {
   name: '',
   apiKey: '',
   apiCli: '',
-
+  icon: '',
   url: 'https://api2.aiql.com',
   urlList: ['https://api2.aiql.com'],
 

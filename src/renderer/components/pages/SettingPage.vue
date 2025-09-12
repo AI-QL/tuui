@@ -5,7 +5,7 @@ import { useI18n } from 'vue-i18n'
 import { useLayoutStore } from '@/renderer/store/layout'
 import { v4 as uuidv4 } from 'uuid'
 import { getApiToken, listenStdioProgress, removeListenStdioProgress } from '@/renderer/utils'
-
+import LogoAvatar from '@/renderer/components/common/LogoAvatar.vue'
 import type { ChatbotConfig } from '@/preload/llm'
 
 const layoutStore = useLayoutStore()
@@ -79,6 +79,42 @@ const validateNumberRange = (min: number, max: number) => {
 
 <template>
   <v-card class="mx-auto" :title="$t('setting.title-api')">
+    <template #prepend>
+      <div class="cursor-pointer">
+        <LogoAvatar :item="config"></LogoAvatar>
+        <v-dialog activator="parent" max-width="80vw">
+          <template #default="{ isActive }">
+            <v-card title="Logo">
+              <v-divider></v-divider>
+              <v-card-text>
+                <v-text-field
+                  :model-value="config.icon"
+                  class="mt-2"
+                  variant="outlined"
+                  hide-details
+                  clearable
+                  @update:model-value="(v) => handleUpdate('icon', v)"
+                ></v-text-field>
+              </v-card-text>
+              <template #actions>
+                <v-btn
+                  variant="plain"
+                  rounded="lg"
+                  icon="mdi-close-box"
+                  color="error"
+                  @click="isActive.value = false"
+                ></v-btn>
+              </template>
+            </v-card>
+          </template>
+        </v-dialog>
+      </div>
+
+      <!-- <v-avatar v-if="config.icon" class="cursor-pointer" rounded="lg" size="x-small">
+        <v-img :src="config.icon"></v-img>
+
+      </v-avatar> -->
+    </template>
     <v-divider></v-divider>
     <v-card-text class="pt-6">
       <v-row class="px-2 mr-2">
@@ -171,7 +207,7 @@ const validateNumberRange = (min: number, max: number) => {
         <v-switch
           v-tooltip:start="$t('setting.auth-header')"
           min-width="170px"
-          class="mt-0 mb-6 ml-4"
+          class="mt-1 mb-6 ml-4"
           :label="config.authorization ? 'Authorization' : 'X-Api-Key'"
           color="secondary"
           base-color="primary"
@@ -297,3 +333,8 @@ const validateNumberRange = (min: number, max: number) => {
     </v-card-text>
   </v-card>
 </template>
+<style scoped>
+.cursor-pointer {
+  cursor: pointer;
+}
+</style>

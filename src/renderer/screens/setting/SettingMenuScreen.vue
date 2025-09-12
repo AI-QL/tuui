@@ -4,13 +4,7 @@ import { useChatbotStore } from '@/renderer/store/chatbot'
 
 const chatbotStore = useChatbotStore()
 
-// const items = computed(() => {
-//   return Object.entries(chatbotStore.chatbots).map(([key, value]) => ({
-//     title: value.name || key,
-//     key: key,
-//     value: value
-//   }));
-// });
+import LogoAvatar from '@/renderer/components/common/LogoAvatar.vue'
 </script>
 
 <template>
@@ -24,6 +18,9 @@ const chatbotStore = useChatbotStore()
       :ripple="false"
       :title="item.name"
     >
+      <template #prepend>
+        <LogoAvatar :item="item"></LogoAvatar>
+      </template>
       <template #append>
         <v-list-item-action>
           <v-icon-btn

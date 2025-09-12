@@ -3,6 +3,7 @@
     "name": "",
     "apiKey": "",
     "apiCli": "",
+    "icon": "",
     "url": "https://api2.aiql.com",
     "urlList": ["https://api2.aiql.com"],
     "path": "/chat/completions",
@@ -35,6 +36,7 @@
   "custom": [
     {
       "name": "Chatbot Default",
+      "icon": "https://www.tuui.com/favicon.ico",
       "reasoningEffort": 1
     },
     {
@@ -42,6 +44,7 @@
       "urlList": ["https://dashscope.aliyuncs.com/compatible-mode"],
       "path": "/v1/chat/completions",
       "name": "Qwen",
+      "icon": "https://g.alicdn.com/qwenweb/qwen-ai-fe/0.0.19/favicon.ico",
       "model": "qwen-turbo",
       "modelList": ["qwen-turbo", "qwen-plus", "qwen-max"]
     },
@@ -49,6 +52,7 @@
       "url": "https://api.deepseek.com",
       "urlList": ["https://api.deepseek.com"],
       "name": "DeepSeek",
+      "icon": "https://www.deepseek.com/favicon.ico",
       "model": "deepseek-chat",
       "modelList": ["deepseek-chat"]
     },
@@ -56,6 +60,7 @@
       "url": "https://api.openai.com",
       "urlList": ["https://api.openai.com", "https://api.aiql.com"],
       "name": "OpenAI & Proxy",
+      "icon": "https://cdnjs.cloudflare.com/ajax/libs/simple-icons/15.14.0/openai.svg",
       "model": "gpt-5",
       "modelList": ["gpt-5", "gpt-4.1", "o1", "o3"],
       "maxTokensPrefix": "max_completion_tokens"
@@ -65,13 +70,15 @@
       "urlList": ["https://api.deepinfra.com"],
       "path": "/v1/openai/chat/completions",
       "name": "DeepInfra",
+      "icon": "https://deepinfra.com/favicon.ico",
       "model": "Qwen/Qwen3-32B",
       "modelList": ["Qwen/Qwen3-32B", "Qwen/Qwen3-30B-A3B", "meta-llama/Llama-3.3-70B-Instruct"]
     },
     {
       "name": "Open Router & Proxy",
-      "url": "https://api3.aiql.com",
-      "urlList": ["https://api3.aiql.com", "https://openrouter.ai/api"],
+      "icon": "https://openrouter.ai/favicon.ico",
+      "url": "https://openrouter.ai/api",
+      "urlList": ["https://openrouter.ai/api", "https://api3.aiql.com"],
       "path": "/v1/chat/completions",
       "model": "openai/gpt-5-chat",
       "modelList": [
@@ -83,6 +90,7 @@
     },
     {
       "name": "Chat Anywhere",
+      "icon": "https://api.chatanywhere.org/favicon.ico",
       "url": "https://api.chatanywhere.tech",
       "urlList": ["https://api.chatanywhere.tech", "https://api.chatanywhere.org"],
       "path": "/chat/completions",
