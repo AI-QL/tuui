@@ -199,7 +199,7 @@ Review our [Security Policy](SECURITY.md). Do not file a public issue for securi
 
 ### MCP Tool call tracing
 
-![](https://gcore.jsdelivr.net/gh/AI-QL/.github/public/tuui2/3_chat.jpg)
+![](https://gcore.jsdelivr.net/gh/AI-QL/.github/public/tuui2/8_plot.jpg)
 
 ### Agent with specified tool selection
 
@@ -207,7 +207,7 @@ Review our [Security Policy](SECURITY.md). Do not file a public issue for securi
 
 ### LLM API setting
 
-![](https://gcore.jsdelivr.net/gh/AI-QL/.github/public/tuui2/5_llmconfig.jpg)
+![](https://gcore.jsdelivr.net/gh/AI-QL/.github/public/tuui2/5_llm.jpg)
 
 ### MCP elicitation
 
