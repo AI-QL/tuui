@@ -15,7 +15,7 @@ interface MessageStoreState {
   conversation: ChatConversationMessage[]
   historyId: string
   base64: string
-  generating: string
+  generating: Record<string, AbortController>
 }
 
 export const useMessageStore = defineStore('messageStore', {
@@ -24,7 +24,7 @@ export const useMessageStore = defineStore('messageStore', {
     conversation: [],
     historyId: '',
     base64: '',
-    generating: ''
+    generating: {}
   }),
   actions: {
     init() {
@@ -41,8 +41,10 @@ export const useMessageStore = defineStore('messageStore', {
       this.historyId = ''
     },
     stop() {
+      const id = this.historyId
       const snackbarStore = useSnackbarStore()
-      this.generating = ''
+      this.generating[id].abort()
+      delete this.generating[id]
       snackbarStore.showInfoMessage('snackbar.stopped')
     },
     clear() {
@@ -70,7 +72,7 @@ export const useMessageStore = defineStore('messageStore', {
       // when role == "user" is found，drop followings
       if (index >= 0) {
         this.conversation.splice(index + 1)
-        this.startInference()
+        return this.startInference()
       }
     },
     sendMessage() {
@@ -89,7 +91,7 @@ export const useMessageStore = defineStore('messageStore', {
           role: 'user'
         })
 
-        this.startInference()
+        return this.startInference()
       }
     },
     syncHistory: function (): string {
@@ -114,11 +116,15 @@ export const useMessageStore = defineStore('messageStore', {
       this.initConversation(messages)
       // this.syncHistory()
     },
-    startInference: async function () {
+    startInference: function () {
       const historyId = this.syncHistory()
       this.clear()
-      await createCompletion(this.conversation, historyId)
-      await this.postToolCall()
+
+      createCompletion(this.conversation, historyId).then(() => {
+        this.postToolCall()
+      })
+
+      return historyId
     },
     postToolCall: async function () {
       const mcpStore = useMcpStore()

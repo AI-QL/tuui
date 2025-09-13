@@ -95,8 +95,6 @@ export const createCompletion = async (
   }, [] as RequestMessageType[])
   // const conversation = rawconversation
   try {
-    console.log('Chat session started: ', sessionId)
-    messageStore.generating = sessionId
     // Create a completion (axios is not used here because it does not support streaming)
 
     const headers: HeadersInit = {
@@ -173,9 +171,17 @@ export const createCompletion = async (
       body: JSON.stringify(body)
     }
 
+    const abortController = new AbortController()
+
+    console.log('Chat session started: ', sessionId)
+    messageStore.generating[sessionId] = abortController
+
     const completion = await fetch(
       chatbotStore.url + (chatbotStore.path ? chatbotStore.path : ''),
-      request
+      {
+        ...request,
+        signal: abortController.signal
+      }
     )
 
     console.log(completion)
@@ -227,8 +233,9 @@ export const createCompletion = async (
   } catch (error: any) {
     snackbarStore.showErrorMessage(error?.message)
   } finally {
-    if (messageStore.generating === sessionId) {
-      messageStore.generating = ''
+    if (sessionId in messageStore.generating) {
+      messageStore.generating[sessionId].abort()
+      delete messageStore.generating[sessionId]
     }
   }
 }
@@ -244,7 +251,7 @@ const read = async (
   const decoder = new TextDecoder()
   const messageStore = useMessageStore()
 
-  if (!messageStore.generating || messageStore.generating !== sessionId) {
+  if (!(sessionId in messageStore.generating)) {
     return reader.releaseLock()
   }
   // Destructure the value returned by reader.read()
@@ -252,8 +259,9 @@ const read = async (
 
   // If the stream is done reading, release the lock on the reader
   if (done) {
-    if (messageStore.generating === sessionId) {
-      messageStore.generating = ''
+    if (sessionId in messageStore.generating) {
+      messageStore.generating[sessionId].abort()
+      delete messageStore.generating[sessionId]
     }
     return reader.releaseLock()
   }

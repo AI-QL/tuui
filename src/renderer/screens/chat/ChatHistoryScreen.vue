@@ -1,6 +1,8 @@
 <script setup lang="tsx">
 import { useHistoryStore } from '@/renderer/store/history'
+import { useMessageStore } from '@/renderer/store/message'
 const historyStore = useHistoryStore()
+const messageStore = useMessageStore()
 
 function parseContent(content) {
   if (typeof content === 'string') {
@@ -30,6 +32,18 @@ function parseContent(content) {
       :subtitle="parseContent(item.messages.at(-1)?.content)"
       @click="historyStore.select(index)"
     >
+      <template #append>
+        <v-list-item-action>
+          <v-icon-btn
+            :loading="item.id in messageStore.generating"
+            icon="mdi-delete-outline"
+            rounded="lg"
+            size="small"
+            @click="historyStore.deleteById(index)"
+          >
+          </v-icon-btn>
+        </v-list-item-action>
+      </template>
     </v-list-item>
   </v-list>
 </template>

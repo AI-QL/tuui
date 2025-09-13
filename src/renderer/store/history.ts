@@ -57,6 +57,7 @@ export const useHistoryStore = defineStore('historyStore', {
     },
     select(index: number) {
       const messageStore = useMessageStore()
+      messageStore.historyId = this.conversation[index].id
       messageStore.conversation = this.conversation[index].messages
     },
     getColor(index: number) {

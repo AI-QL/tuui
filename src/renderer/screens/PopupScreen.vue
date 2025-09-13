@@ -27,10 +27,7 @@ const commandNotify = (item: PopupPromptsType) => {
 <template>
   <v-app>
     <v-layout>
-      <v-app-bar
-        class="py-2 px-3 drag gradient-command"
-        density="compact"
-      >
+      <v-app-bar class="py-2 px-3 drag gradient-command" density="compact">
         <v-text-field
           v-model="search"
           class="no-drag"

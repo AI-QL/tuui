@@ -40,13 +40,16 @@ function handleError(errorMessage: string | null) {
   jsonError.value = errorMessage
 }
 
+const samplingId = ref('')
+
 const tryCompletions = () => {
   if (jsonError.value) {
     snackbarStore.showErrorMessage(jsonError.value)
   } else {
     const { messages, ...restParams } = samplingParams.value as SamplingRequest
     restParams.target = samplingResults.value
-    createCompletion(messages, historyStore.getDate(), restParams)
+    samplingId.value = historyStore.getDate()
+    createCompletion(messages, samplingId.value, restParams)
   }
 }
 
@@ -162,7 +165,7 @@ function continueAutoSampling() {
         unwatch()
       }, 30000) // 30 sec
       const unwatch = watch(
-        () => messageStore.generating,
+        () => samplingId.value in messageStore.generating,
         (val) => {
           if (val) {
             // Generation has started, the timer is no longer needed. The watch will track the progress.
@@ -242,7 +245,7 @@ function continueAutoSampling() {
           v-model="samplingProgress.percent"
           class="ml-8 mr-4"
           color="primary"
-          :indeterminate="Boolean(messageStore.generating)"
+          :indeterminate="samplingId in messageStore.generating"
           rounded
           @click="samplingProgress.auto = false"
         ></v-progress-linear>

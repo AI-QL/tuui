@@ -68,22 +68,35 @@ const agentStore = useAgentStore()
       <!-- Adds a horizontal flex container (row direction) to override parent column layout, ensuring right alignment within v-col -->
       <div class="d-flex justify-end">
         <v-spacer></v-spacer>
+
+        <div v-if="messageStore.historyId in messageStore.generating">
+          <v-icon-btn
+            v-tooltip:start="$t('chat.wipe')"
+            color="error"
+            variant="tonal"
+            icon="mdi-delete-outline"
+            rounded="lg"
+            @click="messageStore.init()"
+          ></v-icon-btn>
+          <v-divider class="mx-1" vertical></v-divider>
+          <v-icon-btn
+            color="primary"
+            variant="tonal"
+            icon="mdi-stop"
+            rounded="lg"
+            @click="messageStore.stop"
+          ></v-icon-btn>
+        </div>
+
         <v-icon-btn
-          v-if="messageStore.userMessage"
+          v-else-if="messageStore.userMessage"
           color="primary"
           variant="tonal"
           icon="mdi-arrow-up"
           rounded="lg"
           @click="messageStore.sendMessage"
         ></v-icon-btn>
-        <v-icon-btn
-          v-else-if="messageStore.generating"
-          color="primary"
-          variant="tonal"
-          icon="mdi-stop"
-          rounded="lg"
-          @click="messageStore.stop"
-        ></v-icon-btn>
+
         <div v-else-if="messageStore.conversation.length > 0">
           <v-icon-btn
             v-tooltip:start="$t('chat.wipe')"
