@@ -32,6 +32,10 @@ body {
   height: 100%;
 }
 
+body::-webkit-scrollbar {
+  display: none;
+}
+
 /* Do not force capitalization of button text */
 .v-btn {
   text-transform: unset !important;

@@ -32,30 +32,29 @@ const { hasComponent } = useRouteFeatures()
           </v-btn>
         </template>
       </v-snackbar>
-      <SidebarLayout v-if="hasComponent('sideDrawer').value" class="position-fixed">
+      <SidebarLayout v-if="hasComponent('sideDrawer').value">
         <router-view name="sideDrawer" />
         <template #append>
           <router-view v-if="hasComponent('sideDock').value" name="sideDock" />
         </template>
       </SidebarLayout>
-      <HeaderLayout class="position-fixed" />
-      <v-main class="d-flex justify-center">
+      <HeaderLayout />
+      <v-main class="d-flex justify-center" scrollable>
         <v-container>
-          <router-view name="centralStage" />
-          <router-view />
+          <v-sheet>
+            <router-view name="centralStage" />
+            <router-view />
+          </v-sheet>
         </v-container>
       </v-main>
-      <FooterLayout v-if="hasComponent('bottomConsole').value" class="position-fixed">
+      <FooterLayout v-if="hasComponent('bottomConsole').value">
         <router-view name="bottomConsole" />
       </FooterLayout>
     </v-layout>
   </v-app>
 </template>
 
-<style scoped>
-.position-fixed {
-  position: fixed;
-}
+<style>
 .snack-span {
   word-break: break-word;
 }

@@ -78,7 +78,6 @@ const items = computed(() => {
     :order="-1"
     color="primary"
     height="36"
-    rounded="be-lg"
   >
     <v-app-bar-nav-icon
       class="ml-2 no-drag"

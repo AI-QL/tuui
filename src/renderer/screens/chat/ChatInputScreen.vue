@@ -1,4 +1,4 @@
-<script setup lang="tsx">
+<script setup lang="ts">
 import ChatInputPage from '@/renderer/components/pages/ChatInputPage.vue'
 </script>
 <template>
