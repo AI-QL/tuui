@@ -132,21 +132,13 @@ export const useMcpStore = defineStore('mcpStore', {
       return servers
     },
     getServerFunction: function (options: {
-      serverName?: string
+      serverName: string
       primitiveName: string
       methodName: string
     }): Function | null {
       const { serverName, primitiveName, methodName } = options
 
-      let targetServerName
-
-      if (serverName) {
-        targetServerName = serverName
-      } else {
-        targetServerName = this.selected?.[0]
-      }
-
-      const allPrimitives = this.getAllByServer(targetServerName)
+      const allPrimitives = this.getAllByServer(serverName)
 
       const foundItem = allPrimitives.find((item) => item.primitive === primitiveName)
 

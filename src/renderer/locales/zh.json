@@ -86,6 +86,10 @@
     "title": "服务端提示模板",
     "get": "获取"
   },
+  "resource": {
+    "list": "资源列表",
+    "total": "全部资源"
+  },
   "sampling": {
     "title": "采样",
     "comp": "开始采样",

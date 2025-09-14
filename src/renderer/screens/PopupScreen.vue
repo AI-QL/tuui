@@ -42,11 +42,7 @@ const commandNotify = (item: PopupPromptsType) => {
       <v-main class="d-flex justify-center" scrollable>
         <v-container class="px-0 pb-0">
           <v-sheet>
-            <v-data-iterator
-              :items="promptData"
-              :items-per-page="-1"
-              :search="search"
-            >
+            <v-data-iterator :items="promptData" :items-per-page="-1" :search="search">
               <template #default="{ items }">
                 <v-list density="compact" nav>
                   <v-list-item

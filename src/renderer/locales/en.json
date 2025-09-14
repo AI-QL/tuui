@@ -74,6 +74,10 @@
     "title": "Server Prompt",
     "get": "Get"
   },
+  "resource": {
+    "list": "Resource List",
+    "total": "Total Resources"
+  },
   "agent": {
     "config": "Agent Config",
     "prompt": "System Prompt",
