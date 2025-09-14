@@ -39,7 +39,7 @@ const { hasComponent } = useRouteFeatures()
         </template>
       </SidebarLayout>
       <HeaderLayout />
-      <v-main class="d-flex justify-center" scrollable>
+      <v-main class="d-flex justify-center custom-scroll" scrollable>
         <v-container>
           <v-sheet>
             <router-view name="centralStage" />
@@ -57,5 +57,9 @@ const { hasComponent } = useRouteFeatures()
 <style>
 .snack-span {
   word-break: break-word;
+}
+
+.custom-scroll .v-main__scroller {
+  overflow-y: scroll !important;
 }
 </style>
