@@ -75,18 +75,16 @@ const closeDialog = () => {
 
 <template>
   <v-dialog v-model="internalDialog" persistent max-width="80vw" max-height="80vh" scrollable>
-    <v-card>
-      <v-card-title class="d-flex align-center">
-        <div> {{ $t('dxt.title') }} </div>
-        <v-spacer></v-spacer>
-        <v-icon-btn
+    <v-card :title="$t('dxt.title')">
+      <template #append>
+        <v-btn
           icon="mdi-close-box"
           rounded="lg"
           color="error"
-          variant="plain"
+          variant="text"
           @click="closeDialog"
-        ></v-icon-btn>
-      </v-card-title>
+        ></v-btn>
+      </template>
       <v-divider></v-divider>
       <v-card-text>
         <slot></slot>

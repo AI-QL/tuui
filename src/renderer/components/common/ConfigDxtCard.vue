@@ -111,7 +111,6 @@ const getErrorMessages = (para: DxtUserConfigurationOption, key: string) => {
       <v-btn
         color="primary"
         variant="text"
-        size="small"
         rounded="lg"
         icon="mdi-open-in-new"
         @click="openDxtFilePath(metadata.name)"
