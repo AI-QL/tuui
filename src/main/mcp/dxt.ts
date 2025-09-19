@@ -1,12 +1,12 @@
 import {
   unpackExtension,
   getMcpConfigForManifest,
-  DxtManifestSchema,
-  DxtManifest,
-  DxtUserConfigValues,
+  McpbManifestSchema,
+  McpbManifest,
+  McpbUserConfigValues,
   McpServerConfig,
   Logger
-} from '@anthropic-ai/dxt'
+} from '@anthropic-ai/mcpb'
 
 import { existsSync, readFileSync, statSync } from 'fs'
 import { join, resolve, sep } from 'path'
@@ -18,8 +18,8 @@ const mockSystemDirs = {
 
 export async function getMcpConfigForDxt(
   basePath: string,
-  baseManifest: DxtManifest,
-  userConfig: DxtUserConfigValues
+  baseManifest: McpbManifest,
+  userConfig: McpbUserConfigValues
 ): Promise<McpServerConfig> {
   const logMessages: string[] = []
   const logger: Logger = {
@@ -44,13 +44,13 @@ export async function getMcpConfigForDxt(
   }
 }
 export async function unpackDxt(dxtUnpackOption: {
-  dxtPath: string
+  mcpbPath: string
   outputDir: string
 }): Promise<boolean> {
   return unpackExtension(dxtUnpackOption)
 }
 
-export function getManifest(inputPath: string): false | DxtManifest {
+export function getManifest(inputPath: string): false | McpbManifest {
   try {
     const resolvedPath = resolve(inputPath)
     let manifestPath = resolvedPath
@@ -63,7 +63,7 @@ export function getManifest(inputPath: string): false | DxtManifest {
     const manifestContent = readFileSync(manifestPath, 'utf-8')
     const manifestData = JSON.parse(manifestContent)
 
-    const result = DxtManifestSchema.safeParse(manifestData)
+    const result = McpbManifestSchema.safeParse(manifestData)
 
     if (result.success) {
       console.log('Manifest is valid!')

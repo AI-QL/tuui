@@ -21,7 +21,7 @@ export default defineConfig([
     'buildAssets/icons/',
     '**/dist/',
     '**/release/',
-    '**/dxt/',
+    '**/mcpb/',
     '**/.idea/',
     '**/.vscode/',
     '**/.github/'

@@ -14,7 +14,7 @@ import {
   ElicitRequest
 } from '@modelcontextprotocol/sdk/types.js'
 
-import { DxtUserConfigValues, DxtManifest } from '@anthropic-ai/dxt'
+import { McpbUserConfigValues, McpbManifest } from '@anthropic-ai/mcpb'
 
 import { StdioServerParameters } from '@modelcontextprotocol/sdk/client/stdio.js'
 
@@ -61,9 +61,9 @@ type McpMetadataStdio = {
 
 type McpMetadataDxt = {
   name: string
-  type: 'metadata__dxt_manifest'
-  config: DxtManifest
-  user_config?: DxtUserConfigValues
+  type: 'metadata__mcpb_manifest'
+  config: McpbManifest
+  user_config?: McpbUserConfigValues
 }
 
 type CommandRequest = {

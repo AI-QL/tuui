@@ -24,7 +24,7 @@ watch(files, (val) => {
 
 const filterFiles = () => {
   files.value = files.value.filter((file) => {
-    return file.name.toLowerCase().endsWith('.dxt')
+    return file.name.toLowerCase().endsWith('.mcpb')
   })
 }
 
@@ -95,7 +95,7 @@ const closeDialog = () => {
             color="light-grey"
             class="mb-2"
             density="compact"
-            accept=".dxt"
+            accept=".mcpb"
             clearable
             show-size
             multiple
@@ -106,7 +106,7 @@ const closeDialog = () => {
               <v-icon class="mb-2" size="x-small" icon="mdi-upload"></v-icon>
             </template>
             <template #title>
-              <div class="text-grey text-h6"> .DXT {{ $t('mcp.file') }} </div>
+              <div class="text-grey text-h6"> .MCPB {{ $t('mcp.file') }} </div>
             </template>
           </v-file-upload>
         </v-card>

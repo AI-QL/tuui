@@ -147,7 +147,7 @@ class Mcp {
         const mcpMetadata = config?.metadata
 
         // Only dxt manifest need include user_config
-        if (!mcpMetadata || mcpMetadata.type !== 'metadata__dxt_manifest') {
+        if (!mcpMetadata || mcpMetadata.type !== 'metadata__mcpb_manifest') {
           return [key, mcpMetadata]
         }
 

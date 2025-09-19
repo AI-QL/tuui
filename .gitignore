@@ -5,7 +5,7 @@
 node_modules/
 
 # Desktop extensions
-src/main/assets/dxt
+src/main/assets/mcpb
 
 # Log files
 *.log

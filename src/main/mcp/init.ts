@@ -34,9 +34,9 @@ export async function initClients(
     const clientPromises = entries.map(async ([name, object]) => {
       if (object.type === 'metadata__stdio_config') {
         return initSingleClient(name, object.config, callback)
-      } else if (object.type === 'metadata__dxt_manifest') {
+      } else if (object.type === 'metadata__mcpb_manifest') {
         const stdioConfig = await getMcpConfigForDxt(
-          Constants.getPosixPath(path.join(Constants.ASSETS_PATH.dxt, name)),
+          Constants.getPosixPath(path.join(Constants.ASSETS_PATH.mcpb, name)),
           object.config,
           object.user_config
         )

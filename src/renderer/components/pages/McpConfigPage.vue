@@ -21,7 +21,7 @@ const configObject = computed(() => ({
     :model-value="configObject.json"
   ></ConfigStdioCard>
   <ConfigDxtCard
-    v-else-if="configObject.json.type === 'metadata__dxt_manifest'"
+    v-else-if="configObject.json.type === 'metadata__mcpb_manifest'"
     :model-value="configObject.json"
   ></ConfigDxtCard>
   <div v-else>{{ configObject }}</div>

@@ -13,7 +13,7 @@ import type {
   GetPromptResult
 } from '@modelcontextprotocol/sdk/types.d.ts'
 
-import { DxtManifest, DxtUserConfigValues } from '@anthropic-ai/dxt'
+import { McpbManifest, McpbUserConfigValues } from '@anthropic-ai/mcpb'
 import { StdioServerParameters } from '@modelcontextprotocol/sdk/client/stdio.js'
 
 export type TypedAsyncFunction<Args extends any[], Result> = (..._args: Args) => Promise<Result>
@@ -41,13 +41,13 @@ export type McpMetadataStdio = {
   config: StdioServerParameters
 }
 
-export type userConfigValue = DxtUserConfigValues[string]
+export type userConfigValue = McpbUserConfigValues[string]
 
 export type McpMetadataDxt = {
   name: string
-  type: 'metadata__dxt_manifest'
-  config: DxtManifest
-  user_config?: DxtUserConfigValues
+  type: 'metadata__mcpb_manifest'
+  config: McpbManifest
+  user_config?: McpbUserConfigValues
 }
 
 export type McpMetadata = McpMetadataStdio | McpMetadataDxt

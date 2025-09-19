@@ -219,7 +219,7 @@ async function refreshAPI() {
     const manifest = dxtManifests[key]
     const metadata: McpMetadataDxt = {
       name: key,
-      type: 'metadata__dxt_manifest',
+      type: 'metadata__mcpb_manifest',
       config: manifest
     }
     if (newAPI[key]) {

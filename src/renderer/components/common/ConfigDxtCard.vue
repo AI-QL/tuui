@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, watchEffect, reactive } from 'vue'
-import { DxtUserConfigurationOption } from '@anthropic-ai/dxt'
+import { McpbUserConfigurationOption } from '@anthropic-ai/mcpb'
 import { getDxtUrl, openDxtFilePath } from '@/renderer/utils'
 import { useDxtStore, validateNumberRange } from '@/renderer/store/dxt'
 import type { McpMetadataDxt, userConfigValue } from '@/preload/mcp'
@@ -82,13 +82,13 @@ function getPlatformIcon(platform: string): string {
   }
 }
 
-const getErrorState = (para: DxtUserConfigurationOption, value: any) => {
+const getErrorState = (para: McpbUserConfigurationOption, value: any) => {
   const isRequired = para.required
   const isEmptyArray = Array.isArray(value) && value.length === 0
   return isRequired && (!value || isEmptyArray)
 }
 
-const getErrorMessages = (para: DxtUserConfigurationOption, key: string) => {
+const getErrorMessages = (para: McpbUserConfigurationOption, key: string) => {
   const value = dynamicModel(metadata.name, key).get()
   return getErrorState(para, value) ? [t('dxt.required')] : []
 }
@@ -99,9 +99,6 @@ const getErrorMessages = (para: DxtUserConfigurationOption, key: string) => {
     <template #title>
       <div class="d-flex">
         {{ $t('dxt.title') + ' - ' + metadata.name }}
-        <v-chip size="small" class="ml-2 mt-1 font-weight-bold" color="blue-darken-4">
-          {{ manifest.dxt_version }}
-        </v-chip>
         <v-chip size="small" class="ml-2 mt-1 font-weight-bold" color="blue">
           {{ manifest.version }}
         </v-chip>

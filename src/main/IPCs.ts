@@ -20,7 +20,7 @@ import { disconnect } from './mcp/connection'
 import { loadConfig } from './mcp/init'
 import { loadLlmFile } from './mcp/config'
 import { unpackDxt, getManifest } from './mcp/dxt'
-import { DxtManifest } from '@anthropic-ai/dxt'
+import { McpbManifest } from '@anthropic-ai/mcpb'
 
 import { closeCommandPicker } from './aid/commands'
 
@@ -31,7 +31,7 @@ const handlerRegistry = new Map<string, Function>()
 
 interface ManifestResponse {
   status: 'success' | 'error'
-  result?: Record<string, DxtManifest> // Object with string keys and DXT values
+  result?: Record<string, McpbManifest> // Object with string keys and DXT values
   error?: string
 }
 
@@ -53,7 +53,7 @@ export default class IPCs {
     })
 
     ipcMain.handle('msgRequestGetDxtUrl', () => {
-      return pathToFileURL(normalize(resolve(Constants.ASSETS_PATH.dxt))).toString()
+      return pathToFileURL(normalize(resolve(Constants.ASSETS_PATH.mcpb))).toString()
     })
 
     ipcMain.handle('msgMcpServersStop', async () => {
@@ -111,7 +111,7 @@ export default class IPCs {
     })
 
     ipcMain.on('msgOpenDxtFilePath', async (event: IpcMainEvent, name: string) => {
-      shell.openPath(resolve(join(Constants.ASSETS_PATH.dxt, name)))
+      shell.openPath(resolve(join(Constants.ASSETS_PATH.mcpb, name)))
     })
 
     ipcMain.on('msgOpenPath', async (event: IpcMainEvent, name: string) => {
@@ -185,12 +185,12 @@ export default class IPCs {
       try {
         const buffer = Buffer.from(data)
         const saveOption = Constants.getDxtSource(name)
-        const filePath = saveOption.dxtPath
+        const filePath = saveOption.mcpbPath
         const dirPath = saveOption.outputDir
         if (!existsSync(dirPath)) {
           mkdirSync(dirPath, { recursive: true })
         }
-        console.log('DXT to be saved in: ', filePath)
+        console.log('MCP bundle to be saved in: ', filePath)
 
         writeFileSync(filePath, buffer, { encoding: null })
 
@@ -211,10 +211,10 @@ export default class IPCs {
     })
 
     ipcMain.handle('list-manifests', async (_event: IpcMainEvent): Promise<ManifestResponse> => {
-      const dxtPath = Constants.ASSETS_PATH.dxt
+      const mcpbPath = Constants.ASSETS_PATH.mcpb
 
       try {
-        const entries = readdirSync(dxtPath, { withFileTypes: true })
+        const entries = readdirSync(mcpbPath, { withFileTypes: true })
         console.log(entries)
 
         // Transform the array into an object
@@ -222,7 +222,7 @@ export default class IPCs {
           .filter((dirent) => dirent.isDirectory())
           .reduce(
             (acc, dirent) => {
-              acc[dirent.name] = getManifest(join(dxtPath, dirent.name))
+              acc[dirent.name] = getManifest(join(mcpbPath, dirent.name))
               return acc
             },
             {} as Record<string, any>

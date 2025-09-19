@@ -43,7 +43,7 @@
     "node": ">=22.12.0"
   },
   "dependencies": {
-    "@anthropic-ai/dxt": "^0.2.6",
+    "@anthropic-ai/mcpb": "^1.1.0",
     "@el3um4s/run-vbs": "^1.1.2",
     "@fontsource/inter": "^5.2.6",
     "@mdi/font": "^7.4.47",

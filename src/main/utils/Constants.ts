@@ -19,7 +19,7 @@ export interface AssetsPaths {
   icon: string
   icon_raw: string
   mcp: string
-  dxt: string
+  mcpb: string
   llm: string
   popup: string
   startup: string
@@ -79,7 +79,7 @@ export default class Constants {
     icon: Constants._buildAssetsPath('icon', 'icon.png'),
     icon_raw: Constants._buildAssetsPath('icon', 'icon_raw.png'),
 
-    dxt: Constants._buildAssetsPath('dxt'),
+    mcpb: Constants._buildAssetsPath('mcpb'),
 
     mcp: Constants._buildAssetsPath('config', 'mcp.json'),
     llm: Constants._buildAssetsPath('config', 'llm.json'),
@@ -93,18 +93,18 @@ export default class Constants {
 
   static getDxtSource(
     filename: string,
-    requiredExtension: string = '.dxt'
+    requiredExtension: string = '.mcpb'
   ): {
-    dxtPath: string
+    mcpbPath: string
     outputDir: string
   } {
     if (!filename.endsWith(requiredExtension)) {
       throw new Error(`File extension name must be: ${requiredExtension}`)
     }
     const dirName = filename.slice(0, -requiredExtension.length)
-    const dirPath = join(this.ASSETS_PATH.dxt, dirName, '/')
+    const dirPath = join(this.ASSETS_PATH.mcpb, dirName, '/')
     return {
-      dxtPath: join(dirPath, filename),
+      mcpbPath: join(dirPath, filename),
       outputDir: dirPath
     }
   }

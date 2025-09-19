@@ -45,7 +45,7 @@
     {
       "img": "https://www.anthropic.com/_next/image?url=https%3A%2F%2Fwww-cdn.anthropic.com%2Fimages%2F4zrzovbb%2Fwebsite%2Fd48f3ea1218a4b90450b9ab8134fa0e24db5a167-720x542.png&w=1920&q=75",
       "title": "Desktop Extensions",
-      "subtitle": "Desktop Extensions (.dxt files) solve these problems by bundling an entire MCP server, including all dependencies into a single installable package.",
+      "subtitle": "Desktop Extensions (.dxt/.mcpb files) solve these problems by bundling an entire MCP server, including all dependencies into a single installable package.",
       "duration": "10",
       "link": "https://www.anthropic.com/engineering/desktop-extensions"
     },

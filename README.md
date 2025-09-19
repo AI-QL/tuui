@@ -193,7 +193,7 @@ Review our [Security Policy](SECURITY.md). Do not file a public issue for securi
 
 ![](https://gcore.jsdelivr.net/gh/AI-QL/.github/public/tuui2/1_primitive.jpg)
 
-### Desktop extensions (.dxt) support
+### MCP bundles (.mcpb) support
 
 ![](https://gcore.jsdelivr.net/gh/AI-QL/.github/public/tuui2/2_dxt.jpg)
 
