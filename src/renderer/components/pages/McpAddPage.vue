@@ -111,13 +111,10 @@ const exampleData = [
 
 <template>
   <v-dialog v-model="internalDialog" persistent max-width="80vw" max-height="80vh" scrollable>
-    <v-card>
-      <v-card-title>
-        {{ $t('mcp.config') }}
-      </v-card-title>
-
-      <v-card-text class="mt-2">
-        <ConfigJsonCard v-model="jsonParams" class="mt-2" @on-error="handleError"></ConfigJsonCard>
+    <v-card :title="$t('mcp.config')">
+      <v-divider></v-divider>
+      <v-card-text>
+        <ConfigJsonCard v-model="jsonParams" @on-error="handleError"></ConfigJsonCard>
         <div class="mx-4">
           <v-expansion-panels static color="grey-200">
             <v-expansion-panel
