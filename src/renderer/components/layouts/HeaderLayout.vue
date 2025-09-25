@@ -1,4 +1,4 @@
-<script setup lang="tsx">
+<script setup lang="ts">
 import { watchEffect, computed, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useLayoutStore, getScreenFromPath } from '@/renderer/store/layout'

@@ -6,6 +6,7 @@ import { useLayoutStore } from '@/renderer/store/layout'
 import { useSnackbarStore } from '@/renderer/store/snackbar'
 import McpDxtPage from '@/renderer/components/pages/McpDxtPage.vue'
 import McpAddPage from '@/renderer/components/pages/McpAddPage.vue'
+import { pick } from 'lodash'
 
 const snackbarStore = useSnackbarStore()
 
@@ -34,8 +35,11 @@ async function stopAllMcpServers() {
 async function activeAllMcpServers() {
   layoutStore.mcpLoading = 'start'
   try {
-    const configs = getServers()
-    const result = await McpEvent.init(configs)
+    const configs = getServers() ?? {}
+
+    const filteredConfigs = pick(configs, mcpStore.checkList)
+
+    const result = await McpEvent.init(filteredConfigs)
     console.log(result)
     await mcpStore.updateServers()
     if (result.status == 'error') {

@@ -1,4 +1,4 @@
-import type { MCPAPI } from '@/preload/mcp'
+import type { McpServerApi } from '@/renderer/store/mcp'
 import { useDxtStore } from '@/renderer/store/dxt'
 
 function isValidValue(value: any): boolean {
@@ -139,7 +139,7 @@ export const CommandEvent = {
 }
 
 class Mcp {
-  static async msgMcpServersInit(configs: MCPAPI | undefined): Promise<any> {
+  static async msgMcpServersInit(configs: McpServerApi): Promise<any> {
     if (!configs) return
     const dxtStore = useDxtStore()
     const filteredConfigs = Object.fromEntries(

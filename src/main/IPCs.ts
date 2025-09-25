@@ -79,18 +79,23 @@ export default class IPCs {
           mcpServersCallback({ name, message, status })
         }
 
+        const configs = await loadConfig()
+
         try {
           const newClients = await initClients(metadata, progressCallback)
-          const features = newClients.map((params) => {
-            return registerIpcHandlers(params)
-          })
+          const activeClientNames = newClients.map((client) => client.name)
+          const inactiveConfigs = configs.filter(
+            (config) => !activeClientNames.includes(config.name)
+          )
 
+          const features = [
+            ...newClients.map((params) => registerIpcHandlers(params)),
+            ...inactiveConfigs.map((params) => registerIpcHandlers(params))
+          ]
           IPCs.updateMCP(features)
           this.clients = newClients
           return features
         } catch (error) {
-          const configs = await loadConfig()
-
           const features = configs.map((params) => {
             return registerIpcHandlers(params)
           })

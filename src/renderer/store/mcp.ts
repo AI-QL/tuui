@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia'
+import { watch } from 'vue'
 import type {
   ChatCompletionRequestContent,
   ChatCompletionPromptMessage
@@ -18,6 +19,7 @@ type McpMethodType =
   | { type: 'call'; fn: () => any }
   | { type: 'templates/list'; fn: () => any }
   | string
+export type McpServerApi = MCPAPI | undefined
 
 export function getAllowedPrimitive(item: McpObject): AllowedPrimitive[] {
   if (!item) return []
@@ -27,11 +29,11 @@ export function getAllowedPrimitive(item: McpObject): AllowedPrimitive[] {
   ) as AllowedPrimitive[]
 }
 
-export function getRawServers(): MCPAPI | undefined {
+export function getRawServers(): McpServerApi {
   return window.mcpServers?.get()
 }
 
-export function getServers(): MCPAPI | undefined {
+export function getServers(): McpServerApi {
   const mcpServers = getRawServers()
   const stdioServers = useStdioStore().configValues
 
@@ -65,12 +67,17 @@ export interface McpCoreType {
   method: McpMethodType
 }
 
+function getObjectKeys(o: unknown) {
+  return o && typeof o === 'object' && !Array.isArray(o) ? Object.keys(o) : []
+}
+
 export const useMcpStore = defineStore('mcpStore', {
   // TODO: fix any to type
   state: (): any => ({
     version: 1,
     serverTools: [],
     loading: true,
+    checkList: getObjectKeys(getServers()) as string[],
     selected: undefined as string[] | undefined,
     selectedChips: {} // { key : 0 | 1 | 2}
   }),
@@ -108,6 +115,16 @@ export const useMcpStore = defineStore('mcpStore', {
   },
 
   actions: {
+    watchServerUpdate() {
+      watch(getServers, (newVal: McpServerApi, oldVal: McpServerApi) => {
+        const newKeys = getObjectKeys(newVal)
+        const oldKeys = getObjectKeys(oldVal)
+        const retainedKeys = this.checkList.filter((key: string) => newKeys.includes(key))
+        const addedKeys = newKeys.filter((key) => !oldKeys.includes(key))
+        this.checkList = [...retainedKeys, ...addedKeys]
+      })
+    },
+
     getAllByServer: function (serverName: string): McpCoreType[] {
       const mcpServers = getServers()
       if (!mcpServers) {

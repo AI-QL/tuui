@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import { McpEvent } from '@/renderer/utils'
+import { useMcpStore } from '@/renderer/store/mcp'
 import { useLayoutStore } from '@/renderer/store/layout'
 import { ref, watch, computed } from 'vue'
 
 const layoutStore = useLayoutStore()
+const mcpStore = useMcpStore()
 
 interface ProgressItem {
   messages: string[]
@@ -40,7 +42,9 @@ McpEvent.watch(handleProgress)
 const isLoading = computed(() => layoutStore.mcpLoading)
 
 const allSuccess = computed(() => {
-  return Object.values(progressMap.value).every((item) => item.status === 'success')
+  return Object.entries(progressMap.value).every(
+    ([key, item]) => item.status === 'success' || !mcpStore.checkList.includes(key)
+  )
 })
 
 watch(isLoading, (newVal, oldVal) => {
