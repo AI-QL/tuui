@@ -28,6 +28,8 @@ interface ChatRequestBody {
   tools?: Tool[]
 }
 
+export type ChatProcessResult = 'aborted' | 'error' | 'done'
+
 type RequestMessageType = ChatCompletionRequestMessage | McpSamplingMessage
 
 const THINK_OPEN = '<think>'
@@ -113,7 +115,7 @@ export const createCompletion = async (
   rawconversation: RequestMessageType[],
   sessionId: string,
   sampling: any = null
-) => {
+): Promise<ChatProcessResult> => {
   const snackbarStore = useSnackbarStore()
 
   const messageStore = useMessageStore()
@@ -250,7 +252,7 @@ export const createCompletion = async (
         }
       } finally {
         snackbarStore.showErrorMessage(errMessage)
-        return
+        return 'error'
       }
     }
 
@@ -262,7 +264,7 @@ export const createCompletion = async (
     const reader = completion.body?.getReader()
     if (!reader) {
       snackbarStore.showErrorMessage('snackbar.parse-stream-fail')
-      return
+      return 'error'
     }
 
     // Add the bot message
@@ -284,10 +286,8 @@ export const createCompletion = async (
   } catch (error: any) {
     snackbarStore.showErrorMessage(error?.message)
   } finally {
-    if (sessionId in messageStore.generating) {
-      messageStore.generating[sessionId].abort()
-      delete messageStore.generating[sessionId]
-    }
+    const result = messageStore.delete(sessionId) ? 'done' : 'aborted'
+    return result
   }
 }
 
@@ -310,10 +310,10 @@ const read = async (
 
   // If the stream is done reading, release the lock on the reader
   if (done) {
-    if (sessionId in messageStore.generating) {
-      messageStore.generating[sessionId].abort()
-      delete messageStore.generating[sessionId]
-    }
+    // if (sessionId in messageStore.generating) {
+    //   messageStore.generating[sessionId].abort()
+    //   delete messageStore.generating[sessionId]
+    // }
     return reader.releaseLock()
   }
 

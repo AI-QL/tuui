@@ -2,7 +2,11 @@ import { defineStore } from 'pinia'
 import { useSnackbarStore } from '@/renderer/store/snackbar'
 import { useMcpStore } from '@/renderer/store/mcp'
 import { useHistoryStore } from '@/renderer/store/history'
-import { createCompletion, isEmptyTools } from '@/renderer/composables/chatCompletions'
+import {
+  createCompletion,
+  isEmptyTools,
+  ChatProcessResult
+} from '@/renderer/composables/chatCompletions'
 
 import type { CallToolResult } from '@modelcontextprotocol/sdk/types.js'
 
@@ -15,7 +19,7 @@ interface MessageStoreState {
   conversation: ChatConversationMessage[]
   historyId: string
   base64: string
-  generating: Record<string, AbortController>
+  generating: Record<string, 'prepare' | AbortController | 'toolcall'>
 }
 
 export const useMessageStore = defineStore('messageStore', {
@@ -41,11 +45,20 @@ export const useMessageStore = defineStore('messageStore', {
       this.historyId = ''
     },
     stop() {
-      const id = this.historyId
+      this.delete(this.historyId)
       const snackbarStore = useSnackbarStore()
-      this.generating[id].abort()
-      delete this.generating[id]
       snackbarStore.showInfoMessage('snackbar.stopped')
+    },
+    delete(id: string) {
+      if (id in this.generating) {
+        if (this.generating[id] instanceof AbortController) {
+          this.generating[id].abort()
+        }
+        delete this.generating[id]
+        return true
+      } else {
+        return false
+      }
     },
     clear() {
       this.userMessage = ''
@@ -120,13 +133,17 @@ export const useMessageStore = defineStore('messageStore', {
       const historyId = this.syncHistory()
       this.clear()
 
-      createCompletion(this.conversation, historyId).then(() => {
-        this.postToolCall()
+      this.generating[historyId] = 'prepare'
+
+      createCompletion(this.conversation, historyId).then((reason: ChatProcessResult) => {
+        if (reason === 'done') {
+          this.postToolCall(historyId)
+        }
       })
 
       return historyId
     },
-    postToolCall: async function () {
+    postToolCall: async function (historyId: string) {
       const mcpStore = useMcpStore()
       const last = this.conversation.at(-1)
 
@@ -141,6 +158,7 @@ export const useMessageStore = defineStore('messageStore', {
 
       let toolCalled = false
       console.log(last.tool_calls)
+      this.generating[historyId] = 'toolcall'
 
       for (const toolCall of last.tool_calls) {
         let result: CallToolResult
@@ -160,7 +178,7 @@ export const useMessageStore = defineStore('messageStore', {
         }
       }
 
-      if (toolCalled) {
+      if (this.delete(historyId) && toolCalled) {
         this.startInference()
       }
     },
