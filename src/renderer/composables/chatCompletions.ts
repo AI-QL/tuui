@@ -3,6 +3,8 @@ import { useSnackbarStore } from '@/renderer/store/snackbar'
 import { useChatbotStore } from '@/renderer/store/chatbot'
 import { useAgentStore } from '@/renderer/store/agent'
 import { useMcpStore } from '@/renderer/store/mcp'
+import { jwtDecode } from 'jwt-decode'
+import { getApiToken } from '@/renderer/utils'
 
 import type {
   AssistantMessage,
@@ -46,6 +48,53 @@ export const isEmptyTools = (tools: any): boolean => {
     }
   } else {
     return true
+  }
+}
+
+async function updateToken(cli: string, oldToken: string) {
+  try {
+    return await getApiToken(cli)
+  } catch {
+    const snackbarStore = useSnackbarStore()
+    snackbarStore.showWarningMessage('chat.token-fail')
+    return oldToken
+  }
+}
+
+async function checkTokenUpdate(
+  chatbotStore: ReturnType<typeof useChatbotStore>['chatbots'][number]
+) {
+  if (chatbotStore.apiCli) {
+    // Might be a dynamic JWT token, check the expiration
+    try {
+      if (!chatbotStore.apiKey) {
+        const snackbarStore = useSnackbarStore()
+        snackbarStore.showInfoMessage('chat.token-refresh')
+        chatbotStore.apiKey = await updateToken(chatbotStore.apiCli, chatbotStore.apiKey)
+        return
+      }
+
+      const payload = jwtDecode(chatbotStore.apiKey)
+      if (!payload.exp) {
+        // Never expired
+        return
+      }
+
+      const currentTime = Math.floor(Date.now() / 1000)
+      const remaining = payload.exp - currentTime
+
+      // Update if remaining time < 10 min
+      if (remaining <= 600) {
+        const snackbarStore = useSnackbarStore()
+        snackbarStore.showInfoMessage('chat.token-refresh')
+        chatbotStore.apiKey = await updateToken(chatbotStore.apiCli, chatbotStore.apiKey)
+      } else {
+        const readableExp = new Date(payload.exp * 1000)
+        console.log(`Token valid until: ${readableExp}`)
+      }
+    } catch {
+      // Crashed, not a JWT token
+    }
   }
 }
 
@@ -100,6 +149,8 @@ export const createCompletion = async (
     const headers: HeadersInit = {
       'Content-Type': chatbotStore.contentType
     }
+
+    await checkTokenUpdate(chatbotStore)
 
     if (chatbotStore.apiKey) {
       if (chatbotStore.authorization) {
