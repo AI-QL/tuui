@@ -213,6 +213,10 @@ Review our [Security Policy](SECURITY.md). Do not file a public issue for securi
 
 ![](https://gcore.jsdelivr.net/gh/AI-QL/.github/public/tuui2/6_elicit.jpg)
 
+### MCP Registry
+
+![](https://gcore.jsdelivr.net/gh/AI-QL/.github/public/tuui2/9_registry.jpg)
+
 ### Native devtools
 
 ![](https://gcore.jsdelivr.net/gh/AI-QL/.github/public/tuui2/7_devtool.jpg)
