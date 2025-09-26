@@ -46,6 +46,8 @@
     "new": "New MCP Server",
     "init": "Start MCP Servers",
     "stop": "Stop MCP Servers",
+    "search": "MCP Registry Lookup",
+    "total": "Total Servers",
     "read": "Read",
     "minutes": "minutes",
     "open": "Reveal in File Explorer",

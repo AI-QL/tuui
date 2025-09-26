@@ -46,6 +46,8 @@
     "new": "新的 MCP 服务端",
     "init": "启动 MCP 服务端",
     "stop": "停止 MCP 服务端",
+    "search": "MCP 注册中心查询",
+    "total": "服务端总数",
     "read": "阅读",
     "minutes": "分钟",
     "open": "在文件管理器中打开",
@@ -90,7 +92,7 @@
   },
   "resource": {
     "list": "资源列表",
-    "total": "全部资源"
+    "total": "资源总数"
   },
   "sampling": {
     "title": "采样",

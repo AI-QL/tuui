@@ -6,6 +6,7 @@ import { useLayoutStore } from '@/renderer/store/layout'
 import { useSnackbarStore } from '@/renderer/store/snackbar'
 import McpDxtPage from '@/renderer/components/pages/McpDxtPage.vue'
 import McpAddPage from '@/renderer/components/pages/McpAddPage.vue'
+import McpRegistryPage from '@/renderer/components/pages/McpRegistryPage.vue'
 import { pick } from 'lodash'
 
 const snackbarStore = useSnackbarStore()
@@ -17,6 +18,8 @@ const mcpStore = useMcpStore()
 const dxtDialog = ref(false)
 
 const addDialog = ref(false)
+
+const registryDialog = ref(false)
 
 const isDragActive = ref(false)
 
@@ -64,6 +67,10 @@ const openDialog = () => {
 
 const addConfig = () => {
   addDialog.value = true
+}
+
+const searchRegistry = () => {
+  registryDialog.value = true
 }
 
 document.addEventListener('dragenter', (_e) => {
@@ -128,10 +135,13 @@ const items = [
           </v-list-item>
         </v-list>
       </v-menu>
+      <v-btn v-tooltip:top="$t('mcp.search')" icon="mdi-home-search" @click="searchRegistry">
+      </v-btn>
     </v-btn-group>
     <McpDxtPage v-model="dxtDialog"></McpDxtPage>
 
     <McpAddPage v-model="addDialog"></McpAddPage>
+    <McpRegistryPage v-model="registryDialog"></McpRegistryPage>
   </v-container>
 </template>
 

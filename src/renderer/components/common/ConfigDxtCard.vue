@@ -99,7 +99,7 @@ const getErrorMessages = (para: McpbUserConfigurationOption, key: string) => {
     <template #title>
       <div class="d-flex">
         {{ $t('dxt.title') + ' - ' + metadata.name }}
-        <v-chip size="small" class="ml-2 mt-1 font-weight-bold" color="blue">
+        <v-chip size="small" class="ml-2 mt-1 font-weight-bold" color="primary">
           {{ manifest.version }}
         </v-chip>
       </div>
@@ -237,7 +237,7 @@ const getErrorMessages = (para: McpbUserConfigurationOption, key: string) => {
       <v-row class="mx-1 mt-2 mb-2" dense>
         <v-col v-if="manifest.author" cols="12" md="6">
           <v-card
-            color="blue-lighten-1"
+            color="indigo-lighten-2"
             append-icon="mdi-open-in-new"
             class="mx-auto"
             :href="manifest.author.url"
@@ -249,7 +249,7 @@ const getErrorMessages = (para: McpbUserConfigurationOption, key: string) => {
         </v-col>
         <v-col v-if="manifest.repository" cols="12" md="6">
           <v-card
-            color="indigo-lighten-2"
+            color="light-green-darken-1"
             append-icon="mdi-open-in-new"
             class="mx-auto"
             :href="manifest.repository.url"
@@ -261,7 +261,7 @@ const getErrorMessages = (para: McpbUserConfigurationOption, key: string) => {
         </v-col>
         <v-col v-if="manifest.homepage" cols="12" md="6">
           <v-card
-            color="green-lighten-1"
+            color="blue-lighten-1"
             append-icon="mdi-open-in-new"
             class="mx-auto"
             :href="manifest.homepage"
