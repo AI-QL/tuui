@@ -96,6 +96,7 @@ function getPackageUrl(registry: McpRegistryPackage) {
     <template #title>
       <v-text-field
         v-model="queryString"
+        :loading="loadingServers"
         class="mr-4"
         prepend-inner-icon="mdi-server"
         variant="outlined"
@@ -106,6 +107,7 @@ function getPackageUrl(registry: McpRegistryPackage) {
     </template>
     <template #append>
       <v-btn
+        :loading="loadingServers"
         rounded="lg"
         variant="tonal"
         icon="mdi-magnify"
@@ -151,7 +153,7 @@ function getPackageUrl(registry: McpRegistryPackage) {
                 <v-expansion-panel-text>
                   <v-col v-if="item.raw.repository">
                     <v-card
-                      color="light-green-darken-1"
+                      color="green-lighten-1"
                       class="mx-auto"
                       :subtitle="item.raw.repository.url"
                       :title="item.raw.repository.source"
@@ -211,6 +213,7 @@ function getPackageUrl(registry: McpRegistryPackage) {
 
       <v-btn
         :disabled="!lastQuery.metadata?.next_cursor"
+        :loading="loadingServers"
         rounded="lg"
         icon="mdi-book-open-page-variant"
         color="secondary"

@@ -249,7 +249,7 @@ const getErrorMessages = (para: McpbUserConfigurationOption, key: string) => {
         </v-col>
         <v-col v-if="manifest.repository" cols="12" md="6">
           <v-card
-            color="light-green-darken-1"
+            color="green-lighten-1"
             append-icon="mdi-open-in-new"
             class="mx-auto"
             :href="manifest.repository.url"
