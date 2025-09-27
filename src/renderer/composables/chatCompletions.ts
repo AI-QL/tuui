@@ -17,7 +17,7 @@ import type {
 
 import { Tool } from '@modelcontextprotocol/sdk/types'
 
-import { REASONING_EFFORT } from '@/renderer/types'
+import { REASONING_EFFORT, ENABLE_THINKING } from '@/renderer/types'
 
 interface ChatRequestBody {
   model?: string
@@ -167,13 +167,17 @@ export const createCompletion = async (
       stream: chatbotStore.stream
     }
 
-    console.log(chatbotStore.reasoningEffort)
-
     if (typeof chatbotStore.reasoningEffort === 'number') {
-      if (chatbotStore.reasoningEffort === 0) {
+      body['reasoning_effort'] = REASONING_EFFORT[chatbotStore.reasoningEffort]
+    }
+
+    if (typeof chatbotStore.enableThinking === 'number') {
+      if (ENABLE_THINKING[chatbotStore.enableThinking] === 'true') {
+        body['chat_template_kwargs'] = { enable_thinking: true }
+        body['enable_thinking'] = true
+      } else if (ENABLE_THINKING[chatbotStore.enableThinking] === 'false') {
         body['chat_template_kwargs'] = { enable_thinking: false }
-      } else {
-        body['reasoning_effort'] = REASONING_EFFORT[chatbotStore.reasoningEffort]
+        body['enable_thinking'] = false
       }
     }
 

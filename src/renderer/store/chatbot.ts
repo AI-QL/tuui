@@ -23,7 +23,7 @@ export const useChatbotStore = defineStore('chatbotStore', {
 
     const chatbots = llms
       ? llms.map((llm) => ({ ...getDefaultLLM(), ...llm }))
-      : [{ ...getDefaultLLM(), name: 'Chatbot Default', mcp: true, reasoningEffort: 1 }]
+      : [{ ...getDefaultLLM(), name: 'Chatbot Default', mcp: true }]
 
     return {
       chatbots: chatbots,

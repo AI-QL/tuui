@@ -33,6 +33,7 @@ export interface ChatbotConfig {
   contentType: string
   stream: boolean
   reasoningEffort?: number
+  enableThinking?: number
   authorization: boolean
   mcp: boolean
 }

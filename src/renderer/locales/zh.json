@@ -120,6 +120,7 @@
     "max-tokens-prefix": "Max Tokens Prefix",
     "temperature": "温度",
     "topP": "核采样",
+    "enable-thinking": "思考模式",
     "reasoning-effort": "推理负荷",
     "auth-header": "鉴权头",
     "auth-prefix": "鉴权前缀",

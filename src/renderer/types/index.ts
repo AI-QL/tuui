@@ -30,8 +30,11 @@ export const CHATBOT_DEFAULTS = {
   contentType: 'application/json',
   stream: true,
   reasoningEffort: undefined,
+  enableThinking: undefined,
   authorization: true,
   mcp: true
 }
 
-export const REASONING_EFFORT = ['false', 'none', 'low', 'medium', 'high']
+export const REASONING_EFFORT = ['minimal', 'low', 'medium', 'high']
+
+export const ENABLE_THINKING = ['true', 'false']

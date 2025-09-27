@@ -30,14 +30,14 @@
     "contentType": "application/json",
     "stream": true,
     "reasoningEffort": null,
+    "enableThinking": null,
     "authorization": true,
     "mcp": true
   },
   "custom": [
     {
       "name": "Chatbot Default",
-      "icon": "https://www.tuui.com/favicon.ico",
-      "reasoningEffort": 1
+      "icon": "https://www.tuui.com/favicon.ico"
     },
     {
       "url": "https://dashscope.aliyuncs.com/compatible-mode",

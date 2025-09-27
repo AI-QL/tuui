@@ -120,6 +120,7 @@
     "max-tokens-prefix": "Max Tokens Prefix",
     "temperature": "Temperature",
     "topP": "Top P",
+    "enable-thinking": "Enable Thinking",
     "reasoning-effort": "Reasoning Effort",
     "auth-header": "Auth Header",
     "auth-prefix": "Auth Prefix",

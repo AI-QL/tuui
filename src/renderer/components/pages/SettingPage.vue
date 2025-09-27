@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
-import { REASONING_EFFORT } from '@/renderer/types'
+import { REASONING_EFFORT, ENABLE_THINKING } from '@/renderer/types'
 import { useI18n } from 'vue-i18n'
 import { useLayoutStore } from '@/renderer/store/layout'
 import { v4 as uuidv4 } from 'uuid'
@@ -316,7 +316,7 @@ const validateNumberRange = (min: number, max: number) => {
         >
         </v-combobox>
       </v-row>
-      <v-field class="ml-2 d-inline-flex" dirty variant="outlined">
+      <v-field class="ma-2 d-inline-flex" dirty variant="outlined">
         <template #label>
           <div>{{ $t('setting.reasoning-effort') }}</div>
         </template>
@@ -327,7 +327,21 @@ const validateNumberRange = (min: number, max: number) => {
           variant="plain"
           @update:model-value="(v) => handleUpdate('reasoningEffort', v)"
         >
-          <v-btn v-for="level in REASONING_EFFORT" :key="level">{{ level }}</v-btn>
+          <v-btn v-for="level in REASONING_EFFORT" :key="level">{{ level.length > 4 ? level.slice(0, 3) : level }}</v-btn>
+        </v-btn-toggle>
+      </v-field>
+      <v-field class="ma-2 d-inline-flex" dirty variant="outlined">
+        <template #label>
+          <div>{{ $t('setting.enable-thinking') }}</div>
+        </template>
+        <v-btn-toggle
+          class="mt-0"
+          color="secondary"
+          :model-value="config.enableThinking"
+          variant="plain"
+          @update:model-value="(v) => handleUpdate('enableThinking', v)"
+        >
+          <v-btn v-for="level in ENABLE_THINKING" :key="level">{{ level }}</v-btn>
         </v-btn-toggle>
       </v-field>
     </v-card-text>
