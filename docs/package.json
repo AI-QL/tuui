@@ -16,9 +16,9 @@
     "vitepress": "^2.0.0-alpha.12",
     "vitepress-i18n": "^1.3.4",
     "vitepress-sidebar": "^1.33.0",
-    "vue": "^3.5.21"
+    "vue": "^3.5.22"
   },
   "optionalDependencies": {
-    "@rollup/rollup-linux-x64-gnu": "4.50.0"
+    "@rollup/rollup-linux-x64-gnu": "4.52.3"
   }
 }
