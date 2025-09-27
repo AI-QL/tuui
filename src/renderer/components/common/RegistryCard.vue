@@ -1,55 +1,48 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 
-type McpRegistryPackage = {
-  identifier: string
-  registryType: string
-  registryBaseUrl?: string
-}
+import { McpRegistryPackage, McpRegistryType } from '@/renderer/types/registry'
 
+// State for loading indicators
 const loadingServers = ref(false)
 
-const queryHistory = ref({})
+// Query history and current query string
+const queryHistory = ref<Record<string, McpRegistryType>>({})
 const queryString = ref('')
 const lastQueryString = ref('')
 
+// Default query limit
 const queryLimit = '5'
 
+// Computed property to get the last query result
 const lastQuery = computed(() => {
   const last = queryHistory.value[lastQueryString.value]
-  if (last) {
-    return last
-  } else {
-    return {
-      servers: []
-    }
-  }
+  return last || { servers: [] }
 })
 
+// Fetch servers based on search query
 async function getServers(search: string) {
   const json = await fetchJson(search)
-
   if (json) {
     queryHistory.value[search] = json
     lastQueryString.value = search
   }
 }
 
+// Fetch next page of results
 async function getNext() {
   const search = lastQueryString.value
-
   const nextCursor = lastQuery.value.metadata?.next_cursor
-
   if (!nextCursor) return
 
   const json = await fetchJson(search, nextCursor)
-
-  if (json && json.servers.length > 0) {
+  if (json?.servers?.length) {
     queryHistory.value[search].servers.push(...json.servers)
     queryHistory.value[search].metadata = json.metadata
   }
 }
 
+// Helper function to fetch JSON data
 async function fetchJson(search: string, cursor?: string) {
   loadingServers.value = true
   try {
@@ -57,7 +50,6 @@ async function fetchJson(search: string, cursor?: string) {
     const url = new URL(baseUrl)
     if (search) url.searchParams.append('search', search)
     url.searchParams.append('limit', queryLimit)
-
     if (cursor) url.searchParams.append('cursor', cursor)
 
     const res = await fetch(url.toString())
@@ -69,6 +61,7 @@ async function fetchJson(search: string, cursor?: string) {
   }
 }
 
+// Generate package URL based on registry type
 function getPackageUrl(registry: McpRegistryPackage) {
   switch (registry.registryType) {
     case 'mcpb':
@@ -151,7 +144,7 @@ function getPackageUrl(registry: McpRegistryPackage) {
                   </v-list-item>
                 </v-expansion-panel-title>
                 <v-expansion-panel-text>
-                  <v-col v-if="item.raw.repository">
+                  <v-col v-if="item.raw.repository?.url">
                     <v-card
                       color="green-lighten-1"
                       class="mx-auto"
