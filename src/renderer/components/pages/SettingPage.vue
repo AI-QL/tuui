@@ -22,6 +22,7 @@ interface Props {
 
 interface Emits {
   (_e: 'update:config', _value: Partial<ChatbotConfig>): void
+  (_e: 'batch:token', _apiCli: string, _apiKey: string): void
 }
 
 // const props =
@@ -29,6 +30,10 @@ defineProps<Props>()
 const emit = defineEmits<Emits>()
 const handleUpdate = <K extends keyof ChatbotConfig>(key: K, value: ChatbotConfig[K]) => {
   emit('update:config', { [key]: value } as Partial<ChatbotConfig>)
+}
+
+const handleBatchToken = (apiCli: string, apiKey: string) => {
+  emit('batch:token', apiCli, apiKey)
 }
 
 // defineExpose({
@@ -50,7 +55,7 @@ const handleGetApiToken = async (cli: string): Promise<void> => {
     listenStdioProgress(handleProgress)
 
     const token = await getApiToken(cli)
-    handleUpdate('apiKey', token)
+    handleBatchToken(cli, token)
     apiDialog.value = false
   } catch (error: any) {
     stderr.value.push(error.toString())
@@ -327,7 +332,9 @@ const validateNumberRange = (min: number, max: number) => {
           variant="plain"
           @update:model-value="(v) => handleUpdate('reasoningEffort', v)"
         >
-          <v-btn v-for="level in REASONING_EFFORT" :key="level">{{ level.length > 4 ? level.slice(0, 3) : level }}</v-btn>
+          <v-btn v-for="level in REASONING_EFFORT" :key="level">{{
+            level.length > 4 ? level.slice(0, 3) : level
+          }}</v-btn>
         </v-btn-toggle>
       </v-field>
       <v-field class="ma-2 d-inline-flex" dirty variant="outlined">

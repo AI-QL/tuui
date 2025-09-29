@@ -17,7 +17,7 @@ export default class Utils {
     return window.mainApi.invoke('msgRequestAppInfo')
   }
 
-  static async getApiToken(cli: string): Promise<any> {
+  static async getApiToken(cli: string): Promise<string> {
     return window.mainApi.invoke('msgGetApiToken', cli)
   }
 

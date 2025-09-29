@@ -47,6 +47,16 @@ export const useChatbotStore = defineStore('chatbotStore', {
         return
       }
       Object.assign(this.chatbots[index], patch)
+      if ((this.chatbots[index].apiCli, 'apiKey' in patch)) {
+      }
+    },
+
+    batchChatbotApiKey(apiCli: string, apiKey: string) {
+      this.chatbots.forEach((chatbot: ChatbotConfig) => {
+        if (chatbot.apiCli.length > 0 && chatbot.apiCli === apiCli) {
+          chatbot.apiKey = apiKey
+        }
+      })
     },
 
     addChatbot() {

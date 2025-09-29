@@ -14,8 +14,17 @@ const currentConfig = computed(() => {
 const handleConfigUpdate = (patch: Partial<ChatbotConfig>) => {
   chatbotStore.updateChatbotConfig(chatbotStore.currentChatbotId, patch)
 }
+
+const batchApiKey = (apiCli: string, apiKey: string) => {
+  chatbotStore.batchChatbotApiKey(apiCli, apiKey)
+}
 </script>
 
 <template>
-  <SettingPage v-if="currentConfig" :config="currentConfig" @update:config="handleConfigUpdate" />
+  <SettingPage
+    v-if="currentConfig"
+    :config="currentConfig"
+    @update:config="handleConfigUpdate"
+    @batch:token="batchApiKey"
+  />
 </template>

@@ -5,6 +5,7 @@ import { useAgentStore } from '@/renderer/store/agent'
 import { useMcpStore } from '@/renderer/store/mcp'
 import { jwtDecode } from 'jwt-decode'
 import { getApiToken } from '@/renderer/utils'
+import type { ChatbotConfig } from '@/preload/llm'
 
 import type {
   AssistantMessage,
@@ -53,30 +54,27 @@ export const isEmptyTools = (tools: any): boolean => {
   }
 }
 
-async function updateToken(cli: string, oldToken: string) {
+async function updateToken(cli: string): Promise<string | undefined> {
   try {
     return await getApiToken(cli)
   } catch {
     const snackbarStore = useSnackbarStore()
     snackbarStore.showWarningMessage('chat.token-fail')
-    return oldToken
+    return
   }
 }
 
-async function checkTokenUpdate(
-  chatbotStore: ReturnType<typeof useChatbotStore>['chatbots'][number]
-) {
-  if (chatbotStore.apiCli) {
+async function checkTokenUpdate(chatbotConfig: ChatbotConfig): Promise<string | undefined> {
+  if (chatbotConfig.apiCli) {
     // Might be a dynamic JWT token, check the expiration
     try {
-      if (!chatbotStore.apiKey) {
+      if (!chatbotConfig.apiKey) {
         const snackbarStore = useSnackbarStore()
         snackbarStore.showInfoMessage('chat.token-refresh')
-        chatbotStore.apiKey = await updateToken(chatbotStore.apiCli, chatbotStore.apiKey)
-        return
+        return await updateToken(chatbotConfig.apiCli)
       }
 
-      const payload = jwtDecode(chatbotStore.apiKey)
+      const payload = jwtDecode(chatbotConfig.apiKey)
       if (!payload.exp) {
         // Never expired
         return
@@ -89,15 +87,16 @@ async function checkTokenUpdate(
       if (remaining <= 600) {
         const snackbarStore = useSnackbarStore()
         snackbarStore.showInfoMessage('chat.token-refresh')
-        chatbotStore.apiKey = await updateToken(chatbotStore.apiCli, chatbotStore.apiKey)
+        return await updateToken(chatbotConfig.apiCli)
       } else {
         const readableExp = new Date(payload.exp * 1000)
         console.log(`Token valid until: ${readableExp}`)
       }
     } catch {
-      // Crashed, not a JWT token
+      // Crashed, not a JWT token or update failed
     }
   }
+  return
 }
 
 const promptMessage = (
@@ -123,11 +122,11 @@ export const createCompletion = async (
   const mcpStore = useMcpStore()
   const agentStore = useAgentStore()
 
-  const allChatbotStore = useChatbotStore()
+  const chatbotStore = useChatbotStore()
 
-  const chatbotStore = allChatbotStore.chatbots[allChatbotStore.selectedChatbotId]
+  const chatbotConfig = chatbotStore.chatbots[chatbotStore.selectedChatbotId]
 
-  console.log(chatbotStore)
+  console.log(chatbotConfig)
 
   const conversation = rawconversation.reduce((newConversation, item) => {
     if (item.role === 'assistant') {
@@ -149,33 +148,36 @@ export const createCompletion = async (
     // Create a completion (axios is not used here because it does not support streaming)
 
     const headers: HeadersInit = {
-      'Content-Type': chatbotStore.contentType
+      'Content-Type': chatbotConfig.contentType
     }
 
-    await checkTokenUpdate(chatbotStore)
+    const newApiKey = await checkTokenUpdate(chatbotConfig)
+    if (newApiKey) {
+      chatbotStore.batchChatbotApiKey(chatbotConfig.apiCli, newApiKey)
+    }
 
-    if (chatbotStore.apiKey) {
-      if (chatbotStore.authorization) {
-        headers.Authorization = `${chatbotStore.authPrefix} ${chatbotStore.apiKey}`
+    if (chatbotConfig.apiKey) {
+      if (chatbotConfig.authorization) {
+        headers.Authorization = `${chatbotConfig.authPrefix} ${chatbotConfig.apiKey}`
       } else {
-        headers['x-api-key'] = chatbotStore.apiKey
+        headers['x-api-key'] = chatbotConfig.apiKey
       }
     }
 
     const body: ChatRequestBody = {
-      model: chatbotStore.model,
-      stream: chatbotStore.stream
+      model: chatbotConfig.model,
+      stream: chatbotConfig.stream
     }
 
-    if (typeof chatbotStore.reasoningEffort === 'number') {
-      body['reasoning_effort'] = REASONING_EFFORT[chatbotStore.reasoningEffort]
+    if (typeof chatbotConfig.reasoningEffort === 'number') {
+      body['reasoning_effort'] = REASONING_EFFORT[chatbotConfig.reasoningEffort]
     }
 
-    if (typeof chatbotStore.enableThinking === 'number') {
-      if (ENABLE_THINKING[chatbotStore.enableThinking] === 'true') {
+    if (typeof chatbotConfig.enableThinking === 'number') {
+      if (ENABLE_THINKING[chatbotConfig.enableThinking] === 'true') {
         body['chat_template_kwargs'] = { enable_thinking: true }
         body['enable_thinking'] = true
-      } else if (ENABLE_THINKING[chatbotStore.enableThinking] === 'false') {
+      } else if (ENABLE_THINKING[chatbotConfig.enableThinking] === 'false') {
         body['chat_template_kwargs'] = { enable_thinking: false }
         body['enable_thinking'] = false
       }
@@ -191,19 +193,19 @@ export const createCompletion = async (
         agentStore.getPrompt()
       )
 
-      if (chatbotStore.maxTokensValue) {
-        body[chatbotStore.maxTokensPrefix] = parseInt(chatbotStore.maxTokensValue)
+      if (chatbotConfig.maxTokensValue) {
+        body[chatbotConfig.maxTokensPrefix] = parseInt(chatbotConfig.maxTokensValue)
       }
 
-      if (chatbotStore.temperature) {
-        body.temperature = parseFloat(chatbotStore.temperature)
+      if (chatbotConfig.temperature) {
+        body.temperature = parseFloat(chatbotConfig.temperature)
       }
 
-      if (chatbotStore.topP) {
-        body.top_p = parseFloat(chatbotStore.topP)
+      if (chatbotConfig.topP) {
+        body.top_p = parseFloat(chatbotConfig.topP)
       }
 
-      if (chatbotStore.mcp) {
+      if (chatbotConfig.mcp) {
         const tools = await agentStore.getTools()
         if (tools && tools.length > 0) {
           body.tools = tools
@@ -218,13 +220,13 @@ export const createCompletion = async (
       body.messages = promptMessage(msg, sampling.systemPrompt)
       body.temperature = sampling.temperature
       if (sampling.maxTokens) {
-        body[chatbotStore.maxTokensPrefix] = parseInt(sampling.maxTokens)
+        body[chatbotConfig.maxTokensPrefix] = parseInt(sampling.maxTokens)
       }
     }
 
     const request = {
       headers,
-      method: chatbotStore.method,
+      method: chatbotConfig.method,
       body: JSON.stringify(body)
     }
 
@@ -234,7 +236,7 @@ export const createCompletion = async (
     messageStore.generating[sessionId] = abortController
 
     const completion = await fetch(
-      chatbotStore.url + (chatbotStore.path ? chatbotStore.path : ''),
+      chatbotConfig.url + (chatbotConfig.path ? chatbotConfig.path : ''),
       {
         ...request,
         signal: abortController.signal
@@ -286,7 +288,7 @@ export const createCompletion = async (
     const buffer = ''
 
     // Read the stream
-    await read(reader, sessionId, lastItem, buffer, chatbotStore.stream)
+    await read(reader, sessionId, lastItem, buffer, chatbotConfig.stream)
   } catch (error: any) {
     snackbarStore.showErrorMessage(error?.message)
   } finally {
