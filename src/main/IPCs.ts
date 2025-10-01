@@ -26,6 +26,7 @@ import { closeCommandPicker } from './aid/commands'
 
 import { commandSelectionInvoke, mcpServersCallback } from './index'
 import { getCachedText } from './aid/utils'
+import { SamplingResponse } from './types'
 
 const handlerRegistry = new Map<string, Function>()
 
@@ -289,8 +290,11 @@ export default class IPCs {
   }
 }
 
-export function responseToRenderer(responseChannel, resolve) {
-  ipcMain.once(responseChannel, (event, response) => {
+export function listenOnceForSamplingResponse(
+  responseChannel: string,
+  resolve: (_value: SamplingResponse) => void
+) {
+  ipcMain.once(responseChannel, (_event, response: SamplingResponse) => {
     resolve(response)
   })
 }

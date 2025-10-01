@@ -1,17 +1,16 @@
 import {
-  CreateMessageResult as SamplingResult,
+  CreateMessageRequest as SamplingRequest,
+  CreateMessageResult as SamplingResponse,
   ElicitRequest
 } from '@modelcontextprotocol/sdk/types.js'
 
 import { McpCallback } from './mcp/types'
 
+export { SamplingRequest, SamplingResponse }
+
 type CommandRequest = {
   prompt: string
   input: string
-}
-
-export interface IpcSamplingEvents {
-  msgSamplingTransferInvoke: (_message: SamplingResult) => void
 }
 
 export interface IpcElicitationEvents {

@@ -1,19 +1,27 @@
-import { app, shell, WebContents, RenderProcessGoneDetails } from 'electron'
+import { app, shell, WebContents, RenderProcessGoneDetails, BrowserWindow } from 'electron'
 import { v4 as uuidv4 } from 'uuid'
 import Constants from './utils/Constants'
 import { createErrorWindow, createMainWindow } from './MainRunner'
 
-import { IpcSamplingEvents, IpcElicitationEvents, IpcCommandEvents, IpcMcpEvents } from './types'
+import {
+  SamplingRequest,
+  IpcElicitationEvents,
+  IpcCommandEvents,
+  IpcMcpEvents,
+  SamplingResponse
+} from './types'
 
-import { responseToRenderer } from './IPCs'
+import { listenOnceForSamplingResponse } from './IPCs'
 
 import * as shortcuts from './aid/shortcuts'
 import Commander from './aid/commander'
 
 import { showWindow } from './tray'
 
-let mainWindow
-let errorWindow
+import { McpClientResult, IpcSamplingRequest } from '@/types/ipc'
+
+let mainWindow: BrowserWindow
+let errorWindow: BrowserWindow
 
 app.setAppUserModelId(Constants.APP_NAME)
 
@@ -98,21 +106,19 @@ app.on('web-contents-created', (e, webContents) => {
 
 app.on(
   'render-process-gone',
-  (event: Event, webContents: WebContents, details: RenderProcessGoneDetails) => {
-    errorWindow = createErrorWindow(errorWindow, mainWindow, details)
+  async (event: Event, webContents: WebContents, details: RenderProcessGoneDetails) => {
+    errorWindow = await createErrorWindow(errorWindow, mainWindow, details)
   }
 )
 
-process.on('uncaughtException', () => {
-  errorWindow = createErrorWindow(errorWindow, mainWindow)
+process.on('uncaughtException', async () => {
+  errorWindow = await createErrorWindow(errorWindow, mainWindow)
 })
 
 const msgSamplingTransferResultChannel = 'msgSamplingTransferResult'
 
-export function samplingTransferInvoke<T extends keyof IpcSamplingEvents>(
-  ...args: Parameters<IpcSamplingEvents[T]>
-): Promise<any> {
-  return new Promise((resolve) => {
+export function samplingTransferInvoke(request: SamplingRequest): Promise<McpClientResult> {
+  return new Promise<SamplingResponse>((resolve) => {
     if (!mainWindow || mainWindow.isDestroyed()) {
       resolve(null)
       return
@@ -120,12 +126,12 @@ export function samplingTransferInvoke<T extends keyof IpcSamplingEvents>(
 
     const responseChannel = `${msgSamplingTransferResultChannel}-${uuidv4()}`
 
-    responseToRenderer(responseChannel, resolve)
+    listenOnceForSamplingResponse(responseChannel, resolve)
 
     mainWindow.webContents.send('msgSamplingTransferInvoke', {
-      args,
+      request,
       responseChannel
-    })
+    } as IpcSamplingRequest)
   })
 }
 
@@ -142,7 +148,7 @@ export function elicitationTransferInvoke<T extends keyof IpcElicitationEvents>(
 
     const responseChannel = `${msgElicitationTransferResultChannel}-${uuidv4()}`
 
-    responseToRenderer(responseChannel, resolve)
+    listenOnceForSamplingResponse(responseChannel, resolve)
 
     mainWindow.webContents.send('msgElicitationTransferInvoke', {
       args,

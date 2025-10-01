@@ -1,6 +1,8 @@
 import type { McpServerApi } from '@/renderer/store/mcp'
 import { useDxtStore } from '@/renderer/store/dxt'
 
+import { IpcSamplingRequestCallback } from '@/types/ipc'
+
 function isValidValue(value: any): boolean {
   if (value === null || value === undefined) return false
   if (typeof value === 'string' && value.trim() === '') return false
@@ -69,7 +71,7 @@ export const {
 } = Utils
 
 class Sampling {
-  static async msgSamplingTransferInvoke(callback: any): Promise<any> {
+  static async msgSamplingTransferInvoke(callback: IpcSamplingRequestCallback): Promise<void> {
     return window.mainApi.on('msgSamplingTransferInvoke', callback)
   }
 

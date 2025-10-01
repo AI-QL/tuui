@@ -12,9 +12,10 @@ import type {
   ChatCompletionResponseMessage,
   McpSamplingResponseMessage
 } from '@/renderer/types/message'
-import type { CreateMessageRequest } from '@modelcontextprotocol/sdk/types'
 
-type SamplingRequest = CreateMessageRequest['params']
+import { IpcSamplingRequestCallback, SamplingRequest } from '@/types/ipc'
+
+type SamplingRequestParams = SamplingRequest['params']
 
 const snackbarStore = useSnackbarStore()
 
@@ -28,7 +29,7 @@ const historyStore = useHistoryStore()
 
 const samplingDialog = ref(false)
 
-const samplingParams = ref<SamplingRequest | {}>({})
+const samplingParams = ref<SamplingRequestParams | {}>({})
 
 const samplingResults = ref<ChatCompletionResponseMessage[]>([])
 
@@ -46,7 +47,7 @@ const tryCompletions = () => {
   if (jsonError.value) {
     snackbarStore.showErrorMessage(jsonError.value)
   } else {
-    const { messages, ...restParams } = samplingParams.value as SamplingRequest
+    const { messages, ...restParams } = samplingParams.value as SamplingRequestParams
     restParams.target = samplingResults.value
     samplingId.value = historyStore.getDate()
     createCompletion(messages, samplingId.value, restParams)
@@ -94,10 +95,10 @@ const rejectSampling = () => {
   return
 }
 
-const handleProgress = (_event, progress) => {
+const handleProgress: IpcSamplingRequestCallback = (_event, progress) => {
   console.log('Sampling', progress)
   samplingDialog.value = true
-  samplingParams.value = progress.args[0].params
+  samplingParams.value = progress.request.params
   samplingChannel.value = progress.responseChannel
 }
 
