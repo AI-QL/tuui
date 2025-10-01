@@ -13,8 +13,9 @@ import type {
   GetPromptResult
 } from '@modelcontextprotocol/sdk/types.d.ts'
 
-import { McpbManifest, McpbUserConfigValues } from '@anthropic-ai/mcpb'
 import { StdioServerParameters } from '@modelcontextprotocol/sdk/client/stdio.js'
+
+import { McpbManifest, McpbUserConfigValues } from '@anthropic-ai/mcpb'
 
 export type TypedAsyncFunction<Args extends any[], Result> = (..._args: Args) => Promise<Result>
 
@@ -35,13 +36,13 @@ export type AsyncFunction =
   | McpAsyncResourcesList
   | McpAsyncResourcesRead
 
+export type userConfigValue = McpbUserConfigValues[string]
+
 export type McpMetadataStdio = {
   name: string
   type: 'metadata__stdio_config'
   config: StdioServerParameters
 }
-
-export type userConfigValue = McpbUserConfigValues[string]
 
 export type McpMetadataDxt = {
   name: string

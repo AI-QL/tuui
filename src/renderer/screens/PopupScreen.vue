@@ -2,7 +2,7 @@
 import { CommandEvent } from '@/renderer/utils'
 import { useRoute } from 'vue-router'
 import { shallowRef, onMounted, ref } from 'vue'
-import type { PopupPromptsType } from '@/preload/popup'
+import type { PopupPromptsType } from '@/types/popup'
 
 const search = shallowRef('')
 

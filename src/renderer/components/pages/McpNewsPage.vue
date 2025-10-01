@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, ref, onMounted } from 'vue'
-import type { StartupNewsType } from '@/preload/startup'
+import type { StartupNewsType } from '@/types/startup'
 
 const mcpNews = ref<StartupNewsType[]>([])
 

@@ -9,10 +9,14 @@
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "emitDeclarationOnly": true,
-    "allowImportingTsExtensions": true
+    "allowImportingTsExtensions": true,
+    "paths": {
+      "@/*": ["./src/*"]
+    }
   },
   "include": [
     "src/main",
+    "src/types",
     "src/preload",
     "package.json",
     "vite.config.mts",

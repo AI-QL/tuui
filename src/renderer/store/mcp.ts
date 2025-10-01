@@ -5,7 +5,7 @@ import type {
   ChatCompletionPromptMessage
 } from '@/renderer/types/message'
 
-import type { MCPAPI, McpObject, ToolType, DXTAPI } from '@/preload/mcp'
+import type { MCPAPI, McpObject, ToolType, DXTAPI } from '@/types/mcp'
 import { useStdioStore } from '@/renderer/store/stdio'
 
 import { merge, mapValues } from 'lodash'

@@ -8,10 +8,10 @@ import vuetify from '@/renderer/plugins/vuetify'
 import i18n from '@/renderer/plugins/i18n'
 import Vue3Lottie from 'vue3-lottie'
 
-import type { MCPAPI, DXTAPI } from '@/preload/mcp'
-import type { LlmConfig } from '@/preload/llm'
-import type { PopupConfig } from '@/preload/popup'
-import type { StartupConfig } from '@/preload/startup'
+import type { MCPAPI, DXTAPI } from '@/types/mcp'
+import type { LlmConfig } from '@/types/llm'
+import type { PopupConfig } from '@/types/popup'
+import type { StartupConfig } from '@/types/startup'
 
 // Add API key defined in contextBridge to window object type
 declare global {

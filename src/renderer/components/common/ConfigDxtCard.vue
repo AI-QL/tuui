@@ -3,7 +3,7 @@ import { ref, watchEffect, reactive } from 'vue'
 import { McpbUserConfigurationOption } from '@anthropic-ai/mcpb'
 import { getDxtUrl, openDxtFilePath } from '@/renderer/utils'
 import { useDxtStore, validateNumberRange } from '@/renderer/store/dxt'
-import type { McpMetadataDxt, userConfigValue } from '@/preload/mcp'
+import type { McpMetadataDxt, userConfigValue } from '@/types/mcp'
 import { useI18n } from 'vue-i18n'
 const { t } = useI18n()
 

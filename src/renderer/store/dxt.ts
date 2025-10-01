@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref, toRaw } from 'vue'
-import type { userConfigValue } from '@/preload/mcp'
+import type { userConfigValue } from '@/types/mcp'
 import { useI18n } from 'vue-i18n'
 
 export const validateNumberRange = (min: number | undefined, max: number | undefined) => {

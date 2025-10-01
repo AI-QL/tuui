@@ -3,7 +3,7 @@ import SettingPage from '@/renderer/components/pages/SettingPage.vue'
 import { useChatbotStore } from '@/renderer/store/chatbot'
 import { computed } from 'vue'
 
-import type { ChatbotConfig } from '@/preload/llm'
+import type { ChatbotConfig } from '@/types/llm'
 
 const chatbotStore = useChatbotStore()
 

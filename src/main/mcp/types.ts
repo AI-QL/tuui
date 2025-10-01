@@ -1,26 +1,21 @@
 import {
-  // CreateMessageRequestSchema,
-
-  // CompleteResultSchema,
-
   ListToolsResultSchema,
   CallToolResultSchema,
   ListPromptsResultSchema,
   GetPromptResultSchema,
   ListResourcesResultSchema,
   ReadResourceResultSchema,
-  ListResourceTemplatesResultSchema,
-  CreateMessageResult as SamplingResult,
-  ElicitRequest
+  ListResourceTemplatesResultSchema
 } from '@modelcontextprotocol/sdk/types.js'
-
-import { McpbUserConfigValues, McpbManifest } from '@anthropic-ai/mcpb'
-
-import { StdioServerParameters } from '@modelcontextprotocol/sdk/client/stdio.js'
 
 import { Client } from '@modelcontextprotocol/sdk/client/index.js'
 
-import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js'
+import {
+  StdioClientTransport,
+  StdioServerParameters
+} from '@modelcontextprotocol/sdk/client/stdio.js'
+
+import { McpMetadataStdio, McpMetadataDxt } from '@/types/mcp'
 
 export const capabilitySchemas = {
   tools: {
@@ -53,25 +48,7 @@ export type ConfigObj = {
   [key: string]: ServerConfig
 }
 
-type McpMetadataStdio = {
-  name: string
-  type: 'metadata__stdio_config'
-  config: ServerConfig
-}
-
-type McpMetadataDxt = {
-  name: string
-  type: 'metadata__mcpb_manifest'
-  config: McpbManifest
-  user_config?: McpbUserConfigValues
-}
-
-type CommandRequest = {
-  prompt: string
-  input: string
-}
-
-type McpCallback = {
+export type McpCallback = {
   name: string
   message: string
   status: 'pending' | 'error' | 'success'
@@ -94,20 +71,4 @@ export type ClientObj = {
 export type FeatureObj = {
   name: string
   config: ClientObj['configJson']
-}
-
-export interface IpcSamplingEvents {
-  msgSamplingTransferInvoke: (_message: SamplingResult) => void
-}
-
-export interface IpcElicitationEvents {
-  msgElicitationTransferInvoke: (_message: ElicitRequest) => void
-}
-
-export interface IpcCommandEvents {
-  msgCommandSelectionInvoke: (_message: CommandRequest) => void
-}
-
-export interface IpcMcpEvents {
-  msgMcpServersWatch: (_message: McpCallback) => void
 }

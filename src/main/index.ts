@@ -3,12 +3,7 @@ import { v4 as uuidv4 } from 'uuid'
 import Constants from './utils/Constants'
 import { createErrorWindow, createMainWindow } from './MainRunner'
 
-import {
-  IpcSamplingEvents,
-  IpcElicitationEvents,
-  IpcCommandEvents,
-  IpcMcpEvents
-} from './mcp/types'
+import { IpcSamplingEvents, IpcElicitationEvents, IpcCommandEvents, IpcMcpEvents } from './types'
 
 import { responseToRenderer } from './IPCs'
 

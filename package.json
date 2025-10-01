@@ -30,6 +30,7 @@
     "bump:major": "npm version major --no-git-tag-version && (cd docs && npm version major --no-git-tag-version)",
     "build": "npm run build:pre && electron-builder --config=buildAssets/builder/config.js",
     "build:pre": "npm run format:fix && vue-tsc --noEmit && vite build",
+    "build:local": "npm run build:pre && npx electron-packager . tuui --asar --extra-resource=src/main/assets --overwrite --out=release",
     "build:all": "npm run build:pre && electron-builder --config=buildAssets/builder/config.js -wml",
     "build:dir": "npm run build:pre && electron-builder --config=buildAssets/builder/config.js --dir",
     "build:mac": "npm run build:pre && CSC_IDENTITY_AUTO_DISCOVERY=false electron-builder --config=buildAssets/builder/config.js --mac",

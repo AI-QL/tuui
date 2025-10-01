@@ -6,7 +6,7 @@ import { useLayoutStore } from '@/renderer/store/layout'
 import { v4 as uuidv4 } from 'uuid'
 import { getApiToken, listenStdioProgress, removeListenStdioProgress } from '@/renderer/utils'
 import LogoAvatar from '@/renderer/components/common/LogoAvatar.vue'
-import type { ChatbotConfig } from '@/preload/llm'
+import type { ChatbotConfig } from '@/types/llm'
 
 const layoutStore = useLayoutStore()
 const { t } = useI18n()

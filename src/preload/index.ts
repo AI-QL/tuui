@@ -1,8 +1,8 @@
 import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron'
-import type { AsyncFunction, MCPAPI, DXTAPI, McpMetadataDxt } from './mcp'
-import type { LlmConfig } from './llm'
-import type { PopupConfig } from './popup'
-import type { StartupConfig } from './startup'
+import type { AsyncFunction, MCPAPI, DXTAPI, McpMetadataDxt } from '@/types/mcp'
+import type { LlmConfig } from '@/types/llm'
+import type { PopupConfig } from '@/types/popup'
+import type { StartupConfig } from '@/types/startup'
 import { StdioServerParameters } from '@modelcontextprotocol/sdk/client/stdio.js'
 
 type CLIENT = {

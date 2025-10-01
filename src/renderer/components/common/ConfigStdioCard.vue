@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { McpMetadataStdio } from '@/preload/mcp'
+import { McpMetadataStdio } from '@/types/mcp'
 import { reactive, ref } from 'vue'
 import { useStdioStore } from '@/renderer/store/stdio'
 import { getRawServers } from '@/renderer/store/mcp'

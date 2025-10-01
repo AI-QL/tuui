@@ -5,7 +5,7 @@ import { useAgentStore } from '@/renderer/store/agent'
 import { useMcpStore } from '@/renderer/store/mcp'
 import { jwtDecode } from 'jwt-decode'
 import { getApiToken } from '@/renderer/utils'
-import type { ChatbotConfig } from '@/preload/llm'
+import type { ChatbotConfig } from '@/types/llm'
 
 import type {
   AssistantMessage,

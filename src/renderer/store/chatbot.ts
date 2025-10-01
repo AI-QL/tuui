@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { CHATBOT_DEFAULTS } from '@/renderer/types'
-import type { ChatbotConfig } from '@/preload/llm'
+import type { ChatbotConfig } from '@/types/llm'
 import { v4 as uuidv4 } from 'uuid'
 
 export interface ChatbotStoreState {
