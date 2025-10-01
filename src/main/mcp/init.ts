@@ -1,4 +1,4 @@
-import { ClientObj, ConfigMcpMetadata, ServerConfig, McpProgressCallback } from './types'
+import { McpClientObject, McpMetadataConfig, McpServerConfig, McpProgressCallback } from './types'
 // import { Notification } from 'electron'
 import { initializeClient } from './client'
 import { loadConfigFile } from './config'
@@ -6,7 +6,7 @@ import Constants from '../utils/Constants'
 import { getMcpConfigForDxt } from './dxt'
 import path from 'node:path'
 
-export async function loadConfig(): Promise<ClientObj[]> {
+export async function loadConfig(): Promise<McpClientObject[]> {
   try {
     const config = loadConfigFile(Constants.ASSETS_PATH.mcp)
     if (config) {
@@ -19,9 +19,9 @@ export async function loadConfig(): Promise<ClientObj[]> {
 }
 
 export async function initClients(
-  metadata: ConfigMcpMetadata,
+  metadata: McpMetadataConfig,
   callback?: McpProgressCallback
-): Promise<ClientObj[]> {
+): Promise<McpClientObject[]> {
   if (!metadata) {
     console.log('NO clients initialized.')
     return []
@@ -58,9 +58,9 @@ export async function initClients(
 
 export async function initSingleClient(
   name: string,
-  serverConfig: ServerConfig,
+  serverConfig: McpServerConfig,
   callback?: McpProgressCallback
-): Promise<ClientObj> {
+): Promise<McpClientObject> {
   console.log(`Initializing client for ${name} with config:`, serverConfig)
   const connection = await initializeClient(name, serverConfig, callback)
   console.log(`${name} initialized.`)

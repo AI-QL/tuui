@@ -1,10 +1,10 @@
 import { ipcMain, shell, IpcMainEvent, dialog, BrowserWindow } from 'electron'
 import Constants from './utils/Constants'
 import {
-  capabilitySchemas,
-  ClientObj,
-  FeatureObj,
-  ConfigMcpMetadata,
+  McpServerCapabilitySchemas,
+  McpClientObject,
+  McpFeatureObject,
+  McpMetadataConfig,
   McpProgressCallback
 } from './mcp/types'
 
@@ -39,8 +39,8 @@ interface ManifestResponse {
  * IPC Communications
  * */
 export default class IPCs {
-  static clients: ClientObj[] = []
-  static currentFeatures: FeatureObj[] = []
+  static clients: McpClientObject[] = []
+  static currentFeatures: McpFeatureObject[] = []
 
   static initialize(): void {
     // Get application version
@@ -72,7 +72,7 @@ export default class IPCs {
 
     ipcMain.handle(
       'msgMcpServersInit',
-      async (event: IpcMainEvent, metadata: ConfigMcpMetadata) => {
+      async (event: IpcMainEvent, metadata: McpMetadataConfig) => {
         IPCs.stopAllServers()
 
         const progressCallback: McpProgressCallback = (name, message, status) => {
@@ -258,12 +258,12 @@ export default class IPCs {
     })
   }
 
-  static updateMCP(newFeatures: FeatureObj[]): void {
+  static updateMCP(newFeatures: McpFeatureObject[]): void {
     this.currentFeatures = newFeatures
   }
 
   static stopAllServers() {
-    this.clients.forEach((client: ClientObj) => {
+    this.clients.forEach((client: McpClientObject) => {
       if (client.connection?.transport) {
         disconnect(client.connection.transport)
         delete client.connection.transport
@@ -281,7 +281,7 @@ export default class IPCs {
     handlerRegistry.clear()
   }
 
-  static initializeMCP(initialFeatures: FeatureObj[]): void {
+  static initializeMCP(initialFeatures: McpFeatureObject[]): void {
     this.currentFeatures = initialFeatures
     ipcMain.handle('list-clients', () => {
       return this.currentFeatures
@@ -295,8 +295,12 @@ export function responseToRenderer(responseChannel, resolve) {
   })
 }
 
-export function registerIpcHandlers({ name, connection, configJson }: ClientObj): FeatureObj {
-  const feature: FeatureObj = {
+export function registerIpcHandlers({
+  name,
+  connection,
+  configJson
+}: McpClientObject): McpFeatureObject {
+  const feature: McpFeatureObject = {
     name,
     config: configJson
   }
@@ -324,7 +328,7 @@ export function registerIpcHandlers({ name, connection, configJson }: ClientObj)
     return eventName
   }
 
-  for (const [type, actions] of Object.entries(capabilitySchemas)) {
+  for (const [type, actions] of Object.entries(McpServerCapabilitySchemas)) {
     const capabilities = connection.client.getServerCapabilities()
     if (capabilities?.[type]) {
       feature[type] = {}

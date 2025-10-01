@@ -15,9 +15,9 @@ import {
   StdioServerParameters
 } from '@modelcontextprotocol/sdk/client/stdio.js'
 
-import { McpMetadataStdio, McpMetadataDxt } from '@/types/mcp'
+import { McpMetadata } from '@/types/mcp'
 
-export const capabilitySchemas = {
+export const McpServerCapabilitySchemas = {
   tools: {
     list: ListToolsResultSchema,
     call: CallToolResultSchema
@@ -33,19 +33,11 @@ export const capabilitySchemas = {
   }
 }
 
-export type ServerConfig = StdioServerParameters
+export type McpServerConfig = StdioServerParameters
 
 export interface McpClientTransport {
   client: Client
   transport: StdioClientTransport
-}
-
-export interface McpServersConfig {
-  [key: string]: ServerConfig
-}
-
-export type ConfigObj = {
-  [key: string]: ServerConfig
 }
 
 export type McpCallback = {
@@ -58,17 +50,17 @@ export type McpProgressCallback = (
   ..._args: [McpCallback['name'], McpCallback['message'], McpCallback['status']]
 ) => void
 
-export type ConfigMcpMetadata = {
-  [key: string]: McpMetadataStdio | McpMetadataDxt
+export type McpMetadataConfig = {
+  [key: string]: McpMetadata
 }
 
-export type ClientObj = {
+export type McpClientObject = {
   name: string
-  configJson?: ServerConfig
+  configJson?: McpServerConfig
   connection?: McpClientTransport
 }
 
-export type FeatureObj = {
+export type McpFeatureObject = {
   name: string
-  config: ClientObj['configJson']
+  config: McpClientObject['configJson']
 }

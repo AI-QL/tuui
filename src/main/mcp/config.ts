@@ -1,7 +1,7 @@
 import { showNotification } from '../utils//notification'
 import fs from 'node:fs'
 import path from 'node:path'
-import { McpServersConfig } from './types'
+import { McpServerConfig } from './types'
 import { shell } from 'electron'
 import { debounce } from 'lodash'
 
@@ -31,7 +31,7 @@ function readConfig(configPath: string) {
   }
 }
 
-export function loadConfigFile(configPath: string): McpServersConfig {
+export function loadConfigFile(configPath: string): Record<string, McpServerConfig> {
   const resolvedConfigPath = path.isAbsolute(configPath)
     ? configPath
     : path.resolve(process.cwd(), configPath)

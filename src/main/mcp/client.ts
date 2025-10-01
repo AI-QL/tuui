@@ -5,7 +5,7 @@ import {
 import { Client } from '@modelcontextprotocol/sdk/client/index.js'
 import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js'
 
-import { ServerConfig, McpClientTransport, McpProgressCallback } from './types'
+import { McpServerConfig, McpClientTransport, McpProgressCallback } from './types'
 import { connect } from './connection'
 
 import { samplingTransferInvoke, elicitationTransferInvoke } from '../index'
@@ -13,7 +13,7 @@ import Constants from '../utils/Constants'
 
 export async function initializeClient(
   name: string,
-  serverConfig: ServerConfig,
+  serverConfig: McpServerConfig,
   callback?: McpProgressCallback,
   idleTimeout: number = 90 // 90 sec by default
 ): Promise<McpClientTransport> {
@@ -43,7 +43,7 @@ export async function initializeClient(
 
 async function initializeStdioClient(
   name: string,
-  config: ServerConfig,
+  config: McpServerConfig,
   callback?: McpProgressCallback,
   onData?: () => void
 ): Promise<McpClientTransport> {
