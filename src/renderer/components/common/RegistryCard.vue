@@ -32,7 +32,7 @@ async function getServers(search: string) {
 // Fetch next page of results
 async function getNext() {
   const search = lastQueryString.value
-  const nextCursor = lastQuery.value.metadata?.next_cursor
+  const nextCursor = lastQuery.value.metadata?.nextCursor
   if (!nextCursor) return
 
   const json = await fetchJson(search, nextCursor)
@@ -50,6 +50,7 @@ async function fetchJson(search: string, cursor?: string) {
     const url = new URL(baseUrl)
     if (search) url.searchParams.append('search', search)
     url.searchParams.append('limit', queryLimit)
+    url.searchParams.append('version', 'latest')
     if (cursor) url.searchParams.append('cursor', cursor)
 
     const res = await fetch(url.toString())
@@ -114,51 +115,51 @@ function getPackageUrl(registry: McpRegistryPackage) {
         <v-data-iterator :key="lastQueryString" :items="lastQuery.servers" :items-per-page="-1">
           <template #default="{ items }">
             <v-expansion-panels variant="accordion" :rounded="false">
-              <v-expansion-panel v-for="item in items as any" :key="item.raw.name">
+              <v-expansion-panel v-for="{ raw: { server } } in items" :key="server.name">
                 <v-expansion-panel-title>
                   <v-list-item>
                     <v-list-item-title class="d-flex"
-                      >{{ item.raw.name }}
+                      >{{ server.name }}
 
                       <v-chip size="small" class="ml-3 mb-2 font-weight-bold" color="primary">
-                        {{ item.raw.version }}
+                        {{ server.version }}
                       </v-chip>
 
                       <v-icon
-                        v-if="item.raw.packages"
+                        v-if="server.packages"
                         class="ml-2"
                         icon="mdi-desktop-classic"
                         color="brown-lighten-2"
                       ></v-icon>
 
                       <v-icon
-                        v-if="item.raw.remotes"
+                        v-if="server.remotes"
                         class="ml-2"
                         icon="mdi-web"
                         color="blue-lighten-1"
                       ></v-icon>
                     </v-list-item-title>
                     <v-list-item-subtitle class="text-high-emphasis">{{
-                      item.raw.description
+                      server.description
                     }}</v-list-item-subtitle>
                   </v-list-item>
                 </v-expansion-panel-title>
                 <v-expansion-panel-text>
-                  <v-col v-if="item.raw.repository?.url">
+                  <v-col v-if="server.repository?.url">
                     <v-card
                       color="green-lighten-1"
                       class="mx-auto"
-                      :subtitle="item.raw.repository.url"
-                      :title="item.raw.repository.source"
+                      :subtitle="server.repository.url"
+                      :title="server.repository.source"
                       prepend-icon="mdi-home"
                       append-icon="mdi-open-in-new"
-                      :href="item.raw.repository.url"
+                      :href="server.repository.url"
                       target="_blank"
                     ></v-card>
                   </v-col>
-                  <v-col v-if="item.raw.packages">
+                  <v-col v-if="server.packages">
                     <v-card
-                      v-for="regPackage in item.raw.packages"
+                      v-for="regPackage in server.packages"
                       :key="regPackage.registryType"
                       color="brown-lighten-2"
                       class="mx-auto my-1"
@@ -173,9 +174,9 @@ function getPackageUrl(registry: McpRegistryPackage) {
                       target="_blank"
                     ></v-card>
                   </v-col>
-                  <v-col v-if="item.raw.remotes">
+                  <v-col v-if="server.remotes">
                     <v-card
-                      v-for="remote in item.raw.remotes"
+                      v-for="remote in server.remotes"
                       :key="remote.url"
                       color="blue-lighten-1"
                       class="mx-auto my-1"
@@ -205,7 +206,7 @@ function getPackageUrl(registry: McpRegistryPackage) {
       </v-footer>
 
       <v-btn
-        :disabled="!lastQuery.metadata?.next_cursor"
+        :disabled="!lastQuery.metadata?.nextCursor"
         :loading="loadingServers"
         rounded="lg"
         icon="mdi-book-open-page-variant"

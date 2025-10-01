@@ -10,17 +10,19 @@ export type McpRegistryPackage = {
 
 // Define the structure of a registry server
 export type McpRegistryServer = {
-  name: string
-  description: string
-  version: string
-  repository: {
-    source: string
-    url: string
-  }
-  packages: McpRegistryPackage[]
-  remotes: {
-    url: string
-    type: string
+  server: {
+    name: string
+    description: string
+    version: string
+    repository: {
+      source: string
+      url: string
+    }
+    packages: McpRegistryPackage[]
+    remotes: {
+      url: string
+      type: string
+    }[]
   }
 }
 
@@ -28,7 +30,7 @@ export type McpRegistryServer = {
 export type McpRegistryType = {
   servers: McpRegistryServer[]
   metadata: {
-    next_cursor: string
+    nextCursor: string
     count: number
   }
 }
