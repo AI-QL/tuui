@@ -1,17 +1,8 @@
 import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron'
-import type { AsyncFunction, MCPAPI, DXTAPI, McpMetadataDxt } from '@/types/mcp'
+import type { AsyncFunction, MCPAPI, DXTAPI, McpMetadataDxt, ClientProfile } from '@/types/mcp'
 import type { LlmConfig } from '@/types/llm'
 import type { PopupConfig } from '@/types/popup'
 import type { StartupConfig } from '@/types/startup'
-import { StdioServerParameters } from '@modelcontextprotocol/sdk/client/stdio.js'
-
-type CLIENT = {
-  name: string
-  tools?: Record<string, string>
-  prompts?: Record<string, string>
-  resources?: Record<string, string>
-  config?: StdioServerParameters
-}
 
 // Whitelist of valid channels used for IPC communication (Send message from Renderer to Main)
 const mainAvailChannels: string[] = [
@@ -157,7 +148,7 @@ contextBridge.exposeInMainWorld('startupApis', startup)
 
 /* ------------------------------ MCP Client Config ------------------------------ */
 
-async function listClients(): Promise<CLIENT[]> {
+async function listClients(): Promise<ClientProfile[]> {
   return await ipcRenderer.invoke('list-clients')
 }
 
@@ -186,7 +177,7 @@ const api = {
   }
 }
 
-function buildClientAPI(client: CLIENT): MCPAPI[string] {
+function buildClientAPI(client: ClientProfile): MCPAPI[string] {
   const { name, tools, prompts, resources, config } = client
   const apiItem: MCPAPI[string] = {}
 

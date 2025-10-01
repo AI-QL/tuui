@@ -10,7 +10,7 @@ import type { ChatbotConfig } from '@/types/llm'
 import type {
   AssistantMessage,
   ToolCall,
-  McpSamplingMessage,
+  McpSamplingResponseMessage,
   ChatCompletionRequestMessage,
   ChatCompletionMessage,
   ChatConversationMessage
@@ -31,7 +31,7 @@ interface ChatRequestBody {
 
 export type ChatProcessResult = 'aborted' | 'error' | 'done'
 
-type RequestMessageType = ChatCompletionRequestMessage | McpSamplingMessage
+type RequestMessageType = ChatCompletionRequestMessage | McpSamplingResponseMessage
 
 const THINK_OPEN = '<think>'
 const THINK_CLOSE = '</think>'
@@ -213,7 +213,7 @@ export const createCompletion = async (
       }
     } else {
       target = sampling.target
-      const msg = (rawconversation as McpSamplingMessage[]).map((item) => ({
+      const msg = (rawconversation as McpSamplingResponseMessage[]).map((item) => ({
         role: item.role,
         content: [mcpStore.convertItem(item.content)]
       }))

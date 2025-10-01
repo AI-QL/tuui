@@ -81,3 +81,11 @@ export type ToolType = {
 export type MCPAPI = Record<string, McpObject>
 
 export type DXTAPI = Record<string, DxtManifest>
+
+export type ClientProfile = {
+  name: string
+  tools?: Record<string, string>
+  prompts?: Record<string, string>
+  resources?: Record<string, string>
+  config?: StdioServerParameters
+}

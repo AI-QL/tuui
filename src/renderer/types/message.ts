@@ -122,7 +122,7 @@ type ImageContentPart = Infer<typeof ImageContentPartSchema>
 // ============================================================================
 
 // ## Needs to be converted to an OpenAI API compatible type
-export type McpSamplingMessage = SamplingMessage
+export type McpSamplingResponseMessage = SamplingMessage
 
 // ============================================================================
 // ## OpenAI API compatible type
