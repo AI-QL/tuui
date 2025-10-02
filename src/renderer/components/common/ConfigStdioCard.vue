@@ -80,6 +80,7 @@ const editConfig = () => {
             density="compact"
             variant="outlined"
             :append-inner-icon="showPassword[envKey] ? 'mdi-eye-off' : 'mdi-eye'"
+            :label="envKey"
             :model-value="envValue"
             readonly
             hide-details

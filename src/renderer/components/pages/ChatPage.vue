@@ -3,46 +3,11 @@ import { computed, reactive } from 'vue'
 import { useDisplay } from 'vuetify'
 import ImgDialog from '../common/ImgDialog.vue'
 import ChatCard from '../common/ChatCard.vue'
+import MarkdownCard from '../common/MarkdownCard.vue'
 import SamplingCard from '../common/SamplingCard.vue'
 import ElicitationCard from '../common/ElicitationCard.vue'
 
 import { isEmptyTools } from '@/renderer/composables/chatCompletions'
-import { MdPreview, config } from 'md-editor-v3'
-import 'md-editor-v3/lib/style.css'
-
-import katex from 'katex'
-import 'katex/dist/katex.min.css'
-
-import mermaid from 'mermaid'
-
-import * as echarts from 'echarts'
-
-import highlight from 'highlight.js'
-import 'highlight.js/styles/atom-one-dark.css'
-
-import * as prettier from 'prettier'
-import parserMarkdown from 'prettier/plugins/markdown'
-
-config({
-  editorExtensions: {
-    prettier: {
-      prettierInstance: prettier,
-      parserMarkdownInstance: parserMarkdown
-    },
-    highlight: {
-      instance: highlight
-    },
-    katex: {
-      instance: katex
-    },
-    mermaid: {
-      instance: mermaid
-    },
-    echarts: {
-      instance: echarts
-    }
-  }
-})
 
 interface Message {
   role: 'user' | 'assistant' | 'tool'
@@ -219,12 +184,10 @@ const groupMessages = computed<Group[]>(() => {
                 />
               </v-card-text>
               <v-card-text v-else class="md-preview pt-3">
-                <md-preview
+                <MarkdownCard
                   :model-value="group.message!.content"
-                  :code-foldable="true"
                   :language="language === 'zh' ? 'zh-CN' : 'en-US'"
-                  :auto-fold-threshold="Infinity"
-                />
+                ></MarkdownCard>
               </v-card-text>
             </template>
           </chat-card>
@@ -338,11 +301,6 @@ const groupMessages = computed<Group[]>(() => {
 .md-preview {
   width: 100vw;
   max-width: 100%;
-}
-
-.md-editor-preview {
-  word-break: keep-all;
-  font-family: 'Inter';
 }
 
 .conversation-area {

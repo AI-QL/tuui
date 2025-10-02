@@ -429,8 +429,8 @@ const parseChoice = (choice: AssistantMessage | string, target: AssistantMessage
         if (typeof choice.reasoning_content === 'string') {
           target.reasoning_content += choice.reasoning_content
         }
+        parseTool(choice.tool_calls, target)
       }
-      parseTool((choice as AssistantMessage).tool_calls, target)
     }
   }
 }
