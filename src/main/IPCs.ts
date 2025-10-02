@@ -24,9 +24,9 @@ import { McpbManifest } from '@anthropic-ai/mcpb'
 
 import { closeCommandPicker } from './aid/commands'
 
-import { commandSelectionInvoke, mcpServersCallback } from './index'
+import { commandSelectionInvoke, mcpServersProcessCallback } from './index'
 import { getCachedText } from './aid/utils'
-import { McpClientResponse, CommandResponse } from './types'
+import { McpClientResponse, CommandResponse, McpInitResponse } from './types'
 
 const handlerRegistry = new Map<string, Function>()
 
@@ -73,11 +73,11 @@ export default class IPCs {
 
     ipcMain.handle(
       'msgMcpServersInit',
-      async (event: IpcMainEvent, metadata: McpMetadataConfig) => {
+      async (_event: IpcMainEvent, metadata: McpMetadataConfig): Promise<McpInitResponse> => {
         IPCs.stopAllServers()
 
         const progressCallback: McpProgressCallback = (name, message, status) => {
-          mcpServersCallback({ name, message, status })
+          mcpServersProcessCallback({ name, message, status })
         }
 
         const configs = await loadConfig()
@@ -95,7 +95,9 @@ export default class IPCs {
           ]
           IPCs.updateMCP(features)
           this.clients = newClients
-          return features
+          return {
+            status: 'success'
+          }
         } catch (error) {
           const features = configs.map((params) => {
             return registerIpcHandlers(params)
@@ -105,7 +107,7 @@ export default class IPCs {
 
           return {
             status: 'error',
-            error: error
+            error: error instanceof Error ? error.message : String(error)
           }
         }
       }

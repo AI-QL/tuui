@@ -45,8 +45,8 @@ async function activeAllMcpServers() {
     const result = await McpEvent.init(filteredConfigs)
     console.log(result)
     await mcpStore.updateServers()
-    if (result.status == 'error') {
-      snackbarStore.showErrorMessage(result.error.toString())
+    if (result?.status == 'error') {
+      snackbarStore.showErrorMessage(result.error)
     } else {
       snackbarStore.showSuccessMessage('mcp.updated')
     }

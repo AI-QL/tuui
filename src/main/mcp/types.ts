@@ -40,14 +40,18 @@ export interface McpClientTransport {
   transport: StdioClientTransport
 }
 
-export type McpCallback = {
+export type McpProgressCallbackObject = {
   name: string
   message: string
   status: 'pending' | 'error' | 'success'
 }
 
 export type McpProgressCallback = (
-  ..._args: [McpCallback['name'], McpCallback['message'], McpCallback['status']]
+  ..._args: [
+    McpProgressCallbackObject['name'],
+    McpProgressCallbackObject['message'],
+    McpProgressCallbackObject['status']
+  ]
 ) => void
 
 export type McpMetadataConfig = {

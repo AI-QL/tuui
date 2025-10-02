@@ -8,11 +8,17 @@ import {
   SamplingResponse,
   ElicitRequest,
   ElicitResponse,
-  CommandRequest,
-  IpcMcpEvents
+  CommandRequest
 } from './types'
 
-import { IpcSamplingRequest, IpcElicitRequest, IpcCommandRequest } from '@/types/ipc'
+import { McpProgressCallbackObject } from './mcp/types'
+
+import {
+  IpcSamplingRequest,
+  IpcElicitRequest,
+  IpcCommandRequest,
+  IpcMcpInitRequest
+} from '@/types/ipc'
 
 import { listenOnceForRendererResponse } from './IPCs'
 
@@ -176,10 +182,8 @@ export async function commandSelectionInvoke(request: CommandRequest) {
   } as IpcCommandRequest)
 }
 
-export async function mcpServersCallback<T extends keyof IpcMcpEvents>(
-  ...args: Parameters<IpcMcpEvents[T]>
-) {
+export async function mcpServersProcessCallback(callback: McpProgressCallbackObject) {
   mainWindow.webContents.send('msgMcpServersWatch', {
-    args
-  })
+    callback
+  } as IpcMcpInitRequest)
 }

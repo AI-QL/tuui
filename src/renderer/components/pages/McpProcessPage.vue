@@ -3,6 +3,7 @@ import { McpEvent } from '@/renderer/utils'
 import { useMcpStore } from '@/renderer/store/mcp'
 import { useLayoutStore } from '@/renderer/store/layout'
 import { ref, watch, computed } from 'vue'
+import { IpcMcpInitRequestCallback } from '@/types/ipc'
 
 const layoutStore = useLayoutStore()
 const mcpStore = useMcpStore()
@@ -16,12 +17,12 @@ const progressMap = ref<Record<string, ProgressItem>>({})
 
 const mcpDialog = ref(false)
 
-const handleProgress = (_event, progress) => {
-  const name = progress.args[0].name
-  const message = progress.args[0].message
-  const status = progress.args[0].status
+const handleProgress: IpcMcpInitRequestCallback = (_event, progress) => {
+  const name = progress.callback.name
+  const message = progress.callback.message
+  const status = progress.callback.status
 
-  console.log(progressMap.value[name], progress.args[0])
+  console.log(progressMap.value[name], progress.callback)
 
   if (!progressMap.value[name]) {
     progressMap.value[name] = {

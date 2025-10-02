@@ -4,10 +4,20 @@ import type {
   ElicitRequest,
   ElicitResponse,
   CommandRequest,
-  CommandResponse
+  CommandResponse,
+  McpInitResponse
 } from '@/main/types'
 
-export type { SamplingRequest, SamplingResponse, ElicitRequest, ElicitResponse, CommandResponse }
+import { McpProgressCallbackObject } from '@/main/mcp/types'
+
+export type {
+  SamplingRequest,
+  SamplingResponse,
+  ElicitRequest,
+  ElicitResponse,
+  CommandResponse,
+  McpInitResponse
+}
 
 export type IpcSamplingRequest = {
   request: SamplingRequest
@@ -28,3 +38,9 @@ export type IpcCommandRequest = {
 }
 
 export type IpcCommandRequestCallback = (_event: Event, _progress: IpcCommandRequest) => void
+
+export type IpcMcpInitRequest = {
+  callback: McpProgressCallbackObject
+}
+
+export type IpcMcpInitRequestCallback = (_event: Event, _progress: IpcMcpInitRequest) => void

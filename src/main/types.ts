@@ -6,8 +6,6 @@ import {
   ElicitResult as ElicitResponse
 } from '@modelcontextprotocol/sdk/types.js'
 
-import { McpCallback } from './mcp/types'
-
 export type CommandResponse = {
   prompt: string
   id: string
@@ -18,8 +16,13 @@ export type CommandRequest = {
   input: string
 }
 
-export { McpClientResponse, SamplingRequest, SamplingResponse, ElicitRequest, ElicitResponse }
+export type McpInitResponse =
+  | {
+      status: 'success'
+    }
+  | {
+      status: 'error'
+      error: string
+    }
 
-export interface IpcMcpEvents {
-  msgMcpServersWatch: (_message: McpCallback) => void
-}
+export { McpClientResponse, SamplingRequest, SamplingResponse, ElicitRequest, ElicitResponse }

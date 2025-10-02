@@ -4,9 +4,13 @@ import { useDxtStore } from '@/renderer/store/dxt'
 import {
   IpcSamplingRequestCallback,
   IpcElicitRequestCallback,
-  IpcCommandRequestCallback
+  IpcCommandRequestCallback,
+  IpcMcpInitRequestCallback,
+  SamplingResponse,
+  ElicitResponse,
+  CommandResponse,
+  McpInitResponse
 } from '@/types/ipc'
-import { SamplingResponse, ElicitResponse, CommandResponse } from '@/types/ipc'
 
 function isValidValue(value: any): boolean {
   if (value === null || value === undefined) return false
@@ -153,7 +157,7 @@ export const CommandEvent = {
 }
 
 class Mcp {
-  static async msgMcpServersInit(configs: McpServerApi): Promise<any> {
+  static async msgMcpServersInit(configs: McpServerApi): Promise<McpInitResponse | undefined> {
     if (!configs) return
     const dxtStore = useDxtStore()
     const filteredConfigs = Object.fromEntries(
@@ -198,11 +202,11 @@ class Mcp {
     return window.mainApi.invoke('msgMcpServersInit', filteredConfigs)
   }
 
-  static async msgMcpServersStop(): Promise<any> {
+  static async msgMcpServersStop(): Promise<void> {
     return window.mainApi.invoke('msgMcpServersStop')
   }
 
-  static async msgMcpServersWatch(callback: any): Promise<any> {
+  static async msgMcpServersWatch(callback: IpcMcpInitRequestCallback): Promise<void> {
     return window.mainApi.on('msgMcpServersWatch', callback)
   }
 }
