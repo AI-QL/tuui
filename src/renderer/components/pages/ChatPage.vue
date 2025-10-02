@@ -15,6 +15,8 @@ import 'katex/dist/katex.min.css'
 
 import mermaid from 'mermaid'
 
+import * as echarts from 'echarts';
+
 import highlight from 'highlight.js'
 import 'highlight.js/styles/atom-one-dark.css'
 
@@ -35,6 +37,9 @@ config({
     },
     mermaid: {
       instance: mermaid
+    },
+    echarts: {
+      instance: echarts
     }
   }
 })
@@ -214,7 +219,6 @@ const groupMessages = computed<Group[]>(() => {
                 />
               </v-card-text>
               <v-card-text v-else class="md-preview pt-3">
-                <!--  -->
                 <md-preview
                   :model-value="group.message!.content"
                   :code-foldable="true"

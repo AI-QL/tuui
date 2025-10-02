@@ -54,6 +54,7 @@
     "@modelcontextprotocol/sdk": "^1.18.2",
     "@nut-tree-fork/nut-js": "^4.2.6",
     "applescript": "^1.0.0",
+    "echarts": "^6.0.0",
     "highlight.js": "^11.11.1",
     "jwt-decode": "^4.0.0",
     "katex": "^0.16.22",
