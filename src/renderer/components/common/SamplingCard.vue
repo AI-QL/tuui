@@ -8,12 +8,9 @@ import { useMessageStore } from '@/renderer/store/message'
 import { createCompletion } from '@/renderer/composables/chatCompletions'
 import ConfigJsonCard from './ConfigJsonCard.vue'
 
-import type {
-  ChatCompletionResponseMessage,
-  McpSamplingResponseMessage
-} from '@/renderer/types/message'
+import type { ChatCompletionResponseMessage } from '@/renderer/types/message'
 
-import { IpcSamplingRequestCallback, SamplingRequest } from '@/types/ipc'
+import { IpcSamplingRequestCallback, SamplingRequest, SamplingResponse } from '@/types/ipc'
 
 type SamplingRequestParams = SamplingRequest['params']
 
@@ -64,7 +61,7 @@ const clearSampling = () => {
 
 const finishSampling = (index: number) => {
   const bestResponse: ChatCompletionResponseMessage = samplingResults.value[index]
-  const response: McpSamplingResponseMessage = {
+  const response: SamplingResponse = {
     model: chatbotStore.model,
     role: bestResponse?.role || 'assistant',
     content: {
@@ -81,7 +78,7 @@ const finishSampling = (index: number) => {
 }
 
 const rejectSampling = () => {
-  const response: McpSamplingResponseMessage = {
+  const response: SamplingResponse = {
     model: 'N/A',
     role: 'assistant',
     stopReason: 'Reject by user',

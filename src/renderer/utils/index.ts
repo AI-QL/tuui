@@ -1,7 +1,8 @@
 import type { McpServerApi } from '@/renderer/store/mcp'
 import { useDxtStore } from '@/renderer/store/dxt'
 
-import { IpcSamplingRequestCallback } from '@/types/ipc'
+import { IpcSamplingRequestCallback, IpcElicitRequestCallback } from '@/types/ipc'
+import { SamplingResponse, ElicitResponse } from '@/types/ipc'
 
 function isValidValue(value: any): boolean {
   if (value === null || value === undefined) return false
@@ -76,7 +77,11 @@ class Sampling {
   }
 
   // Channel format: "msgSamplingTransferResult-uuid4()"
-  static async msgSamplingTransferResult(channel: string, response: any): Promise<void> {
+  static async msgSamplingTransferResult(
+    channel: string,
+    response: SamplingResponse
+  ): Promise<void> {
+    console.log(response)
     await window.mainApi.send(channel, response)
   }
 }
@@ -87,12 +92,15 @@ export const SamplingTransfer = {
 }
 
 class Elicitation {
-  static async msgElicitationTransferInvoke(callback: any): Promise<any> {
+  static async msgElicitationTransferInvoke(callback: IpcElicitRequestCallback): Promise<void> {
     return window.mainApi.on('msgElicitationTransferInvoke', callback)
   }
 
   // Channel format: "msgElicitationTransferResult-uuid4()"
-  static async msgElicitationTransferResult(channel: string, response: any): Promise<void> {
+  static async msgElicitationTransferResult(
+    channel: string,
+    response: ElicitResponse
+  ): Promise<void> {
     await window.mainApi.send(channel, response)
   }
 }

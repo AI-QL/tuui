@@ -1,12 +1,17 @@
-import type { ClientResult as McpClientResult } from '@modelcontextprotocol/sdk/types'
+import type { SamplingRequest, SamplingResponse, ElicitRequest, ElicitResponse } from '@/main/types'
 
-import type { SamplingRequest } from '@/main/types'
-
-export type { McpClientResult, SamplingRequest }
+export type { SamplingRequest, SamplingResponse, ElicitRequest, ElicitResponse }
 
 export type IpcSamplingRequest = {
   request: SamplingRequest
   responseChannel: string
 }
 
-export type IpcSamplingRequestCallback = (_event: Event, _progress: IpcSamplingProgress) => void
+export type IpcSamplingRequestCallback = (_event: Event, _progress: IpcSamplingRequest) => void
+
+export type IpcElicitRequest = {
+  request: ElicitRequest
+  responseChannel: string
+}
+
+export type IpcElicitRequestCallback = (_event: Event, _progress: IpcElicitRequest) => void

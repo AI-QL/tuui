@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { ref, toRaw } from 'vue'
+import { ref, toRaw, computed } from 'vue'
 import { ElicitationTransfer } from '@/renderer/utils'
-import type { ElicitRequest, ElicitResult } from '@modelcontextprotocol/sdk/types'
+import { IpcElicitRequestCallback, ElicitRequest, ElicitResponse } from '@/types/ipc'
 import { validateNumberRange } from '@/renderer/store/dxt'
 import { useI18n } from 'vue-i18n'
 const { t } = useI18n()
@@ -20,6 +20,14 @@ const elicitationParams = ref<ElicitRequestParams | {}>({})
 
 const elicitationChannel = ref('')
 
+const normalizedProperties = computed(() => {
+  const props = (elicitationParams.value as ElicitRequestParams).requestedSchema.properties
+  return Object.keys(props).map((key) => ({
+    key,
+    para: props[key]
+  }))
+})
+
 const getConfigAttribute = (name: string) => {
   return elicitationResults.value[name] ?? null
 }
@@ -34,7 +42,7 @@ const dynamicModel = (name: string) => ({
 })
 
 const declineElicitation = () => {
-  const response: ElicitResult = {
+  const response: ElicitResponse = {
     action: 'decline'
   }
   ElicitationTransfer.response(elicitationChannel.value, response)
@@ -43,7 +51,7 @@ const declineElicitation = () => {
 }
 
 // const cancelElicitation = () => {
-//   const response: ElicitResult = {
+//   const response: ElicitResponse = {
 //     "action": "cancel"
 //   }
 //   ElicitationTransfer.response(elicitationChannel.value, response)
@@ -52,7 +60,7 @@ const declineElicitation = () => {
 // }
 
 const acceptElicitation = () => {
-  const response: ElicitResult = {
+  const response: ElicitResponse = {
     action: 'accept',
     content: toRaw(elicitationResults.value)
   }
@@ -110,10 +118,10 @@ const validateStringLength = (
   }
 }
 
-const handleProgress = (_event, progress) => {
+const handleProgress: IpcElicitRequestCallback = (_event, progress) => {
   console.log('Elicitation', progress)
   elicitationDialog.value = true
-  elicitationParams.value = progress.args[0].params
+  elicitationParams.value = progress.request.params as ElicitRequestParams
   elicitationChannel.value = progress.responseChannel
 }
 
@@ -137,11 +145,7 @@ ElicitationTransfer.request(handleProgress)
           'properties' in elicitationParams.requestedSchema
         "
       >
-        <v-row
-          v-for="(para, key) in elicitationParams.requestedSchema.properties"
-          :key="key"
-          class="mx-3 mb-3"
-        >
+        <v-row v-for="{ para, key } in normalizedProperties" :key="key" class="mx-3 mb-3">
           <v-select
             v-if="para.enum"
             prepend-icon="mdi-list-box-outline"

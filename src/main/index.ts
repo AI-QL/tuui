@@ -5,20 +5,21 @@ import { createErrorWindow, createMainWindow } from './MainRunner'
 
 import {
   SamplingRequest,
-  IpcElicitationEvents,
+  SamplingResponse,
+  ElicitRequest,
+  ElicitResponse,
   IpcCommandEvents,
-  IpcMcpEvents,
-  SamplingResponse
+  IpcMcpEvents
 } from './types'
 
-import { listenOnceForSamplingResponse } from './IPCs'
+import { IpcSamplingRequest, IpcElicitRequest } from '@/types/ipc'
+
+import { listenOnceForRendererResponse } from './IPCs'
 
 import * as shortcuts from './aid/shortcuts'
 import Commander from './aid/commander'
 
 import { showWindow } from './tray'
-
-import { McpClientResult, IpcSamplingRequest } from '@/types/ipc'
 
 let mainWindow: BrowserWindow
 let errorWindow: BrowserWindow
@@ -117,7 +118,7 @@ process.on('uncaughtException', async () => {
 
 const msgSamplingTransferResultChannel = 'msgSamplingTransferResult'
 
-export function samplingTransferInvoke(request: SamplingRequest): Promise<McpClientResult> {
+export function samplingTransferInvoke(request: SamplingRequest): Promise<SamplingResponse> {
   return new Promise<SamplingResponse>((resolve) => {
     if (!mainWindow || mainWindow.isDestroyed()) {
       resolve(null)
@@ -126,7 +127,7 @@ export function samplingTransferInvoke(request: SamplingRequest): Promise<McpCli
 
     const responseChannel = `${msgSamplingTransferResultChannel}-${uuidv4()}`
 
-    listenOnceForSamplingResponse(responseChannel, resolve)
+    listenOnceForRendererResponse(responseChannel, resolve)
 
     mainWindow.webContents.send('msgSamplingTransferInvoke', {
       request,
@@ -137,9 +138,7 @@ export function samplingTransferInvoke(request: SamplingRequest): Promise<McpCli
 
 const msgElicitationTransferResultChannel = 'msgElicitationTransferResult'
 
-export function elicitationTransferInvoke<T extends keyof IpcElicitationEvents>(
-  ...args: Parameters<IpcElicitationEvents[T]>
-): Promise<any> {
+export function elicitationTransferInvoke(request: ElicitRequest): Promise<ElicitResponse> {
   return new Promise((resolve) => {
     if (!mainWindow || mainWindow.isDestroyed()) {
       resolve(null)
@@ -148,12 +147,12 @@ export function elicitationTransferInvoke<T extends keyof IpcElicitationEvents>(
 
     const responseChannel = `${msgElicitationTransferResultChannel}-${uuidv4()}`
 
-    listenOnceForSamplingResponse(responseChannel, resolve)
+    listenOnceForRendererResponse(responseChannel, resolve)
 
     mainWindow.webContents.send('msgElicitationTransferInvoke', {
-      args,
+      request,
       responseChannel
-    })
+    } as IpcElicitRequest)
   })
 }
 

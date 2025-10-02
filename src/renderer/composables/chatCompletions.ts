@@ -128,22 +128,6 @@ export const createCompletion = async (
 
   console.log(chatbotConfig)
 
-  const conversation = rawconversation.reduce((newConversation, item) => {
-    if (item.role === 'assistant') {
-      const { reasoning_content, ...rest } = item
-      void reasoning_content
-      newConversation.push(rest)
-    }
-    // (item.role === "user" && item.content[0].type === "image_url") {
-    //     // Image is too large, only latest query could be kept
-    //     newConversation = [item];
-    // }
-    else {
-      newConversation.push(item)
-    }
-    return newConversation
-  }, [] as RequestMessageType[])
-  // const conversation = rawconversation
   try {
     // Create a completion (axios is not used here because it does not support streaming)
 
@@ -186,6 +170,22 @@ export const createCompletion = async (
     let target: ChatConversationMessage[]
 
     if (!sampling) {
+      const conversation = rawconversation.reduce((newConversation, item) => {
+        if (item.role === 'assistant') {
+          const { reasoning_content, ...rest } = item
+          void reasoning_content
+          newConversation.push(rest)
+        }
+        // (item.role === "user" && item.content[0].type === "image_url") {
+        //     // Image is too large, only latest query could be kept
+        //     newConversation = [item];
+        // }
+        else {
+          newConversation.push(item)
+        }
+        return newConversation
+      }, [] as RequestMessageType[])
+
       target = messageStore.conversation
 
       body.messages = promptMessage(

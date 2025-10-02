@@ -15,7 +15,7 @@ import 'katex/dist/katex.min.css'
 
 import mermaid from 'mermaid'
 
-import * as echarts from 'echarts';
+import * as echarts from 'echarts'
 
 import highlight from 'highlight.js'
 import 'highlight.js/styles/atom-one-dark.css'

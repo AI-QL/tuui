@@ -1,12 +1,14 @@
 import {
+  ClientResult as McpClientResponse,
   CreateMessageRequest as SamplingRequest,
   CreateMessageResult as SamplingResponse,
-  ElicitRequest
+  ElicitRequest,
+  ElicitResult as ElicitResponse
 } from '@modelcontextprotocol/sdk/types.js'
 
 import { McpCallback } from './mcp/types'
 
-export { SamplingRequest, SamplingResponse }
+export { McpClientResponse, SamplingRequest, SamplingResponse, ElicitRequest, ElicitResponse }
 
 type CommandRequest = {
   prompt: string
