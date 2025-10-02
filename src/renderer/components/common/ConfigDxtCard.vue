@@ -32,9 +32,9 @@ const props = defineProps({
 const { modelValue: metadata } = props
 const { config: manifest } = metadata
 
-const showPassword = reactive({})
+const showPassword = reactive<Record<string, boolean>>({})
 
-function toggleShowPassword(key) {
+function toggleShowPassword(key: string) {
   showPassword[key] = !showPassword[key]
 }
 

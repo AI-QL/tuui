@@ -28,6 +28,8 @@ import { commandSelectionInvoke, mcpServersProcessCallback } from './index'
 import { getCachedText } from './aid/utils'
 import { McpClientResponse, CommandResponse, McpInitResponse } from './types'
 
+import { IpcFileTransferRequest, IpcFileTransferResponse } from '@/types/ipc'
+
 const handlerRegistry = new Map<string, Function>()
 
 interface ManifestResponse {
@@ -189,28 +191,39 @@ export default class IPCs {
       return dialogResult
     })
 
-    ipcMain.on('msgFileTransferRequest', async (event: IpcMainEvent, { name, data }) => {
-      try {
-        const buffer = Buffer.from(data)
-        const saveOption = Constants.getDxtSource(name)
-        const filePath = saveOption.mcpbPath
-        const dirPath = saveOption.outputDir
-        if (!existsSync(dirPath)) {
-          mkdirSync(dirPath, { recursive: true })
+    ipcMain.on(
+      'msgFileTransferRequest',
+      async (event: IpcMainEvent, { name, data }: IpcFileTransferRequest) => {
+        try {
+          const buffer = Buffer.from(data)
+          const saveOption = Constants.getDxtSource(name)
+          const filePath = saveOption.mcpbPath
+          const dirPath = saveOption.outputDir
+          if (!existsSync(dirPath)) {
+            mkdirSync(dirPath, { recursive: true })
+          }
+          console.log('MCP bundle to be saved in: ', filePath)
+
+          writeFileSync(filePath, buffer, { encoding: null })
+
+          console.log(saveOption)
+          await unpackDxt(saveOption)
+          // console.log(getManifest(dirPath))
+
+          event.reply('msgFileTransferResponse', {
+            name,
+            success: true,
+            path: saveOption.outputDir
+          } as IpcFileTransferResponse)
+        } catch (err) {
+          event.reply('msgFileTransferResponse', {
+            name,
+            success: false,
+            reason: err.message
+          } as IpcFileTransferResponse)
         }
-        console.log('MCP bundle to be saved in: ', filePath)
-
-        writeFileSync(filePath, buffer, { encoding: null })
-
-        console.log(saveOption)
-        await unpackDxt(saveOption)
-        // console.log(getManifest(dirPath))
-
-        event.reply('msgFileTransferResponse', { name, success: true, path: saveOption.outputDir })
-      } catch (err) {
-        event.reply('msgFileTransferResponse', { name, success: false, reason: err.message })
       }
-    })
+    )
 
     ipcMain.on(
       'msgCommandSelectionResult',

@@ -9,7 +9,9 @@ import {
   SamplingResponse,
   ElicitResponse,
   CommandResponse,
-  McpInitResponse
+  McpInitResponse,
+  IpcFileTransferRequest,
+  IpcFileTransferResponse
 } from '@/types/ipc'
 
 function isValidValue(value: any): boolean {
@@ -119,19 +121,22 @@ export const ElicitationTransfer = {
 }
 
 class File {
-  static async sendFileToMainRequest(file: { name: string; data: ArrayBuffer }): Promise<void> {
+  static async sendFileToMainRequest(file: IpcFileTransferRequest): Promise<void> {
     await window.mainApi.send('msgFileTransferRequest', file)
   }
-  static async sendFileToMainResponse(count: number): Promise<void> {
-    const results: any = []
+  static async sendFileToMainResponse(count: number): Promise<IpcFileTransferResponse[]> {
+    const results: IpcFileTransferResponse[] = []
     let completedCount = 0
-    window.mainApi.on('msgFileTransferResponse', (_event, result) => {
-      results.push(result)
-      completedCount++
-      if (completedCount === count) {
-        console.log('All done', results)
+    window.mainApi.on(
+      'msgFileTransferResponse',
+      (_event: Event, result: IpcFileTransferResponse) => {
+        results.push(result)
+        completedCount++
+        if (completedCount === count) {
+          console.log('All done', results)
+        }
       }
-    })
+    )
     return results
   }
 }

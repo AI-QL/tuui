@@ -8,7 +8,7 @@ const stdioStore = useStdioStore()
 
 const editDialog = ref(false)
 
-const showPassword = reactive({})
+const showPassword = reactive<Record<string, boolean>>({})
 
 const props = defineProps({
   modelValue: {

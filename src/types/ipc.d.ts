@@ -44,3 +44,9 @@ export type IpcMcpInitRequest = {
 }
 
 export type IpcMcpInitRequestCallback = (_event: Event, _progress: IpcMcpInitRequest) => void
+
+export type IpcFileTransferRequest = { name: string; data: ArrayBuffer }
+
+export type IpcFileTransferResponse =
+  | { name: string; success: false; reason: string }
+  | { name; success: true; path: string }
