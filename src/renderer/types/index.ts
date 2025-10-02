@@ -35,6 +35,8 @@ export const CHATBOT_DEFAULTS = {
   mcp: true
 }
 
-export const REASONING_EFFORT = ['minimal', 'low', 'medium', 'high']
+export const REASONING_EFFORT = ['minimal', 'low', 'medium', 'high'] as const
+
+export type ReasoningEffort = (typeof REASONING_EFFORT)[number]
 
 export const ENABLE_THINKING = ['true', 'false']

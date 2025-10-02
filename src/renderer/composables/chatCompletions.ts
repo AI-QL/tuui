@@ -18,15 +18,34 @@ import type {
 
 import { Tool } from '@modelcontextprotocol/sdk/types'
 
-import { REASONING_EFFORT, ENABLE_THINKING } from '@/renderer/types'
+import { ReasoningEffort, REASONING_EFFORT, ENABLE_THINKING } from '@/renderer/types'
 
-interface ChatRequestBody {
+type ChatRequestBody = {
   model?: string
   stream?: boolean
   temperature?: number
   messages?: ChatCompletionMessage[]
   top_p?: number
   tools?: Tool[]
+  reasoning_effort?: ReasoningEffort
+  enable_thinking?: boolean
+  chat_template_kwargs?: Record<string, any>
+  [key: string]: unknown
+}
+
+type SimpleStreamChoice = {
+  index: number
+  delta: AssistantMessage
+  message?: AssistantMessage
+  finish_reason: string | null
+}
+
+type SimpleStreamResponse = {
+  choices: SimpleStreamChoice[]
+}
+
+type SimpleCfResponse = {
+  response: AssistantMessage
 }
 
 export type ChatProcessResult = 'aborted' | 'error' | 'done'
@@ -370,9 +389,9 @@ const read = async (
   return read(reader, sessionId, target, buffer, stream)
 }
 
-const parseJson = (content, target: AssistantMessage) => {
+const parseJson = (content: string, target: AssistantMessage) => {
   try {
-    const parsed = JSON.parse(content)
+    const parsed = JSON.parse(content as string)
     parseChoices(parsed, target)
   } catch (e) {
     console.log(e, content)
@@ -380,7 +399,10 @@ const parseJson = (content, target: AssistantMessage) => {
   }
 }
 
-const parseChoices = (parsed, target) => {
+const parseChoices = (
+  parsed: SimpleStreamResponse | SimpleCfResponse,
+  target: AssistantMessage
+) => {
   if ('choices' in parsed) {
     return parsed.choices.map((choice) => {
       const content = choice.delta || choice.message
@@ -393,7 +415,7 @@ const parseChoices = (parsed, target) => {
   }
 }
 
-const parseChoice = (choice: AssistantMessage, target: AssistantMessage) => {
+const parseChoice = (choice: AssistantMessage | string, target: AssistantMessage) => {
   if (choice) {
     if (target.role === 'assistant') {
       if (typeof choice === 'string') {
@@ -408,7 +430,7 @@ const parseChoice = (choice: AssistantMessage, target: AssistantMessage) => {
           target.reasoning_content += choice.reasoning_content
         }
       }
-      parseTool(choice.tool_calls, target)
+      parseTool((choice as AssistantMessage).tool_calls, target)
     }
   }
 }
@@ -453,7 +475,8 @@ const parseTool = (tools: ToolCall[] | undefined, target: AssistantMessage) => {
 
       // Merge each property from source function
       Object.keys(sourceFunc).forEach((key) => {
-        const value = sourceFunc[key]
+        const typedKey = key as 'name' | 'arguments'
+        const value = sourceFunc[typedKey]
 
         // Skip null values (don't overwrite existing values with null)
         if (value === null) return
@@ -461,10 +484,10 @@ const parseTool = (tools: ToolCall[] | undefined, target: AssistantMessage) => {
         // Merge strategy:
         // - If target has existing non-empty value: concatenate
         // - Otherwise: overwrite
-        if (targetFunc[key] && targetFunc[key] !== '{}') {
-          targetFunc[key] += value
+        if (targetFunc[typedKey] && targetFunc[typedKey] !== '{}') {
+          targetFunc[typedKey] += value
         } else {
-          targetFunc[key] = value
+          targetFunc[typedKey] = value
         }
       })
     }
