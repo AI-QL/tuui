@@ -33,7 +33,7 @@ export const usePromptStore = defineStore('promptStore', {
       const mcpStore = useMcpStore()
       const mcpServers = mcpStore.getSelected
       const prompts = await mcpServers.method.list()
-      return prompts.prompts.map((prompt) => ({
+      return prompts.prompts.map((prompt: PromptType) => ({
         title: mcpServers.server,
         ...prompt
       }))
@@ -62,7 +62,7 @@ export const usePromptStore = defineStore('promptStore', {
 
       return allPrompts
     },
-    select: function (prompt) {
+    select: function (prompt: PromptType) {
       console.log(prompt.title, prompt.name, prompt.arguments)
       this.promptSelect = prompt
       this.promptSheet = true

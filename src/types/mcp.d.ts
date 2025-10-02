@@ -69,7 +69,7 @@ export type McpObject = {
   }
 }
 
-type McpTool = ListToolsResult['tools'][number]
+export type McpToolType = ListToolsResult['tools'][number]
 
 export type ToolType = {
   name: McpTool['name']

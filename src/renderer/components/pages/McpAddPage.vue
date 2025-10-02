@@ -5,6 +5,13 @@ import { useStdioStore, CustomStdioServerParameters, StdioServerKey } from '@/re
 import ConfigJsonCard from '@/renderer/components/common/ConfigJsonCard.vue'
 import { pickBy } from 'lodash'
 import { useSnackbarStore } from '@/renderer/store/snackbar'
+
+type McpServerConfig = {
+  mcpServers: McpServerObject
+}
+
+type McpServerObject = Record<string, CustomStdioServerParameters>
+
 const snackbarStore = useSnackbarStore()
 
 const stdioStore = useStdioStore()
@@ -35,7 +42,7 @@ const closeDialog = () => {
   internalDialog.value = false
 }
 
-function findConfig(jsonConfig): Record<string, CustomStdioServerParameters> {
+function findConfig(jsonConfig: McpServerConfig | McpServerObject): CustomStdioServerParameters {
   if (!jsonConfig) return {}
 
   const mcpConfig = jsonConfig.mcpServers ? jsonConfig.mcpServers : jsonConfig
@@ -57,8 +64,9 @@ const addConfig = () => {
   }
 
   for (const [serverName, serverConfig] of Object.entries(jsonConfigs)) {
+    const config = serverConfig as CustomStdioServerParameters
     ;(['command', 'args', 'env'] as StdioServerKey[]).forEach((key) => {
-      const value = serverConfig[key]
+      const value = config[key]
       if (value) {
         stdioStore.updateConfigAttribute(serverName, key, value)
       }

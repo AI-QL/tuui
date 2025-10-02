@@ -37,7 +37,9 @@ const closeDialog = () => {
   internalDialog.value = false
 }
 
-function findConfig(jsonConfig): CustomStdioServerParameters {
+function findConfig(
+  jsonConfig: CustomStdioServerParameters | Record<string, CustomStdioServerParameters>
+): CustomStdioServerParameters {
   if (!jsonConfig) return {}
   if ('command' in jsonConfig) {
     return jsonConfig

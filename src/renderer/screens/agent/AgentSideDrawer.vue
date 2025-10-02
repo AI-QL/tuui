@@ -4,7 +4,7 @@ import { useMcpStore } from '@/renderer/store/mcp'
 const mcpStore = useMcpStore()
 const agentStore = useAgentStore()
 
-function handleDelete(index, event) {
+function handleDelete(index: number, event: MouseEvent) {
   event.stopPropagation()
   agentStore.agents.splice(index, 1)
 }

@@ -12,7 +12,7 @@ onMounted((): void => {
   }
 })
 
-const handleChangeLanguage = (val): void => {
+const handleChangeLanguage = (val: string): void => {
   locale.value = val
   localeStore.selected = val
 }

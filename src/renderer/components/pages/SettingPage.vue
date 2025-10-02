@@ -46,7 +46,7 @@ watch(apiDialog, (_val) => {
 })
 
 const handleGetApiToken = async (cli: string): Promise<void> => {
-  const handleProgress = (_event, progress) => {
+  const handleProgress = (_event: Event, progress: string) => {
     stdout.value.push(progress)
   }
 

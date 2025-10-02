@@ -5,7 +5,7 @@ import type {
   ChatCompletionPromptMessage
 } from '@/renderer/types/message'
 
-import type { MCPAPI, McpObject, ToolType, DXTAPI } from '@/types/mcp'
+import type { MCPAPI, McpObject, ToolType, McpToolType, DXTAPI } from '@/types/mcp'
 import { useStdioStore } from '@/renderer/store/stdio'
 
 import { merge, mapValues } from 'lodash'
@@ -157,7 +157,7 @@ export const useMcpStore = defineStore('mcpStore', {
 
       const allPrimitives = this.getAllByServer(serverName)
 
-      const foundItem = allPrimitives.find((item) => item.primitive === primitiveName)
+      const foundItem = allPrimitives.find((item: McpCoreType) => item.primitive === primitiveName)
 
       if (foundItem) {
         return foundItem.method?.[methodName] || null
@@ -184,15 +184,16 @@ export const useMcpStore = defineStore('mcpStore', {
       const results = await Promise.all(promises)
       for (const toolsData of results.filter(Boolean)) {
         if (Array.isArray(toolsData?.tools)) {
-          toolsData.tools.forEach((tool) => {
-            mcpTools.push({
+          toolsData.tools.forEach((tool: McpToolType) => {
+            const functionTool: FunctionType = {
               type: 'function',
               function: {
                 name: tool.name,
                 description: tool.description,
                 parameters: tool.inputSchema
               }
-            })
+            }
+            mcpTools.push(functionTool)
           })
         }
       }
@@ -203,7 +204,7 @@ export const useMcpStore = defineStore('mcpStore', {
     loadServerTools: function () {
       this.loading = true
       try {
-        this.listServerTools().then((tools) => {
+        this.listServerTools().then((tools: FunctionType[]) => {
           this.serverTools = tools.map((tool) => {
             return {
               name: tool.function.name,
@@ -250,7 +251,7 @@ export const useMcpStore = defineStore('mcpStore', {
       }
       return mcpTools
     },
-    getTool: async function (toolName) {
+    getTool: async function (toolName: string) {
       const mcpServers = getServers()
       if (!mcpServers) {
         return null
@@ -329,7 +330,7 @@ export const useMcpStore = defineStore('mcpStore', {
         }
       }
     },
-    packReturn: (string) => {
+    packReturn: (string: string) => {
       return {
         content: [
           {

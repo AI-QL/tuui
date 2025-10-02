@@ -40,7 +40,7 @@ export const useMessageStore = defineStore('messageStore', {
         snackbarStore.showSuccessMessage('snackbar.addnew')
       }
     },
-    initConversation(conversationArray) {
+    initConversation(conversationArray: ChatConversationMessage[]) {
       this.conversation = conversationArray
       this.historyId = ''
     },
@@ -63,7 +63,7 @@ export const useMessageStore = defineStore('messageStore', {
     clear() {
       this.userMessage = ''
     },
-    handleKeydown(e) {
+    handleKeydown(e: KeyboardEvent) {
       if (e.key === 'Enter' && e.shiftKey) {
         //  A new line by default
       } else if (e.key === 'Enter') {
@@ -125,7 +125,7 @@ export const useMessageStore = defineStore('messageStore', {
         return foundHistoryId
       }
     },
-    applyPrompt: function (messages) {
+    applyPrompt: function (messages: ChatConversationMessage[]) {
       this.initConversation(messages)
       // this.syncHistory()
     },

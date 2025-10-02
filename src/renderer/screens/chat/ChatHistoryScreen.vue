@@ -1,10 +1,11 @@
 <script setup lang="tsx">
 import { useHistoryStore } from '@/renderer/store/history'
 import { useMessageStore } from '@/renderer/store/message'
+import { ChatConversationMessage } from '@/renderer/types/message'
 const historyStore = useHistoryStore()
 const messageStore = useMessageStore()
 
-function parseContent(content) {
+function parseContent(content: undefined | string | ChatConversationMessage['content']) {
   if (typeof content === 'string') {
     return content
   } else if (Array.isArray(content)) {
