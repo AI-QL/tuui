@@ -26,7 +26,7 @@ import { closeCommandPicker } from './aid/commands'
 
 import { commandSelectionInvoke, mcpServersCallback } from './index'
 import { getCachedText } from './aid/utils'
-import { McpClientResponse } from './types'
+import { McpClientResponse, CommandResponse } from './types'
 
 const handlerRegistry = new Map<string, Function>()
 
@@ -210,11 +210,15 @@ export default class IPCs {
       }
     })
 
-    ipcMain.on('msgCommandSelectionNotify', async (event: IpcMainEvent, { id, prompt }) => {
-      closeCommandPicker()
-      const args = { id, prompt, input: getCachedText(id) }
-      commandSelectionInvoke(args)
-    })
+    ipcMain.on(
+      'msgCommandSelectionResult',
+      async (_event: IpcMainEvent, response: CommandResponse) => {
+        closeCommandPicker()
+        const prompt = response.prompt
+        const request = { prompt, input: getCachedText(response.id) }
+        commandSelectionInvoke(request)
+      }
+    )
 
     ipcMain.handle('list-manifests', async (_event: IpcMainEvent): Promise<ManifestResponse> => {
       const mcpbPath = Constants.ASSETS_PATH.mcpb

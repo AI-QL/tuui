@@ -19,7 +19,7 @@ const commandNotify = (item: PopupPromptsType) => {
     id: route.query.textId as string,
     prompt: item.prompt
   }
-  CommandEvent.notify(command)
+  CommandEvent.response(command)
   return
 }
 </script>

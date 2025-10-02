@@ -8,11 +8,11 @@ import {
   SamplingResponse,
   ElicitRequest,
   ElicitResponse,
-  IpcCommandEvents,
+  CommandRequest,
   IpcMcpEvents
 } from './types'
 
-import { IpcSamplingRequest, IpcElicitRequest } from '@/types/ipc'
+import { IpcSamplingRequest, IpcElicitRequest, IpcCommandRequest } from '@/types/ipc'
 
 import { listenOnceForRendererResponse } from './IPCs'
 
@@ -156,9 +156,7 @@ export function elicitationTransferInvoke(request: ElicitRequest): Promise<Elici
   })
 }
 
-export async function commandSelectionInvoke<T extends keyof IpcCommandEvents>(
-  ...args: Parameters<IpcCommandEvents[T]>
-) {
+export async function commandSelectionInvoke(request: CommandRequest) {
   if (Constants.IS_DEV_ENV) {
     await mainWindow.loadURL(`${Constants.APP_INDEX_URL_DEV}#/chat`)
   } else {
@@ -171,11 +169,11 @@ export async function commandSelectionInvoke<T extends keyof IpcCommandEvents>(
     return
   }
 
-  console.log(args)
+  console.log(request)
 
   mainWindow.webContents.send('msgCommandSelectionInvoke', {
-    args
-  })
+    request
+  } as IpcCommandRequest)
 }
 
 export async function mcpServersCallback<T extends keyof IpcMcpEvents>(

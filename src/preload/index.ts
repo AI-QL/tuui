@@ -13,7 +13,7 @@ const mainAvailChannels: string[] = [
   'msgOpenPath',
   'msgOpenFile',
   'msgFileTransferRequest',
-  'msgCommandSelectionNotify',
+  'msgCommandSelectionResult',
   'msgGetApiToken',
   'msgMcpServersInit',
   'msgMcpServersStop',

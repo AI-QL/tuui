@@ -8,20 +8,17 @@ import {
 
 import { McpCallback } from './mcp/types'
 
-export { McpClientResponse, SamplingRequest, SamplingResponse, ElicitRequest, ElicitResponse }
+export type CommandResponse = {
+  prompt: string
+  id: string
+}
 
-type CommandRequest = {
+export type CommandRequest = {
   prompt: string
   input: string
 }
 
-export interface IpcElicitationEvents {
-  msgElicitationTransferInvoke: (_message: ElicitRequest) => void
-}
-
-export interface IpcCommandEvents {
-  msgCommandSelectionInvoke: (_message: CommandRequest) => void
-}
+export { McpClientResponse, SamplingRequest, SamplingResponse, ElicitRequest, ElicitResponse }
 
 export interface IpcMcpEvents {
   msgMcpServersWatch: (_message: McpCallback) => void

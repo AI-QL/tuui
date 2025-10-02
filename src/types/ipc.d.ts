@@ -1,6 +1,13 @@
-import type { SamplingRequest, SamplingResponse, ElicitRequest, ElicitResponse } from '@/main/types'
+import type {
+  SamplingRequest,
+  SamplingResponse,
+  ElicitRequest,
+  ElicitResponse,
+  CommandRequest,
+  CommandResponse
+} from '@/main/types'
 
-export type { SamplingRequest, SamplingResponse, ElicitRequest, ElicitResponse }
+export type { SamplingRequest, SamplingResponse, ElicitRequest, ElicitResponse, CommandResponse }
 
 export type IpcSamplingRequest = {
   request: SamplingRequest
@@ -15,3 +22,9 @@ export type IpcElicitRequest = {
 }
 
 export type IpcElicitRequestCallback = (_event: Event, _progress: IpcElicitRequest) => void
+
+export type IpcCommandRequest = {
+  request: CommandRequest
+}
+
+export type IpcCommandRequestCallback = (_event: Event, _progress: IpcCommandRequest) => void

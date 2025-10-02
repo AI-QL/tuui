@@ -1,8 +1,12 @@
 import type { McpServerApi } from '@/renderer/store/mcp'
 import { useDxtStore } from '@/renderer/store/dxt'
 
-import { IpcSamplingRequestCallback, IpcElicitRequestCallback } from '@/types/ipc'
-import { SamplingResponse, ElicitResponse } from '@/types/ipc'
+import {
+  IpcSamplingRequestCallback,
+  IpcElicitRequestCallback,
+  IpcCommandRequestCallback
+} from '@/types/ipc'
+import { SamplingResponse, ElicitResponse, CommandResponse } from '@/types/ipc'
 
 function isValidValue(value: any): boolean {
   if (value === null || value === undefined) return false
@@ -134,18 +138,18 @@ export const FileTransfer = {
 }
 
 class Command {
-  static async msgSendCommandToMainNotify(command: { id: string; prompt: string }): Promise<void> {
-    await window.mainApi.send('msgCommandSelectionNotify', command)
+  static async msgCommandSelectionInvoke(callback: IpcCommandRequestCallback): Promise<void> {
+    return window.mainApi.on('msgCommandSelectionInvoke', callback)
   }
 
-  static async msgCommandToChatInvoke(callback: any): Promise<any> {
-    return window.mainApi.on('msgCommandSelectionInvoke', callback)
+  static async msgCommandSelectionResult(response: CommandResponse): Promise<void> {
+    await window.mainApi.send('msgCommandSelectionResult', response)
   }
 }
 
 export const CommandEvent = {
-  notify: Command.msgSendCommandToMainNotify,
-  callback: Command.msgCommandToChatInvoke
+  request: Command.msgCommandSelectionInvoke,
+  response: Command.msgCommandSelectionResult
 }
 
 class Mcp {
