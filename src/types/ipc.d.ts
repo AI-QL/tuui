@@ -10,9 +10,12 @@ import type {
 
 import { McpProgressCallbackObject } from '@/main/mcp/types'
 
+import { SamplingMessage } from '@modelcontextprotocol/sdk/types'
+
 export type {
   SamplingRequest,
   SamplingResponse,
+  SamplingMessage,
   ElicitRequest,
   ElicitResponse,
   CommandResponse,

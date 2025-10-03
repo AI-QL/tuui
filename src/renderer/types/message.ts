@@ -2,7 +2,7 @@ import { z, ZodTypeAny } from 'zod'
 
 import {
   TextContentSchema as TextContentPartSchema,
-  PromptMessage,
+  PromptMessage
 } from '@modelcontextprotocol/sdk/types'
 
 type Primitive = string | number | boolean | bigint | null | undefined

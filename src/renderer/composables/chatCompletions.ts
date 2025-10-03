@@ -7,7 +7,7 @@ import { jwtDecode } from 'jwt-decode'
 import { getApiToken } from '@/renderer/utils'
 import type { ChatbotConfig } from '@/types/llm'
 
-import { SamplingRequestParams } from '@/types/ipc'
+import { SamplingRequestParams, SamplingMessage } from '@/types/ipc'
 
 import type {
   AssistantMessage,
@@ -188,27 +188,26 @@ export const createCompletion = async (
     const target = targetConversation
 
     if (!sampling) {
-
-      const conversation = target.reduce((newConversation: ChatCompletionRequestMessage[], item) => {
-        if (item.role === 'assistant') {
-          const { reasoning_content, ...rest } = item
-          void reasoning_content
-          newConversation.push(rest)
-        }
-        // (item.role === "user" && item.content[0].type === "image_url") {
-        //     // Image is too large, only latest query could be kept
-        //     newConversation = [item];
-        // }
-        else {
-          newConversation.push(item)
-        }
-        return newConversation
-      }, [])
-
-      body.messages = promptMessage(
-        conversation,
-        agentStore.getPrompt()
+      const conversation = target.reduce(
+        (newConversation: ChatCompletionRequestMessage[], item) => {
+          if (item.role === 'assistant') {
+            const { reasoning_content, ...rest } = item
+            void reasoning_content
+            newConversation.push(rest)
+          }
+          // (item.role === "user" && item.content[0].type === "image_url") {
+          //     // Image is too large, only latest query could be kept
+          //     newConversation = [item];
+          // }
+          else {
+            newConversation.push(item)
+          }
+          return newConversation
+        },
+        []
       )
+
+      body.messages = promptMessage(conversation, agentStore.getPrompt())
 
       if (chatbotConfig.maxTokensValue) {
         body[chatbotConfig.maxTokensPrefix] = parseInt(chatbotConfig.maxTokensValue)
@@ -229,11 +228,12 @@ export const createCompletion = async (
         }
       }
     } else {
-
-      const msg = (sampling.messages).map((item) => ({
-        role: item.role,
-        content: [mcpStore.convertItem(item.content)]
-      }))
+      const msg: ChatCompletionRequestMessage[] = sampling.messages.map(
+        (item: SamplingMessage) => ({
+          role: item.role,
+          content: [mcpStore.convertItem(item.content)]
+        })
+      )
       body.messages = promptMessage(msg, sampling.systemPrompt)
       body.temperature = sampling.temperature
       if (sampling.maxTokens) {

@@ -12,8 +12,6 @@ import type { ChatCompletionResponseMessage } from '@/renderer/types/message'
 
 import { IpcSamplingRequestCallback, SamplingRequestParams, SamplingResponse } from '@/types/ipc'
 
-
-
 const snackbarStore = useSnackbarStore()
 
 const allChatbotStore = useChatbotStore()
