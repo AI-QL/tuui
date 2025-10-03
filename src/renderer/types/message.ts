@@ -3,7 +3,6 @@ import { z, ZodTypeAny } from 'zod'
 import {
   TextContentSchema as TextContentPartSchema,
   PromptMessage,
-  SamplingMessage
 } from '@modelcontextprotocol/sdk/types'
 
 type Primitive = string | number | boolean | bigint | null | undefined
@@ -116,13 +115,6 @@ export type ToolMessage = Infer<typeof ToolMessageSchema>
 type TextContentPart = Infer<typeof TextContentPartSchema>
 // type RefusalContentPart = Infer<typeof RefusalContentPartSchema>
 type ImageContentPart = Infer<typeof ImageContentPartSchema>
-
-// ============================================================================
-// ## MCP SDK compatible type
-// ============================================================================
-
-// ## Needs to be converted to an OpenAI API compatible type
-export type McpSamplingResponseMessage = SamplingMessage
 
 // ============================================================================
 // ## OpenAI API compatible type

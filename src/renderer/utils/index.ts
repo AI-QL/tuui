@@ -91,8 +91,8 @@ class Sampling {
     channel: string,
     response: SamplingResponse
   ): Promise<void> {
-    console.log(response)
-    await window.mainApi.send(channel, response)
+    console.log(channel, response)
+    window.mainApi.send(channel, response)
   }
 }
 

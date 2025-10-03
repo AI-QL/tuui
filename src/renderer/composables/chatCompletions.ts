@@ -7,10 +7,11 @@ import { jwtDecode } from 'jwt-decode'
 import { getApiToken } from '@/renderer/utils'
 import type { ChatbotConfig } from '@/types/llm'
 
+import { SamplingRequestParams } from '@/types/ipc'
+
 import type {
   AssistantMessage,
   ToolCall,
-  McpSamplingResponseMessage,
   ChatCompletionRequestMessage,
   ChatCompletionMessage,
   ChatConversationMessage
@@ -49,8 +50,6 @@ type SimpleCfResponse = {
 }
 
 export type ChatProcessResult = 'aborted' | 'error' | 'done'
-
-type RequestMessageType = ChatCompletionRequestMessage | McpSamplingResponseMessage
 
 const THINK_OPEN = '<think>'
 const THINK_CLOSE = '</think>'
@@ -120,7 +119,7 @@ async function checkTokenUpdate(chatbotConfig: ChatbotConfig): Promise<string | 
 
 const promptMessage = (
   conversation: ChatCompletionRequestMessage[],
-  systemPrompt: string | null
+  systemPrompt: string | undefined
 ): ChatCompletionMessage[] => {
   if (systemPrompt) {
     return [{ content: systemPrompt, role: 'system' }, ...conversation]
@@ -130,9 +129,9 @@ const promptMessage = (
 }
 
 export const createCompletion = async (
-  rawconversation: RequestMessageType[],
+  targetConversation: ChatConversationMessage[],
   sessionId: string,
-  sampling: any = null
+  sampling?: SamplingRequestParams
 ): Promise<ChatProcessResult> => {
   const snackbarStore = useSnackbarStore()
 
@@ -186,10 +185,11 @@ export const createCompletion = async (
       }
     }
 
-    let target: ChatConversationMessage[]
+    const target = targetConversation
 
     if (!sampling) {
-      const conversation = rawconversation.reduce((newConversation, item) => {
+
+      const conversation = target.reduce((newConversation: ChatCompletionRequestMessage[], item) => {
         if (item.role === 'assistant') {
           const { reasoning_content, ...rest } = item
           void reasoning_content
@@ -203,12 +203,10 @@ export const createCompletion = async (
           newConversation.push(item)
         }
         return newConversation
-      }, [] as RequestMessageType[])
-
-      target = messageStore.conversation
+      }, [])
 
       body.messages = promptMessage(
-        conversation as ChatCompletionRequestMessage[],
+        conversation,
         agentStore.getPrompt()
       )
 
@@ -231,15 +229,15 @@ export const createCompletion = async (
         }
       }
     } else {
-      target = sampling.target
-      const msg = (rawconversation as McpSamplingResponseMessage[]).map((item) => ({
+
+      const msg = (sampling.messages).map((item) => ({
         role: item.role,
         content: [mcpStore.convertItem(item.content)]
       }))
       body.messages = promptMessage(msg, sampling.systemPrompt)
       body.temperature = sampling.temperature
       if (sampling.maxTokens) {
-        body[chatbotConfig.maxTokensPrefix] = parseInt(sampling.maxTokens)
+        body[chatbotConfig.maxTokensPrefix] = Number(sampling.maxTokens)
       }
     }
 

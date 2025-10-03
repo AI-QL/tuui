@@ -19,6 +19,8 @@ export type {
   McpInitResponse
 }
 
+export type SamplingRequestParams = SamplingRequest['params']
+
 export type IpcSamplingRequest = {
   request: SamplingRequest
   responseChannel: string

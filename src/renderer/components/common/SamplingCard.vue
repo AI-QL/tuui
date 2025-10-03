@@ -10,9 +10,9 @@ import ConfigJsonCard from './ConfigJsonCard.vue'
 
 import type { ChatCompletionResponseMessage } from '@/renderer/types/message'
 
-import { IpcSamplingRequestCallback, SamplingRequest, SamplingResponse } from '@/types/ipc'
+import { IpcSamplingRequestCallback, SamplingRequestParams, SamplingResponse } from '@/types/ipc'
 
-type SamplingRequestParams = SamplingRequest['params']
+
 
 const snackbarStore = useSnackbarStore()
 
@@ -45,10 +45,10 @@ const tryCompletions = () => {
     snackbarStore.showErrorMessage(jsonError.value)
   } else {
     if ('messages' in samplingParams.value) {
-      const { messages, ...restParams } = samplingParams.value
-      restParams.target = samplingResults.value
+      // const { messages, ...restParams } = samplingParams.value
+      // restParams.target = samplingResults.value
       samplingId.value = historyStore.getDate()
-      createCompletion(messages, samplingId.value, restParams)
+      createCompletion(samplingResults.value, samplingId.value, samplingParams.value)
     }
   }
 }
@@ -59,6 +59,13 @@ const clearSampling = () => {
   samplingChannel.value = ''
   samplingResults.value.length = 0
   return
+}
+
+function responseSampling(response: SamplingResponse) {
+  if (samplingChannel.value) {
+    SamplingTransfer.response(samplingChannel.value, response)
+  }
+  clearSampling()
 }
 
 const finishSampling = (index: number) => {
@@ -74,8 +81,7 @@ const finishSampling = (index: number) => {
         `No response from model ${chatbotStore.model}`
     }
   }
-  SamplingTransfer.response(samplingChannel.value, response)
-  clearSampling()
+  responseSampling(response)
   return
 }
 
@@ -89,8 +95,7 @@ const rejectSampling = () => {
       text: 'The sampling request was rejected by the user for containing non-compliant content.'
     }
   }
-  SamplingTransfer.response(samplingChannel.value, response)
-  clearSampling()
+  responseSampling(response)
   return
 }
 
