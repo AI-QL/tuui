@@ -109,7 +109,7 @@ const getErrorMessages = (para: McpbUserConfigurationOption, key: string) => {
         color="primary"
         variant="text"
         rounded="lg"
-        icon="mdi-open-in-new"
+        icon="mdi-folder-open"
         @click="openDxtFilePath(metadata.name)"
       ></v-btn>
     </template>

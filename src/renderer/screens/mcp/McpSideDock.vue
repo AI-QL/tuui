@@ -107,18 +107,19 @@ const items = [
         @click="stopAllMcpServers()"
       >
       </v-btn>
+      <v-btn v-tooltip:top="$t('mcp.search')" icon="mdi-home-search" @click="searchRegistry">
+      </v-btn>
       <v-btn
         v-tooltip:top="$t('mcp.open')"
-        color="primary"
-        icon="mdi-open-in-new"
+        icon="mdi-folder-open"
         @click="openPath('config')"
       ></v-btn>
       <v-menu>
         <template #activator="{ props }">
           <v-btn
-            v-tooltip:top="$t('mcp.new')"
+            v-tooltip:top="$t('mcp.add')"
             v-bind="props"
-            icon="mdi-upload"
+            icon="mdi-plus"
             :class="{ 'drag-active': isDragActive }"
             @dragenter.prevent="openDialog()"
           >
@@ -135,11 +136,8 @@ const items = [
           </v-list-item>
         </v-list>
       </v-menu>
-      <v-btn v-tooltip:top="$t('mcp.search')" icon="mdi-home-search" @click="searchRegistry">
-      </v-btn>
     </v-btn-group>
     <McpDxtPage v-model="dxtDialog"></McpDxtPage>
-
     <McpAddPage v-model="addDialog"></McpAddPage>
     <McpRegistryPage v-model="registryDialog"></McpRegistryPage>
   </v-container>

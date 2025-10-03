@@ -43,14 +43,14 @@
   "mcp": {
     "config": "Server Config",
     "file": "Archive File",
-    "new": "New MCP Server",
+    "add": "Add MCP Server",
     "init": "Start MCP Servers",
     "stop": "Stop MCP Servers",
     "search": "MCP Registry Lookup",
     "total": "Total Servers",
     "read": "Read",
     "minutes": "minutes",
-    "open": "Reveal in File Explorer",
+    "open": "Reveal Config File",
     "updated": "MCP Severs Updated"
   },
   "menu": {
