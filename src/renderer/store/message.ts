@@ -133,19 +133,27 @@ export const useMessageStore = defineStore('messageStore', {
       const historyId = this.syncHistory()
       this.clear()
 
-      this.generating[historyId] = 'prepare'
-
-      createCompletion(this.conversation, historyId).then((reason: ChatProcessResult) => {
-        if (reason === 'done') {
-          this.postToolCall(historyId)
-        }
-      })
+      this.processInference(historyId)
 
       return historyId
     },
-    postToolCall: async function (historyId: string) {
-      const mcpStore = useMcpStore()
-      const last = this.conversation.at(-1)
+    processInference: function (sessionId: string) {
+      const historyStore = useHistoryStore()
+      const history = historyStore.find(sessionId)
+
+      if (history) {
+        this.generating[sessionId] = 'prepare'
+        createCompletion(history.messages, sessionId).then((reason: ChatProcessResult) => {
+          if (reason === 'done') {
+            this.postToolCall(sessionId)
+          }
+        })
+      }
+    },
+    postToolCall: async function (sessionId: string) {
+      const historyStore = useHistoryStore()
+
+      const last = historyStore.find(sessionId)?.messages.at(-1)
 
       if (!last || !('tool_calls' in last) || !last.tool_calls) {
         return
@@ -158,7 +166,9 @@ export const useMessageStore = defineStore('messageStore', {
 
       let toolCalled = false
       console.log(last.tool_calls)
-      this.generating[historyId] = 'toolcall'
+      this.generating[sessionId] = 'toolcall'
+
+      const mcpStore = useMcpStore()
 
       for (const toolCall of last.tool_calls) {
         let result: CallToolResult
@@ -171,15 +181,25 @@ export const useMessageStore = defineStore('messageStore', {
         }
 
         if (result?.content) {
-          this.contentConvert(result.content, toolCall.id).forEach((item) => {
-            this.conversation.push(item)
-          })
           toolCalled = true
+          if (sessionId === this.historyId) {
+            this.contentConvert(result.content, toolCall.id).forEach((item) => {
+              this.conversation.push(item)
+            })
+          } else {
+            const historyStore = useHistoryStore()
+            const history = historyStore.find(sessionId)
+            if (history) {
+              this.contentConvert(result.content, toolCall.id).forEach((item) => {
+                history.messages.push(item)
+              })
+            }
+          }
         }
       }
 
-      if (this.delete(historyId) && toolCalled) {
-        this.startInference()
+      if (this.delete(sessionId) && toolCalled && sessionId === this.historyId) {
+        this.processInference(sessionId)
       }
     },
     contentConvert: function (
