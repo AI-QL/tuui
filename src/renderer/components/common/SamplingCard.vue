@@ -44,10 +44,12 @@ const tryCompletions = () => {
   if (jsonError.value) {
     snackbarStore.showErrorMessage(jsonError.value)
   } else {
-    const { messages, ...restParams } = samplingParams.value as SamplingRequestParams
-    restParams.target = samplingResults.value
-    samplingId.value = historyStore.getDate()
-    createCompletion(messages, samplingId.value, restParams)
+    if ('messages' in samplingParams.value) {
+      const { messages, ...restParams } = samplingParams.value
+      restParams.target = samplingResults.value
+      samplingId.value = historyStore.getDate()
+      createCompletion(messages, samplingId.value, restParams)
+    }
   }
 }
 
