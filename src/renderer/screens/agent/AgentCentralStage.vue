@@ -36,22 +36,25 @@ watch(
     }
     console.log('Tools Updated', val)
     const flatChildren = []
-    const children = val.map((type) => ({
-      id: type.server,
-      name: type.server,
-      children: type.tools
-        ? type.tools.map((obj) => {
-            const id = agentStore.genId(type.server, obj.name)
-            const unit = {
-              id: id,
-              server: type.server,
-              name: obj.name
+    const children = val
+      .filter((serverType) => serverType.tools && serverType.tools.length > 0)
+      .map((serverType) => {
+        const serverNode = {
+          id: serverType.server,
+          name: serverType.server,
+          children: serverType.tools.map((tool) => {
+            const toolId = agentStore.genId(serverType.server, tool.name)
+            const toolNode = {
+              id: toolId,
+              server: serverType.server,
+              name: tool.name
             }
-            flatChildren.push(id)
-            return unit
+            flatChildren.push(toolId)
+            return toolNode
           })
-        : []
-    }))
+        }
+        return serverNode
+      })
     const rootObj = items.value[0]
     rootObj.children = children
     items.value = [rootObj]
