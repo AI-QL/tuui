@@ -13,8 +13,8 @@ const { locale } = useI18n()
 <template>
   <CommandCard></CommandCard>
   <ChatPage
-    v-if="messageStore.conversation.length > 0"
-    :messages="messageStore.conversation"
+    v-if="messageStore.conversation.messages.length > 0"
+    :messages="messageStore.conversation.messages"
     :language="locale"
     @request-delete="messageStore.deleteMessage"
   >

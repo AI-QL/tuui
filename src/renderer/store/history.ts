@@ -4,26 +4,20 @@ import { v4 as uuidv4 } from 'uuid'
 import { useMessageStore } from '@/renderer/store/message'
 
 import type { ChatConversationMessage } from '@/renderer/types/message'
-
-type ConversationID = string
-
-type ConversationEntry = {
-  id: ConversationID
-  messages: ChatConversationMessage[]
-}
+import type { SessionId, SessionEntry } from '@/renderer/types/session'
 
 interface HistoryStoreState {
-  selected: ConversationID[] | undefined
-  conversation: ConversationEntry[]
+  // selected: SessionId[] | undefined
+  conversations: SessionEntry[]
 }
 
 export const useHistoryStore = defineStore('historyStore', {
   state: (): HistoryStoreState => ({
-    selected: undefined as ConversationID[] | undefined,
-    conversation: [] as ConversationEntry[]
+    // selected: undefined as SessionId[] | undefined,
+    conversations: [] as SessionEntry[]
   }),
   persist: {
-    include: ['conversation'],
+    include: ['conversations'],
     storage: localForage
   },
   getters: {},
@@ -36,32 +30,39 @@ export const useHistoryStore = defineStore('historyStore', {
       this.$reset()
     },
     deleteById(index: number) {
-      this.conversation.splice(index, 1)
+      this.conversations.splice(index, 1)
     },
-    init(conversation: ChatConversationMessage[]) {
-      const newId = this.getDate()
-      this.conversation.unshift({
-        id: newId,
-        messages: conversation
-      })
-      this.selected = [newId]
-      return newId
+    init(conversation: SessionEntry) {
+      const oldConversation = this.find(conversation.id)
+      console.log(conversation)
+      if (!oldConversation) {
+        const newId = this.getDate()
+        this.conversations.unshift({
+          ...conversation,
+          id: newId
+        })
+        // this.selected = [newId]
+        return this.conversations[0]
+      } else {
+        return oldConversation
+      }
     },
-    replace(index: number) {
-      this.deleteById(index)
-      const messageStore = useMessageStore()
-      this.init(messageStore.conversation)
+    find(id: string | undefined) {
+      if (id) {
+        return this.conversations.find((item) => item.id === id)
+      } else {
+        return undefined
+      }
     },
-    find(id: string) {
-      return this.conversation.find((item) => item.id === id)
-    },
-    select(index: number) {
-      const messageStore = useMessageStore()
-      messageStore.historyId = this.conversation[index].id
-      messageStore.conversation = this.conversation[index].messages
+    select(sessionId: SessionId) {
+      const conversation = this.find(sessionId)
+      if (conversation) {
+        const messageStore = useMessageStore()
+        messageStore.setConversation(conversation)
+      }
     },
     getColor(index: number) {
-      const targetElement = this.conversation[index]?.messages.find(
+      const targetElement = this.conversations[index]?.messages.find(
         (element) => element.role === 'assistant'
       )
       if (targetElement) {
@@ -71,13 +72,13 @@ export const useHistoryStore = defineStore('historyStore', {
       }
     },
     downloadById(index: number) {
-      const name = this.conversation[index].id.replace(/[/: ]/g, '-')
-      this.download(this.conversation[index].messages, `history-${name}.json`)
+      const name = this.conversations[index].id.replace(/[/: ]/g, '-')
+      this.download(this.conversations[index].messages, `history-${name}.json`)
     },
     downloadHistory() {
-      this.download(this.conversation, 'history.json')
+      this.download(this.conversations, 'history.json')
     },
-    download(json: ChatConversationMessage[] | ConversationEntry[], filename: string) {
+    download(json: ChatConversationMessage[] | SessionEntry[], filename: string) {
       const blob = new Blob([JSON.stringify(json, null, 2)], { type: 'application/json' })
       const url = URL.createObjectURL(blob)
       const a = document.createElement('a')

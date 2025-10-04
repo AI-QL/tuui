@@ -1,4 +1,5 @@
-<script setup lang="tsx">
+<script setup lang="ts">
+import { computed } from 'vue'
 import { useHistoryStore } from '@/renderer/store/history'
 import { useMessageStore } from '@/renderer/store/message'
 import { ChatConversationMessage } from '@/renderer/types/message'
@@ -19,11 +20,18 @@ function parseContent(content: undefined | string | ChatConversationMessage['con
     return content
   }
 }
+
+const selectedConversation = computed({
+  get: () => [messageStore.conversation.id],
+  set: ([value]) => {
+    historyStore.select(value)
+  }
+})
 </script>
 <template>
-  <v-list v-model:selected="historyStore.selected" nav>
+  <v-list v-model:selected="selectedConversation" nav>
     <v-list-item
-      v-for="(item, index) in historyStore.conversation"
+      v-for="(item, index) in historyStore.conversations"
       :key="item.id"
       :ripple="false"
       two-line
@@ -31,7 +39,6 @@ function parseContent(content: undefined | string | ChatConversationMessage['con
       link
       :title="parseContent(item.messages[0]?.content)"
       :subtitle="parseContent(item.messages.at(-1)?.content)"
-      @click="historyStore.select(index)"
     >
       <template #append>
         <v-list-item-action>

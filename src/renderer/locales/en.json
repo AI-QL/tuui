@@ -67,6 +67,7 @@
   "chat": {
     "wipe": "Wipe",
     "reg": "Regenerate",
+    "continue": "Continue",
     "token-refresh": "Invalid API key, updating now...",
     "token-fail": "Update API key failed.",
     "select-model": "Select Model",

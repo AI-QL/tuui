@@ -14,7 +14,7 @@ const handleProgress: IpcCommandRequestCallback = (_event, progress) => {
       role: 'user'
     } as ChatConversationMessage
   ]
-  messageStore.applyPrompt(conversations)
+  messageStore.initConversation(conversations)
   messageStore.userMessage = params.input
 }
 

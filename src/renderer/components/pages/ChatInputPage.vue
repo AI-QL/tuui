@@ -66,10 +66,10 @@ const agentStore = useAgentStore()
     </v-col>
     <v-col cols="4" class="pt-4 pb-0 pr-0">
       <!-- Adds a horizontal flex container (row direction) to override parent column layout, ensuring right alignment within v-col -->
-      <div class="d-flex justify-end">
+      <span class="d-flex justify-end">
         <v-spacer></v-spacer>
 
-        <div v-if="messageStore.historyId in messageStore.generating">
+        <span v-if="messageStore.conversation.id in messageStore.generating">
           <v-icon-btn
             v-tooltip:start="$t('chat.wipe')"
             color="error"
@@ -86,7 +86,7 @@ const agentStore = useAgentStore()
             rounded="lg"
             @click="messageStore.stop"
           ></v-icon-btn>
-        </div>
+        </span>
 
         <v-icon-btn
           v-else-if="messageStore.userMessage"
@@ -97,7 +97,7 @@ const agentStore = useAgentStore()
           @click="messageStore.sendMessage"
         ></v-icon-btn>
 
-        <div v-else-if="messageStore.conversation.length > 0">
+        <span v-else-if="messageStore.conversation.messages.length > 0">
           <v-icon-btn
             v-tooltip:start="$t('chat.wipe')"
             color="error"
@@ -109,15 +109,27 @@ const agentStore = useAgentStore()
 
           <v-divider class="mx-1" vertical></v-divider>
 
-          <v-icon-btn
-            v-tooltip:start="$t('chat.reg')"
-            color="teal"
-            variant="tonal"
-            icon="mdi-autorenew"
-            rounded="lg"
-            @click="messageStore.resendMessage"
-          ></v-icon-btn>
-        </div>
+          <span v-if="messageStore.conversation.messages.at(-1)?.role === 'assistant'">
+            <v-icon-btn
+              v-tooltip:top="$t('chat.reg')"
+              color="teal"
+              variant="tonal"
+              icon="mdi-autorenew"
+              rounded="lg"
+              @click="messageStore.resendMessage"
+            ></v-icon-btn>
+          </span>
+          <span v-else>
+            <v-icon-btn
+              v-tooltip:top="$t('chat.continue')"
+              color="primary"
+              variant="tonal"
+              icon="mdi-step-forward"
+              rounded="lg"
+              @click="messageStore.startInference"
+            ></v-icon-btn>
+          </span>
+        </span>
         <v-icon-btn
           v-else
           color="grey"
@@ -125,7 +137,7 @@ const agentStore = useAgentStore()
           icon="mdi-account-edit"
           rounded="lg"
         ></v-icon-btn>
-      </div>
+      </span>
     </v-col>
   </v-row>
 </template>

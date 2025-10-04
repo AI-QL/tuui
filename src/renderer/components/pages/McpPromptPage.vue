@@ -16,7 +16,7 @@ const navigateTo = (route: string, screenValue: number) => {
 
 const handleApplyPrompt = async () => {
   const conversations = await promptStore.fetchSelect()
-  messageStore.applyPrompt(conversations)
+  messageStore.initConversation(conversations)
   navigateTo('/chat', 1)
 }
 </script>

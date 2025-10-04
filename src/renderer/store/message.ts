@@ -10,42 +10,52 @@ import {
 
 import type { CallToolResult } from '@modelcontextprotocol/sdk/types.js'
 
+import type { SessionId, SessionEntry } from '@/renderer/types/session'
+
 type CallToolResultContent = CallToolResult['content']
 
 import type { ToolMessage, UserMessage, ChatConversationMessage } from '@/renderer/types/message'
 
 interface MessageStoreState {
   userMessage: string
-  conversation: ChatConversationMessage[]
-  historyId: string
+  conversation: SessionEntry
   base64: string
   generating: Record<string, 'prepare' | AbortController | 'toolcall'>
+}
+
+const EmptyConversation = {
+  id: '',
+  messages: []
 }
 
 export const useMessageStore = defineStore('messageStore', {
   state: (): MessageStoreState => ({
     userMessage: '',
-    conversation: [],
-    historyId: '',
+    conversation: EmptyConversation,
     base64: '',
     generating: {}
   }),
   actions: {
     init() {
       const snackbarStore = useSnackbarStore()
-      if (this.conversation.length === 0) {
+      if (this.conversation.messages.length === 0) {
         snackbarStore.showWarningMessage('snackbar.addfail')
       } else {
         this.initConversation([])
         snackbarStore.showSuccessMessage('snackbar.addnew')
       }
     },
-    initConversation(conversationArray: ChatConversationMessage[]) {
-      this.conversation = conversationArray
-      this.historyId = ''
+    initConversation(conversationMessages: ChatConversationMessage[]) {
+      this.setConversation({
+        id: '',
+        messages: conversationMessages
+      })
+    },
+    setConversation(conversation: SessionEntry) {
+      this.conversation = conversation
     },
     stop() {
-      this.delete(this.historyId)
+      this.delete(this.conversation.id)
       const snackbarStore = useSnackbarStore()
       snackbarStore.showInfoMessage('snackbar.stopped')
     },
@@ -73,18 +83,18 @@ export const useMessageStore = defineStore('messageStore', {
       }
     },
     deleteMessage({ index, range }: { index: number; range: number }) {
-      this.conversation.splice(index, range)
+      this.conversation.messages.splice(index, range)
     },
     resendMessage() {
       // const conversation = this.conversation.reduce((newConversation, item) => {
-      let index = this.conversation.length - 1
-      while (index >= 0 && this.conversation[index].role !== 'user') {
+      let index = this.conversation.messages.length - 1
+      while (index >= 0 && this.conversation.messages[index].role !== 'user') {
         index--
       }
 
       // when role == "user" is found，drop followings
       if (index >= 0) {
-        this.conversation.splice(index + 1)
+        this.conversation.messages.splice(index + 1)
         return this.startInference()
       }
     },
@@ -94,7 +104,7 @@ export const useMessageStore = defineStore('messageStore', {
 
         const imageBase64 = this.base64
 
-        this.conversation.push({
+        this.conversation.messages.push({
           content: imageBase64
             ? [
                 { type: 'image_url', image_url: { url: imageBase64 } },
@@ -107,50 +117,34 @@ export const useMessageStore = defineStore('messageStore', {
         return this.startInference()
       }
     },
-    syncHistory: function (): string {
-      const historyStore = useHistoryStore()
-      if (!this.historyId) {
-        const historyId = historyStore.init(this.conversation)
-        this.historyId = historyId
-        return historyId
-      }
-
-      const foundHistoryId = historyStore.find(this.historyId)?.id
-
-      if (!foundHistoryId) {
-        const historyId = historyStore.init(this.conversation)
-        this.historyId = historyId
-        return historyId
-      } else {
-        return foundHistoryId
-      }
-    },
-    applyPrompt: function (messages: ChatConversationMessage[]) {
-      this.initConversation(messages)
-      // this.syncHistory()
-    },
     startInference: function () {
-      const historyId = this.syncHistory()
+      const historyStore = useHistoryStore()
+
+      const conversation = historyStore.init(this.conversation)
+
       this.clear()
 
-      this.processInference(historyId)
+      this.conversation = conversation
 
-      return historyId
+      this.processInference(conversation.id)
+
+      return conversation.id
     },
-    processInference: function (sessionId: string) {
+    processInference: function (sessionId: SessionId) {
       const historyStore = useHistoryStore()
-      const history = historyStore.find(sessionId)
+      const oldConversation = historyStore.find(sessionId)
 
-      if (history) {
+      // Verify the old conversation still exist
+      if (oldConversation) {
         this.generating[sessionId] = 'prepare'
-        createCompletion(history.messages, sessionId).then((reason: ChatProcessResult) => {
+        createCompletion(oldConversation.messages, sessionId).then((reason: ChatProcessResult) => {
           if (reason === 'done') {
             this.postToolCall(sessionId)
           }
         })
       }
     },
-    postToolCall: async function (sessionId: string) {
+    postToolCall: async function (sessionId: SessionId) {
       const historyStore = useHistoryStore()
 
       const last = historyStore.find(sessionId)?.messages.at(-1)
@@ -182,23 +176,17 @@ export const useMessageStore = defineStore('messageStore', {
 
         if (result?.content) {
           toolCalled = true
-          if (sessionId === this.historyId) {
+          const historyStore = useHistoryStore()
+          const conversation = historyStore.find(sessionId)
+          if (conversation) {
             this.contentConvert(result.content, toolCall.id).forEach((item) => {
-              this.conversation.push(item)
+              conversation.messages.push(item)
             })
-          } else {
-            const historyStore = useHistoryStore()
-            const history = historyStore.find(sessionId)
-            if (history) {
-              this.contentConvert(result.content, toolCall.id).forEach((item) => {
-                history.messages.push(item)
-              })
-            }
           }
         }
       }
 
-      if (this.delete(sessionId) && toolCalled && sessionId === this.historyId) {
+      if (this.delete(sessionId) && toolCalled && sessionId === this.conversation.id) {
         this.processInference(sessionId)
       }
     },
