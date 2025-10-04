@@ -46,7 +46,13 @@ const tryCompletions = () => {
       // const { messages, ...restParams } = samplingParams.value
       // restParams.target = samplingResults.value
       samplingId.value = historyStore.getDate()
-      createCompletion(samplingResults.value, samplingId.value, samplingParams.value)
+      createCompletion(
+        {
+          id: samplingId.value,
+          messages: samplingResults.value
+        },
+        samplingParams.value
+      )
     }
   }
 }

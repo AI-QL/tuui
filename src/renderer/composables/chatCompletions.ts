@@ -9,15 +9,16 @@ import type { ChatbotConfig } from '@/types/llm'
 
 import { SamplingRequestParams, SamplingMessage } from '@/types/ipc'
 
+import type { SessionEntry, McpToolMessage } from '@/renderer/types/session'
+
+import { unionBy } from 'lodash'
+
 import type {
   AssistantMessage,
   ToolCall,
   ChatCompletionRequestMessage,
-  ChatCompletionMessage,
-  ChatConversationMessage
+  ChatCompletionMessage
 } from '@/renderer/types/message'
-
-import { Tool } from '@modelcontextprotocol/sdk/types'
 
 import { ReasoningEffort, REASONING_EFFORT, ENABLE_THINKING } from '@/renderer/types'
 
@@ -27,7 +28,7 @@ type ChatRequestBody = {
   temperature?: number
   messages?: ChatCompletionMessage[]
   top_p?: number
-  tools?: Tool[]
+  tools?: McpToolMessage[]
   reasoning_effort?: ReasoningEffort
   enable_thinking?: boolean
   chat_template_kwargs?: Record<string, any>
@@ -129,8 +130,7 @@ const promptMessage = (
 }
 
 export const createCompletion = async (
-  targetConversation: ChatConversationMessage[],
-  sessionId: string,
+  session: SessionEntry,
   sampling?: SamplingRequestParams
 ): Promise<ChatProcessResult> => {
   const snackbarStore = useSnackbarStore()
@@ -185,7 +185,7 @@ export const createCompletion = async (
       }
     }
 
-    const target = targetConversation
+    const target = session.messages
 
     if (!sampling) {
       const conversation = target.reduce(
@@ -225,6 +225,7 @@ export const createCompletion = async (
         const tools = await agentStore.getTools()
         if (tools && tools.length > 0) {
           body.tools = tools
+          session.tools = unionBy(session.tools, tools, 'function.name')
         }
       }
     } else {
@@ -249,8 +250,8 @@ export const createCompletion = async (
 
     const abortController = new AbortController()
 
-    console.log('Chat session started: ', sessionId)
-    messageStore.generating[sessionId] = abortController
+    console.log('Chat session started: ', session.id)
+    messageStore.generating[session.id] = abortController
 
     const completion = await fetch(
       chatbotConfig.url + (chatbotConfig.path ? chatbotConfig.path : ''),
@@ -305,11 +306,11 @@ export const createCompletion = async (
     const buffer = ''
 
     // Read the stream
-    await read(reader, sessionId, lastItem, buffer, chatbotConfig.stream)
+    await read(reader, session.id, lastItem, buffer, chatbotConfig.stream)
   } catch (error: any) {
     snackbarStore.showErrorMessage(error?.message)
   } finally {
-    const result = messageStore.delete(sessionId) ? 'done' : 'aborted'
+    const result = messageStore.delete(session.id) ? 'done' : 'aborted'
     return result
   }
 }

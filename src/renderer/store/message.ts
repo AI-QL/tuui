@@ -137,7 +137,7 @@ export const useMessageStore = defineStore('messageStore', {
       // Verify the old conversation still exist
       if (oldConversation) {
         this.generating[sessionId] = 'prepare'
-        createCompletion(oldConversation.messages, sessionId).then((reason: ChatProcessResult) => {
+        createCompletion(oldConversation).then((reason: ChatProcessResult) => {
           if (reason === 'done') {
             this.postToolCall(sessionId)
           }
