@@ -104,8 +104,13 @@ function hasErrors(config: McpbManifest | McpDxtErrors): config is McpDxtErrors 
 
 <template>
   <div v-if="hasErrors(manifest)">
-    <v-card v-for="error in manifest.errors" :key="error.field" :subtitle = "error.field" :text="error.message" color="error">
-
+    <v-card
+      v-for="error in manifest.errors"
+      :key="error.field"
+      :subtitle="error.field"
+      :text="error.message"
+      color="error"
+    >
     </v-card>
   </div>
   <div v-else>

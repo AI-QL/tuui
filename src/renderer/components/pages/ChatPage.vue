@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, reactive } from 'vue'
+import { computed, ref } from 'vue'
 import { useDisplay } from 'vuetify'
 import ImgDialog from '../common/ImgDialog.vue'
 import ChatCard from '../common/ChatCard.vue'
@@ -44,7 +44,7 @@ const handleDeleteMessages = ({ index, range }: { index: number; range: number }
   })
 }
 
-const dialogs = reactive<{ [key: string]: number }>({})
+const dialogs = ref<{ [key: string]: number }>({})
 const groupMessages = computed<Group[]>(() => {
   const groups: Group[] = []
   props.messages.forEach((message, index) => {
@@ -64,7 +64,7 @@ const groupMessages = computed<Group[]>(() => {
       const lastGroup = groups[groups.length - 1]
       if (lastGroup?.group === 'tool') {
         lastGroup.messages?.push(message)
-        dialogs[lastGroup.tab!] = lastGroup.length!
+        dialogs.value[lastGroup.tab!] = lastGroup.length!
         lastGroup.length! += 1
       } else {
         const id = message.tool_call_id || message.tool_calls?.[0]?.id
@@ -75,11 +75,12 @@ const groupMessages = computed<Group[]>(() => {
           messages: [message],
           length: 1
         })
-        dialogs[id!] = 0
+        dialogs.value[id!] = 0
       }
     }
   })
   console.log(groups)
+  console.log(dialogs.value)
   return groups
 })
 </script>
@@ -213,74 +214,82 @@ const groupMessages = computed<Group[]>(() => {
             :range="group.messages!.length"
             @delete-messages="handleDeleteMessages"
           >
-            <v-tabs v-model="dialogs[group.tab!]" :items="group.messages" show-arrows>
-              <template #tab="{ item }">
-                <v-tab :text="item.role" :value="item">
-                  <v-icon
-                    v-if="item.role === 'tool'"
-                    icon="mdi-arrow-left-bold-circle"
-                    color="primary"
-                  />
-                  <v-icon
-                    v-if="item.role === 'assistant'"
-                    icon="mdi-arrow-right-bold-circle"
-                    color="teal"
-                  />
-                </v-tab>
-              </template>
-              <template #item="{ item }">
-                <v-tabs-window-item :value="item">
-                  <v-card v-if="item.role === 'tool'" class="mt-1" variant="flat">
-                    <v-card-item prepend-icon="mdi-chevron-left">
-                      <v-card-subtitle>
-                        {{ item.tool_call_id }}
-                      </v-card-subtitle>
-                    </v-card-item>
-                    <template v-if="Array.isArray(item.content)">
-                      <v-card-text v-for="content in item.content" :key="content.id">
-                        <v-textarea
-                          :rows="1"
-                          auto-grow
-                          max-rows="15"
-                          variant="plain"
-                          :model-value="content.text"
-                          hide-details
-                        ></v-textarea>
-                      </v-card-text>
-                    </template>
-                    <v-card-text v-else>
+            <v-tabs v-model="dialogs[group.tab!]" show-arrows>
+              <v-tab
+                v-for="(item, index) in group.messages"
+                :key="index"
+                :text="item.role"
+                :value="index"
+              >
+                <v-icon
+                  v-if="item.role === 'tool'"
+                  icon="mdi-arrow-left-bold-circle"
+                  color="primary"
+                />
+                <v-icon
+                  v-if="item.role === 'assistant'"
+                  icon="mdi-arrow-right-bold-circle"
+                  color="teal"
+                />
+              </v-tab>
+            </v-tabs>
+
+            <v-tabs-window v-model="dialogs[group.tab!]">
+              <v-tabs-window-item
+                v-for="(item, index) in group.messages"
+                :key="index"
+                :value="index"
+              >
+                <v-card v-if="item.role === 'tool'" class="mt-1" variant="flat">
+                  <v-card-item prepend-icon="mdi-chevron-left">
+                    <v-card-subtitle>
+                      {{ item.tool_call_id }}
+                    </v-card-subtitle>
+                  </v-card-item>
+                  <template v-if="Array.isArray(item.content)">
+                    <v-card-text v-for="content in item.content" :key="content.id">
                       <v-textarea
                         :rows="1"
                         auto-grow
                         max-rows="15"
                         variant="plain"
-                        :model-value="item.content"
+                        :model-value="content.text"
                         hide-details
-                      >
-                      </v-textarea>
+                      ></v-textarea>
                     </v-card-text>
-                  </v-card>
-                  <v-card v-if="item.role === 'assistant'" class="mt-1" variant="flat">
-                    <v-card-text v-if="item.reasoning_content" class="font-weight-bold">
-                      {{ item.reasoning_content }}
+                  </template>
+                  <v-card-text v-else>
+                    <v-textarea
+                      :rows="1"
+                      auto-grow
+                      max-rows="15"
+                      variant="plain"
+                      :model-value="item.content"
+                      hide-details
+                    >
+                    </v-textarea>
+                  </v-card-text>
+                </v-card>
+                <v-card v-if="item.role === 'assistant'" class="mt-1" variant="flat">
+                  <v-card-text v-if="item.reasoning_content" class="font-weight-bold">
+                    {{ item.reasoning_content }}
+                  </v-card-text>
+                  <v-card-text v-if="item.content" class="font-weight-bold">
+                    {{ item.content }}
+                  </v-card-text>
+                  <div v-for="content in item.tool_calls" :key="content.id">
+                    <v-card-item prepend-icon="mdi-chevron-right">
+                      <v-card-subtitle>
+                        {{ content.id }}
+                      </v-card-subtitle>
+                    </v-card-item>
+                    <v-card-text>
+                      {{ content.function.name }}({{ content.function.arguments }})
                     </v-card-text>
-                    <v-card-text v-if="item.content" class="font-weight-bold">
-                      {{ item.content }}
-                    </v-card-text>
-                    <div v-for="content in item.tool_calls" :key="content.id">
-                      <v-card-item prepend-icon="mdi-chevron-right">
-                        <v-card-subtitle>
-                          {{ content.id }}
-                        </v-card-subtitle>
-                      </v-card-item>
-                      <v-card-text>
-                        {{ content.function.name }}({{ content.function.arguments }})
-                      </v-card-text>
-                    </div>
-                  </v-card>
-                </v-tabs-window-item>
-              </template>
-            </v-tabs>
+                  </div>
+                </v-card>
+              </v-tabs-window-item>
+            </v-tabs-window>
           </chat-card>
         </div>
       </div>
