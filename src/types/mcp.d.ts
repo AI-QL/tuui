@@ -44,10 +44,21 @@ export type McpMetadataStdio = {
   config: StdioServerParameters
 }
 
+type McpDxtError = {
+  field: string
+  message: string
+}
+
+export type McpDxtErrors = {
+  errors: McpDxtError[]
+}
+
+export type { McpbManifest }
+
 export type McpMetadataDxt = {
   name: string
   type: 'metadata__mcpb_manifest'
-  config: McpbManifest
+  config: McpbManifest | McpDxtErrors
   user_config?: McpbUserConfigValues
 }
 
@@ -72,15 +83,15 @@ export type McpObject = {
 export type McpToolType = ListToolsResult['tools'][number]
 
 export type ToolType = {
-  name: McpTool['name']
-  description: McpTool['description']
+  name: McpToolType['name']
+  description: McpToolType['description']
   // Rename inputSchema to parameters to comply with the OpenAI SDK
-  parameters: McpTool['inputSchema']
+  parameters: McpToolType['inputSchema']
 }
 
 export type MCPAPI = Record<string, McpObject>
 
-export type DXTAPI = Record<string, DxtManifest>
+export type DXTAPI = Record<string, McpbManifest>
 
 export type ClientProfile = {
   name: string

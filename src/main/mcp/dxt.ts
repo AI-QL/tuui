@@ -8,6 +8,8 @@ import {
   Logger
 } from '@anthropic-ai/mcpb'
 
+import type { McpDxtErrors } from '@/types/mcp'
+
 import { existsSync, readFileSync, statSync } from 'fs'
 import { join, resolve, sep } from 'path'
 
@@ -50,7 +52,7 @@ export async function unpackDxt(dxtUnpackOption: {
   return unpackExtension(dxtUnpackOption)
 }
 
-export function getManifest(inputPath: string): false | McpbManifest {
+export function getManifest(inputPath: string): McpDxtErrors | McpbManifest {
   try {
     const resolvedPath = resolve(inputPath)
     let manifestPath = resolvedPath
@@ -70,27 +72,23 @@ export function getManifest(inputPath: string): false | McpbManifest {
       return result.data
     } else {
       console.log('ERROR: Manifest validation failed:\n')
-      result.error.issues.forEach((issue) => {
+      const errors = result.error.issues.map((issue) => {
         const path = issue.path.join('.')
         console.log(`  - ${path ? `${path}: ` : ''}${issue.message}`)
+        return {
+          field: path,
+          message: issue.message
+        }
       })
-      return false
+      return { errors: errors }
     }
   } catch (error) {
-    if (error instanceof Error) {
-      if (error.message.includes('ENOENT')) {
-        console.error(`ERROR: File not found: ${inputPath}`)
-        if (existsSync(resolve(inputPath)) && statSync(resolve(inputPath)).isDirectory()) {
-          console.error(`  (No manifest.json found in directory)`)
-        }
-      } else if (error.message.includes('JSON')) {
-        console.error(`ERROR: Invalid JSON in manifest file: ${error.message}`)
-      } else {
-        console.error(`ERROR: Error reading manifest: ${error.message}`)
-      }
-    } else {
-      console.error('ERROR: Unknown error occurred')
+    const dxtError = {
+      field: 'manifest',
+      message: error instanceof Error ? error.message : String(error)
     }
-    return false
+
+    console.error(dxtError.message)
+    return { errors: [dxtError] }
   }
 }
