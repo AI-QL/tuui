@@ -102,8 +102,8 @@ async function checkTokenUpdate(chatbotConfig: ChatbotConfig): Promise<string | 
       const currentTime = Math.floor(Date.now() / 1000)
       const remaining = payload.exp - currentTime
 
-      // Update if remaining time < 10 min
-      if (remaining <= 600) {
+      // Update if remaining time < 1 sec
+      if (remaining <= 1) {
         const snackbarStore = useSnackbarStore()
         snackbarStore.showInfoMessage('chat.token-refresh')
         return await updateToken(chatbotConfig.apiCli)
