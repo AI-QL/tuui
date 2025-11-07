@@ -68,7 +68,7 @@
       "title": "API Proxy",
       "subtitle": "API proxy enabling seamless LLM API access by resolving cross-origin and blocking issues, simplifying and streamlining model interaction.",
       "duration": "10",
-      "link": "https://github.com/AI-QL/openai-proxy-docker"
+      "link": "https://github.com/AI-QL/api-proxy"
     }
   ]
 }
