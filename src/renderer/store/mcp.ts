@@ -71,6 +71,31 @@ function getObjectKeys(o: unknown) {
   return o && typeof o === 'object' && !Array.isArray(o) ? Object.keys(o) : []
 }
 
+function getSelectedByServer(
+  serverName: string,
+  selectedIndex: number | undefined,
+  _version: number
+): McpCoreType | null {
+  const mcpServers = getServers()
+  if (!mcpServers || !mcpServers[serverName]) return null
+  console.log(mcpServers[serverName])
+  if (typeof selectedIndex === 'number') {
+    const selectedPrimitive = {
+      server: serverName,
+      primitive: Object.keys(mcpServers[serverName])[selectedIndex] as McpPrimitiveType,
+      method: Object.values(mcpServers[serverName])[selectedIndex] as McpMethodType
+    }
+    console.log(selectedPrimitive)
+    return selectedPrimitive
+  } else {
+    return {
+      server: serverName,
+      primitive: 'metadata',
+      method: JSON.stringify(mcpServers[serverName].metadata, null, 2)
+    }
+  }
+}
+
 export const useMcpStore = defineStore('mcpStore', {
   // TODO: fix any to type
   state: (): any => ({
@@ -85,31 +110,11 @@ export const useMcpStore = defineStore('mcpStore', {
   getters: {
     getSelected(state): McpCoreType | null {
       if (state.selected) {
-        return this.getSelectedByServer(state.selected[0])
+        const serverName = state.selected[0]
+        const selectedIndex = state.selectedChips[serverName]
+        return getSelectedByServer(serverName, selectedIndex, state.version)
       } else {
         return null
-      }
-    },
-    getSelectedByServer(state) {
-      return (serverName: string): McpCoreType | null => {
-        const mcpServers = getServers()
-        if (!mcpServers || !mcpServers[serverName]) return null
-        const selectedIndex = state.selectedChips[serverName]
-        if (typeof selectedIndex === 'number') {
-          const selectedPrimitive = {
-            server: serverName,
-            primitive: Object.keys(mcpServers[serverName])[selectedIndex] as McpPrimitiveType,
-            method: Object.values(mcpServers[serverName])[selectedIndex] as McpMethodType
-          }
-          console.log(selectedPrimitive)
-          return selectedPrimitive
-        } else {
-          return {
-            server: serverName,
-            primitive: 'metadata',
-            method: JSON.stringify(mcpServers[serverName].metadata, null, 2)
-          }
-        }
       }
     }
   },

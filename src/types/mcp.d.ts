@@ -10,7 +10,8 @@ import type {
   ListPromptsRequest,
   ListPromptsResult,
   GetPromptRequest,
-  GetPromptResult
+  GetPromptResult,
+  Implementation as McpServerImplementation
 } from '@modelcontextprotocol/sdk/types.d.ts'
 
 import { StdioServerParameters } from '@modelcontextprotocol/sdk/client/stdio.js'
@@ -42,6 +43,7 @@ export type McpMetadataStdio = {
   name: string
   type: 'metadata__stdio_config'
   config: StdioServerParameters
+  description?: McpServerDescription
 }
 
 type McpDxtError = {
@@ -99,4 +101,10 @@ export type ClientProfile = {
   prompts?: Record<string, string>
   resources?: Record<string, string>
   config?: StdioServerParameters
+  description?: McpServerDescription
+}
+
+export type McpServerDescription = {
+  instructions: string
+  implementation: McpServerImplementation
 }

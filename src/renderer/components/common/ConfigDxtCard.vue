@@ -5,6 +5,7 @@ import { getDxtUrl, openDxtFilePath } from '@/renderer/utils'
 import { useDxtStore, validateNumberRange } from '@/renderer/store/dxt'
 import type { McpMetadataDxt, userConfigValue, McpbManifest, McpDxtErrors } from '@/types/mcp'
 import { useI18n } from 'vue-i18n'
+import MarkdownCard from '@/renderer/components/common/MarkdownCard.vue'
 const { t } = useI18n()
 
 const dxtStore = useDxtStore()
@@ -114,24 +115,13 @@ function hasErrors(config: McpbManifest | McpDxtErrors): config is McpDxtErrors 
     </v-card>
   </div>
   <div v-else>
-    <v-card>
-      <template #title>
-        <div class="d-flex">
-          {{ $t('dxt.title') + ' - ' + metadata.name }}
-          <v-chip size="small" class="ml-2 mt-1 font-weight-bold" color="primary">
-            {{ manifest.version }}
-          </v-chip>
-        </div>
-      </template>
+    <v-card :title="$t('dxt.title')" :subtitle="metadata.name">
       <template #append>
-        <v-btn
-          color="primary"
-          variant="text"
-          rounded="lg"
-          icon="mdi-folder-open"
-          @click="openDxtFilePath(metadata.name)"
-        ></v-btn>
+        <v-chip size="small" class="font-weight-bold" color="primary">
+          {{ manifest.version }}
+        </v-chip>
       </template>
+
       <v-divider></v-divider>
       <v-card
         class="mx-auto"
@@ -144,8 +134,17 @@ function hasErrors(config: McpbManifest | McpDxtErrors): config is McpDxtErrors 
             <v-img :src="getIcon(metadata)"></v-img>
           </v-avatar>
         </template>
-        <v-card-text class="wrap-text">
-          {{ manifest.long_description }}
+        <template #append>
+          <v-btn
+            color="primary"
+            variant="text"
+            rounded="lg"
+            icon="mdi-folder-open"
+            @click="openDxtFilePath(metadata.name)"
+          ></v-btn>
+        </template>
+        <v-card-text v-if="manifest.long_description">
+          <MarkdownCard :model-value="manifest.long_description"></MarkdownCard>
         </v-card-text>
       </v-card>
     </v-card>

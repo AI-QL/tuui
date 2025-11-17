@@ -3,10 +3,16 @@ import { McpMetadataStdio } from '@/types/mcp'
 import { reactive, ref } from 'vue'
 import { useStdioStore } from '@/renderer/store/stdio'
 import { getRawServers } from '@/renderer/store/mcp'
+
 import McpEditPage from '@/renderer/components/pages/McpEditPage.vue'
+
+import MarkdownCard from '@/renderer/components/common/MarkdownCard.vue'
+
 const stdioStore = useStdioStore()
 
 const editDialog = ref(false)
+
+const show = ref(false)
 
 const showPassword = reactive<Record<string, boolean>>({})
 
@@ -33,7 +39,15 @@ const editConfig = () => {
 </script>
 
 <template>
-  <v-card title="Stdio Config">
+  <v-card :title="$t('mcp.stdio')">
+    <template v-if="metadata.description?.implementation" #subtitle>
+      {{ metadata.description?.implementation.title ?? metadata.description?.implementation.name }}
+    </template>
+    <template v-if="metadata.description?.implementation.version" #append>
+      <v-chip size="small" class="font-weight-bold" color="primary">{{
+        metadata.description.implementation.version
+      }}</v-chip>
+    </template>
     <v-divider></v-divider>
     <v-card-text>
       <div v-for="(value, key) in metadata.config" :key="key" class="ma-2">
@@ -104,6 +118,11 @@ const editConfig = () => {
     </v-card-text>
     <v-divider></v-divider>
     <v-card-actions>
+      <v-btn
+        v-if="metadata.description?.instructions"
+        :icon="show ? 'mdi-chevron-up' : 'mdi-chevron-down'"
+        @click="show = !show"
+      ></v-btn>
       <v-spacer> </v-spacer>
       <v-btn
         v-if="metadata.name in (getRawServers() ?? {})"
@@ -133,6 +152,15 @@ const editConfig = () => {
       >
       </v-btn>
     </v-card-actions>
+    <v-expand-transition v-if="metadata.description?.instructions">
+      <div v-show="show">
+        <v-divider></v-divider>
+
+        <v-card-text class="ma-2">
+          <MarkdownCard :model-value="metadata.description.instructions"></MarkdownCard
+        ></v-card-text>
+      </div>
+    </v-expand-transition>
   </v-card>
   <McpEditPage v-model="editDialog" v-model:name="metadata.name"></McpEditPage>
 </template>

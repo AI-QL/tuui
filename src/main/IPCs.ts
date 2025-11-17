@@ -361,5 +361,15 @@ export function registerIpcHandlers({
     }
   }
 
-  return feature
+  const instructions = connection.client.getInstructions()
+
+  const implementation = connection.client.getServerVersion()
+
+  return {
+    ...feature,
+    description: {
+      instructions,
+      implementation
+    }
+  }
 }

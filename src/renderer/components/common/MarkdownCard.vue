@@ -1,5 +1,8 @@
 <script setup lang="ts">
 import { MdPreview, config } from 'md-editor-v3'
+import { useI18n } from 'vue-i18n'
+const { locale } = useI18n()
+
 import 'md-editor-v3/lib/style.css'
 
 import katex from 'katex'
@@ -39,7 +42,6 @@ config({
 interface Props {
   modelValue: string
   codeFoldable?: boolean
-  language?: string
   autoFoldThreshold?: number
 }
 
@@ -54,7 +56,7 @@ withDefaults(defineProps<Props>(), {
   <md-preview
     :model-value="modelValue"
     :code-foldable="codeFoldable"
-    :language="language"
+    :language="locale === 'zh' ? 'zh-CN' : 'en-US'"
     :auto-fold-threshold="autoFoldThreshold"
   />
 </template>

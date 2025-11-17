@@ -30,7 +30,6 @@ const { smAndUp } = useDisplay()
 
 const props = defineProps<{
   messages: Message[]
-  language: string
 }>()
 
 const emit = defineEmits<{
@@ -185,10 +184,7 @@ const groupMessages = computed<Group[]>(() => {
                 />
               </v-card-text>
               <v-card-text v-else class="md-preview pt-3">
-                <MarkdownCard
-                  :model-value="group.message!.content"
-                  :language="language === 'zh' ? 'zh-CN' : 'en-US'"
-                ></MarkdownCard>
+                <MarkdownCard :model-value="group.message!.content"></MarkdownCard>
               </v-card-text>
             </template>
           </chat-card>

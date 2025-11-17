@@ -42,6 +42,7 @@
   },
   "mcp": {
     "config": "Server Config",
+    "stdio": "Stdio Config",
     "file": "Archive File",
     "add": "Add MCP Server",
     "init": "Start MCP Servers",

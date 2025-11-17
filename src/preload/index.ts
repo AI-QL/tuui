@@ -178,7 +178,7 @@ const api = {
 }
 
 function buildClientAPI(client: ClientProfile): MCPAPI[string] {
-  const { name, tools, prompts, resources, config } = client
+  const { name, tools, prompts, resources, config, description } = client
   const apiItem: MCPAPI[string] = {}
 
   if (tools) apiItem.tools = createAPIMethods(tools)
@@ -186,9 +186,10 @@ function buildClientAPI(client: ClientProfile): MCPAPI[string] {
   if (resources) apiItem.resources = createAPIMethods(resources)
 
   const metadata = {
-    name: name,
+    name,
     type: 'metadata__stdio_config' as const,
-    config: config
+    config,
+    description
   }
 
   apiItem.metadata = metadata

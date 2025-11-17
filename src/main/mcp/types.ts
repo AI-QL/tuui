@@ -15,7 +15,7 @@ import {
   StdioServerParameters
 } from '@modelcontextprotocol/sdk/client/stdio.js'
 
-import { McpMetadata } from '@/types/mcp'
+import { McpMetadata, McpServerDescription } from '@/types/mcp'
 
 export const McpServerCapabilitySchemas = {
   tools: {
@@ -67,4 +67,5 @@ export type McpClientObject = {
 export type McpFeatureObject = {
   name: string
   config: McpClientObject['configJson']
+  description?: McpServerDescription
 }

@@ -1,7 +1,7 @@
 {
   "desc": {},
   "dxt": {
-    "title": "MCP扩展包",
+    "title": "MCP 扩展包",
     "name": "名称",
     "version": "版本",
     "description": "介绍",
@@ -42,6 +42,7 @@
   },
   "mcp": {
     "config": "服务端配置",
+    "stdio": "Stdio 配置",
     "file": "文件压缩包",
     "add": "新增 MCP 服务端",
     "init": "启动 MCP 服务端",
