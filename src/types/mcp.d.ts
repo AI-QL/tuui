@@ -16,7 +16,7 @@ import type {
 
 import { StdioServerParameters } from '@modelcontextprotocol/sdk/client/stdio.js'
 
-import { McpbManifest, McpbUserConfigValues } from '@anthropic-ai/mcpb'
+import { McpbManifestAny, McpbUserConfigValues } from '@anthropic-ai/mcpb'
 
 export type TypedAsyncFunction<Args extends any[], Result> = (..._args: Args) => Promise<Result>
 
@@ -55,12 +55,12 @@ export type McpDxtErrors = {
   errors: McpDxtError[]
 }
 
-export type { McpbManifest }
+export type { McpbManifestAny }
 
 export type McpMetadataDxt = {
   name: string
   type: 'metadata__mcpb_manifest'
-  config: McpbManifest | McpDxtErrors
+  config: McpbManifestAny | McpDxtErrors
   user_config?: McpbUserConfigValues
 }
 
@@ -93,7 +93,7 @@ export type ToolType = {
 
 export type MCPAPI = Record<string, McpObject>
 
-export type DXTAPI = Record<string, McpbManifest>
+export type DXTAPI = Record<string, McpbManifestAny>
 
 export type ClientProfile = {
   name: string

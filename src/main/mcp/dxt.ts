@@ -1,10 +1,9 @@
 import {
   unpackExtension,
   getMcpConfigForManifest,
-  McpbManifestSchema,
-  McpbManifest,
+  v0_3 as McpbVersion,
+  McpbManifestAny,
   McpbUserConfigValues,
-  McpServerConfig,
   Logger
 } from '@anthropic-ai/mcpb'
 
@@ -13,6 +12,8 @@ import type { McpDxtErrors } from '@/types/mcp'
 import { existsSync, readFileSync, statSync } from 'fs'
 import { join, resolve, sep } from 'path'
 
+export type McpServerConfig = McpbManifestAny['server']['mcp_config']
+
 const mockSystemDirs = {
   home: '/home/user',
   data: '/data'
@@ -20,7 +21,7 @@ const mockSystemDirs = {
 
 export async function getMcpConfigForDxt(
   basePath: string,
-  baseManifest: McpbManifest,
+  baseManifest: McpbManifestAny,
   userConfig: McpbUserConfigValues
 ): Promise<McpServerConfig> {
   const logMessages: string[] = []
@@ -52,7 +53,7 @@ export async function unpackDxt(dxtUnpackOption: {
   return unpackExtension(dxtUnpackOption)
 }
 
-export function getManifest(inputPath: string): McpDxtErrors | McpbManifest {
+export function getManifest(inputPath: string): McpDxtErrors | McpbManifestAny {
   try {
     const resolvedPath = resolve(inputPath)
     let manifestPath = resolvedPath
@@ -65,7 +66,7 @@ export function getManifest(inputPath: string): McpDxtErrors | McpbManifest {
     const manifestContent = readFileSync(manifestPath, 'utf-8')
     const manifestData = JSON.parse(manifestContent)
 
-    const result = McpbManifestSchema.safeParse(manifestData)
+    const result = McpbVersion.McpbManifestSchema.safeParse(manifestData)
 
     if (result.success) {
       console.log('Manifest is valid!')

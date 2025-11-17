@@ -20,7 +20,7 @@ import { disconnect } from './mcp/connection'
 import { loadConfig } from './mcp/init'
 import { loadLlmFile } from './mcp/config'
 import { unpackDxt, getManifest } from './mcp/dxt'
-import { McpbManifest } from '@anthropic-ai/mcpb'
+import { McpbManifestAny } from '@anthropic-ai/mcpb'
 
 import { closeCommandPicker } from './aid/commands'
 
@@ -34,7 +34,7 @@ const handlerRegistry = new Map<string, Function>()
 
 interface ManifestResponse {
   status: 'success' | 'error'
-  result?: Record<string, McpbManifest> // Object with string keys and DXT values
+  result?: Record<string, McpbManifestAny> // Object with string keys and DXT values
   error?: string
 }
 

@@ -1,12 +1,14 @@
 <script setup lang="ts">
 import { ref, watchEffect, reactive } from 'vue'
-import { McpbUserConfigurationOption } from '@anthropic-ai/mcpb'
+import { McpbUserConfigValues } from '@anthropic-ai/mcpb'
 import { getDxtUrl, openDxtFilePath } from '@/renderer/utils'
 import { useDxtStore, validateNumberRange } from '@/renderer/store/dxt'
-import type { McpMetadataDxt, userConfigValue, McpbManifest, McpDxtErrors } from '@/types/mcp'
+import type { McpMetadataDxt, userConfigValue, McpbManifestAny, McpDxtErrors } from '@/types/mcp'
 import { useI18n } from 'vue-i18n'
 import MarkdownCard from '@/renderer/components/common/MarkdownCard.vue'
 const { t } = useI18n()
+
+type McpbUserConfigurationOption = McpbUserConfigValues
 
 const dxtStore = useDxtStore()
 
@@ -87,10 +89,13 @@ function getPlatformIcon(platform: string): string {
   }
 }
 
-const getErrorState = (para: McpbUserConfigurationOption, value: any) => {
-  const isRequired = para.required
+const getErrorState = (para: McpbUserConfigurationOption, value: any): boolean | undefined => {
+  if (!para.required) {
+    return undefined
+  }
+
   const isEmptyArray = Array.isArray(value) && value.length === 0
-  return isRequired && (!value || isEmptyArray)
+  return !value || isEmptyArray
 }
 
 const getErrorMessages = (para: McpbUserConfigurationOption, key: string) => {
@@ -98,7 +103,7 @@ const getErrorMessages = (para: McpbUserConfigurationOption, key: string) => {
   return getErrorState(para, value) ? [t('dxt.required')] : []
 }
 
-function hasErrors(config: McpbManifest | McpDxtErrors): config is McpDxtErrors {
+function hasErrors(config: McpbManifestAny | McpDxtErrors): config is McpDxtErrors {
   return 'errors' in config && Array.isArray(config.errors)
 }
 </script>
