@@ -6,15 +6,14 @@ import type { Prompt as PromptType, GetPromptRequest } from '@modelcontextprotoc
 
 type ParamsType = GetPromptRequest['params']
 
-
 // Extend the argument content to be sent to the MCP server
 type ExtendedArgument = NonNullable<PromptType['arguments']>[number] & {
-  content?: string;
-};
+  content?: string
+}
 
 type ExtendedPromptType = Omit<PromptType, 'arguments'> & {
-  arguments?: ExtendedArgument[];
-};
+  arguments?: ExtendedArgument[]
+}
 
 export const usePromptStore = defineStore('promptStore', {
   state: () => ({
