@@ -28,7 +28,7 @@ const placeholderColor = computed(() => {
               <v-img
                 class="ma-2"
                 rounded="lg"
-                cover
+                :cover="item.raw.cover ?? true"
                 :src="item.raw.img"
                 :height="140"
                 :lazy-src="placeholderColor(index)"

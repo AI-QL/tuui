@@ -8,4 +8,5 @@ export interface StartupNewsType {
   subtitle: string
   duration: string
   link: string
+  cover?: boolean
 }

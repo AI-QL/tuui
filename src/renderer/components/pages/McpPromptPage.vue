@@ -3,11 +3,17 @@ import { useMessageStore } from '@/renderer/store/message'
 import { useLayoutStore } from '@/renderer/store/layout'
 import { usePromptStore } from '@/renderer/store/prompt'
 import { useRouter } from 'vue-router'
+import { ref } from 'vue'
+import { useRules } from '@/renderer/composables/useRules'
 
 const messageStore = useMessageStore()
 const promptStore = usePromptStore()
 const layoutStore = useLayoutStore()
 const router = useRouter()
+
+const rules = useRules()
+
+const isValid = ref(true)
 
 const navigateTo = (route: string, screenValue: number) => {
   layoutStore.screen = screenValue
@@ -80,31 +86,49 @@ const handleApplyPrompt = async () => {
       :subtitle="promptStore.promptSelect.name"
     >
       <v-divider></v-divider>
-      <v-card-text>
-        <div>{{ promptStore.promptSelect.description }}</div>
-        <div v-if="promptStore.promptSelect.arguments">
-          <br />
+      <v-card-text class="pt-0">
+        <v-textarea
+          variant="plain"
+          :model-value="promptStore.promptSelect.description"
+          rows="1"
+          auto-grow
+          hide-details
+        ></v-textarea>
+        <v-form v-if="promptStore.promptSelect.arguments" ref="form" v-model="isValid" class="pt-2">
           <v-textarea
             v-for="argument in promptStore.promptSelect.arguments"
             :key="argument.name"
             v-model="argument.content"
-            class="mx-2"
-            color="primary"
+            :hint="argument.description"
+            class="mx-2 mt-3"
+            :base-color="argument.required ? 'secondary' : 'primary'"
+            :color="argument.required ? 'secondary' : 'primary'"
             type="text"
             variant="outlined"
             :label="argument.name"
             rows="1"
             auto-grow
+            :rules="argument.required ? [rules.required] : []"
           >
           </v-textarea>
-        </div>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn class="pt-0" variant="flat" color="primary" @click="handleApplyPrompt">
-            {{ $t('prompt.get') }}</v-btn
-          >
-        </v-card-actions>
+        </v-form>
       </v-card-text>
+      <v-divider></v-divider>
+      <v-card-actions>
+        <v-spacer></v-spacer>
+        <v-btn
+          class="my-2 mx-3 px-3"
+          variant="tonal"
+          :disabled="!isValid"
+          @click="handleApplyPrompt"
+        >
+          {{ $t('prompt.get') }}
+          <template #prepend>
+            <v-icon v-if="!isValid" icon="mdi-close-circle" color="error"></v-icon>
+            <v-icon v-else icon="mdi-check-circle" color="success"></v-icon>
+          </template>
+        </v-btn>
+      </v-card-actions>
     </v-card>
   </v-dialog>
 </template>
