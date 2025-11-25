@@ -69,6 +69,7 @@
     "wipe": "Wipe",
     "reg": "Regenerate",
     "continue": "Continue",
+    "reduce": "Drop older messages",
     "token-refresh": "Invalid API key, updating now...",
     "token-fail": "Update API key failed.",
     "select-model": "Select Model",

@@ -110,6 +110,7 @@ const copyToClipboard = async (msg: Message) => {
               <!-- Reduce Button -->
               <v-btn
                 v-if="showReduce && index > 0"
+                v-tooltip:top="$t('chat.reduce')"
                 color="error"
                 icon="mdi-format-align-top"
                 size="x-small"

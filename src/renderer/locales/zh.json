@@ -69,6 +69,7 @@
     "wipe": "清理对话",
     "reg": "重新生成",
     "continue": "继续生成",
+    "reduce": "丢弃较早的消息",
     "token-refresh": "无效的 API key, 正在更新中...",
     "token-fail": "更新 API key 失败.",
     "select-model": "选择模型",
