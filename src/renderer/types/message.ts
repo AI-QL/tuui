@@ -1,4 +1,4 @@
-import { z, ZodTypeAny } from 'zod'
+import * as z from 'zod/v4'
 
 import {
   TextContentSchema as TextContentPartSchema,
@@ -19,7 +19,7 @@ type Flatten<T> = T extends Primitive
               [K in keyof T]: Flatten<T[K]>
             }
           : T
-type Infer<Schema extends ZodTypeAny> = Flatten<z.infer<Schema>>
+type Infer<Schema extends z.ZodTypeAny> = Flatten<z.infer<Schema>>
 
 const TextContent = z.string()
 
