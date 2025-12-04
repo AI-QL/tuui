@@ -145,7 +145,7 @@ ElicitationTransfer.request(handleProgress)
           'properties' in elicitationParams.requestedSchema
         "
       >
-        <v-row v-for="{ para, key } in normalizedProperties" :key="key" class="mx-3 mb-3">
+        <v-row v-for="{ para, key } in normalizedProperties" :key="key" class="mx-3 mb-2 mt-1">
           <v-select
             v-if="para.enum"
             prepend-icon="mdi-list-box-outline"
@@ -194,6 +194,7 @@ ElicitationTransfer.request(handleProgress)
             :model-value="dynamicModel(key).get()"
             :label="para.title"
             @update:model-value="dynamicModel(key).set($event)"
+            hide-details
           ></v-checkbox>
         </v-row>
       </v-card-text>
