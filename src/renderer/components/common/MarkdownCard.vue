@@ -10,8 +10,6 @@ import 'katex/dist/katex.min.css'
 
 import mermaid from 'mermaid'
 
-import * as echarts from 'echarts'
-
 import highlight from 'highlight.js'
 import 'highlight.js/styles/atom-one-dark.css'
 
@@ -32,9 +30,6 @@ config({
     },
     mermaid: {
       instance: mermaid
-    },
-    echarts: {
-      instance: echarts
     }
   }
 })
@@ -58,6 +53,7 @@ withDefaults(defineProps<Props>(), {
     :code-foldable="codeFoldable"
     :language="locale === 'zh' ? 'zh-CN' : 'en-US'"
     :auto-fold-threshold="autoFoldThreshold"
+    no-echarts
   />
 </template>
 
