@@ -47,11 +47,11 @@
     "node": ">=22.12.0"
   },
   "dependencies": {
-    "@anthropic-ai/mcpb": "^2.1.1",
+    "@anthropic-ai/mcpb": "^2.1.2",
     "@el3um4s/run-vbs": "^1.1.2",
     "@fontsource/inter": "^5.2.8",
     "@mdi/font": "^7.4.47",
-    "@modelcontextprotocol/sdk": "^1.24.2",
+    "@modelcontextprotocol/sdk": "^1.24.3",
     "@nut-tree-fork/nut-js": "^4.2.6",
     "applescript": "^1.0.0",
     "highlight.js": "^11.11.1",
@@ -79,7 +79,7 @@
     "@vitejs/plugin-vue": "^6.0.2",
     "@vitejs/plugin-vue-jsx": "^5.1.2",
     "dotenv": "^17.2.3",
-    "electron": "^39.2.5",
+    "electron": "^39.2.6",
     "electron-builder": "^26.0.18",
     "eslint": "^9.39.1",
     "eslint-config-prettier": "^10.1.8",
@@ -96,7 +96,7 @@
     "vite-plugin-electron-renderer": "^0.14.6",
     "vite-plugin-vuetify": "^2.1.2",
     "vue-eslint-parser": "^10.2.0",
-    "vue-tsc": "^3.1.5"
+    "vue-tsc": "^3.1.6"
   },
   "overrides": {
     "vite-plugin-electron": {
