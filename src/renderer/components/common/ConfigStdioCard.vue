@@ -155,8 +155,7 @@ const editConfig = () => {
     <v-expand-transition v-if="metadata.description?.instructions">
       <div v-show="show">
         <v-divider></v-divider>
-
-        <v-card-text class="ma-2">
+        <v-card-text class="mx-2">
           <MarkdownCard :model-value="metadata.description.instructions"></MarkdownCard
         ></v-card-text>
       </div>

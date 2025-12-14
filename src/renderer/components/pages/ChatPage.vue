@@ -183,7 +183,7 @@ const groupMessages = computed<Group[]>(() => {
                   readonly
                 />
               </v-card-text>
-              <v-card-text v-else class="md-preview pt-3">
+              <v-card-text v-else class="md-preview py-2">
                 <MarkdownCard :model-value="group.message!.content"></MarkdownCard>
               </v-card-text>
             </template>
