@@ -68,7 +68,7 @@
       "failure_reason": null,
       "id": "t1",
       "replay": {
-        "cassette_path": "/mnt/c/Users/snowb/OneDrive/Desktop/agenteval/runledger/automation/workdir/AI-QL_tuui/evals/runledger/cassettes/t1.jsonl",
+        "cassette_path": "evals/runledger/cassettes/t1.jsonl",
         "cassette_sha256": "3ca88ba1cde6952e1927e83ba82cc13948f96157d200ef01a7a15b5e586883e5"
       },
       "status": "pass",
@@ -102,12 +102,12 @@
   "suite": {
     "agent_command": [
       "python",
-      "/mnt/c/Users/snowb/OneDrive/Desktop/agenteval/runledger/automation/workdir/AI-QL_tuui/evals/runledger/agent/agent.py"
+      "evals/runledger/agent/agent.py"
     ],
     "cases_total": 1,
     "name": "runledger-demo",
     "suite_config_hash": null,
-    "suite_path": "/mnt/c/Users/snowb/OneDrive/Desktop/agenteval/runledger/automation/workdir/AI-QL_tuui/evals/runledger/suite.yaml",
+    "suite_path": "evals/runledger/suite.yaml",
     "tool_mode": "replay"
   }
 }
