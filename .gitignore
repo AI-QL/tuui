@@ -67,3 +67,4 @@ tests/results/
 npm-debug.log
 npm-debug.log.*
 vite-plugin-electron.log
+runledger_out/
