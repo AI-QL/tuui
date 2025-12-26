@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue'
 
+defineOptions({
+  inheritAttrs: false
+})
+
 const emit = defineEmits(['update:modelValue', 'onError', 'focus', 'blur'])
 
 type JSONValue = string | number | boolean | null | JSONValue[] | { [key: string]: JSONValue }
@@ -64,6 +68,7 @@ watch(
         variant="solo"
         outlined
         auto-grow
+        v-bind="$attrs"
         :error-messages="jsonError"
         :hide-details="!Boolean(jsonError ?? '')"
         @focus="handleFocus"

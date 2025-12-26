@@ -31,6 +31,8 @@ export const CHATBOT_DEFAULTS = {
   stream: true,
   reasoningEffort: undefined,
   enableThinking: undefined,
+  enableExtraBody: false,
+  extraBody: {},
   authorization: true,
   mcp: true
 }

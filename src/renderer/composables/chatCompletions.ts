@@ -166,10 +166,15 @@ export const createCompletion = async (
       }
     }
 
+    const extraBody = chatbotConfig.enableExtraBody ? chatbotConfig.extraBody : {}
+
     const body: ChatRequestBody = {
       model: chatbotConfig.model,
-      stream: chatbotConfig.stream
+      stream: chatbotConfig.stream,
+      ...extraBody
     }
+
+    console.log(body)
 
     if (typeof chatbotConfig.reasoningEffort === 'number') {
       body['reasoning_effort'] = REASONING_EFFORT[chatbotConfig.reasoningEffort]
@@ -177,10 +182,16 @@ export const createCompletion = async (
 
     if (typeof chatbotConfig.enableThinking === 'number') {
       if (ENABLE_THINKING[chatbotConfig.enableThinking] === 'true') {
-        body['chat_template_kwargs'] = { enable_thinking: true }
+        body['chat_template_kwargs'] = {
+          enable_thinking: true,
+          thinking: true
+        }
         body['enable_thinking'] = true
       } else if (ENABLE_THINKING[chatbotConfig.enableThinking] === 'false') {
-        body['chat_template_kwargs'] = { enable_thinking: false }
+        body['chat_template_kwargs'] = {
+          enable_thinking: false,
+          thinking: false
+        }
         body['enable_thinking'] = false
       }
     }

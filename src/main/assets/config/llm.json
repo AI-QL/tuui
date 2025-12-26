@@ -31,6 +31,8 @@
     "stream": true,
     "reasoningEffort": null,
     "enableThinking": null,
+    "enableExtraBody": false,
+    "extraBody": {},
     "authorization": true,
     "mcp": true
   },

@@ -6,6 +6,8 @@ import { useLayoutStore } from '@/renderer/store/layout'
 import { v4 as uuidv4 } from 'uuid'
 import { getApiToken, listenStdioProgress, removeListenStdioProgress } from '@/renderer/utils'
 import LogoAvatar from '@/renderer/components/common/LogoAvatar.vue'
+import ConfigJsonCard from '@/renderer/components/common/ConfigJsonCard.vue'
+
 import type { ChatbotConfig } from '@/types/llm'
 
 const layoutStore = useLayoutStore()
@@ -25,8 +27,7 @@ interface Emits {
   (_e: 'batch:token', _apiCli: string, _apiKey: string): void
 }
 
-// const props =
-defineProps<Props>()
+const props = defineProps<Props>()
 const emit = defineEmits<Emits>()
 const handleUpdate = <K extends keyof ChatbotConfig>(key: K, value: ChatbotConfig[K]) => {
   emit('update:config', { [key]: value } as Partial<ChatbotConfig>)
@@ -44,6 +45,21 @@ watch(apiDialog, (_val) => {
   stdout.value.length = 0
   stderr.value.length = 0
 })
+
+watch(
+  () => props.config.enableExtraBody,
+  async (val) => {
+    if (val) {
+      domExtraBody.value?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'center'
+      })
+    }
+  },
+  { flush: 'post' }
+)
+
+const domExtraBody = ref<HTMLElement | null>(null)
 
 const handleGetApiToken = async (cli: string): Promise<void> => {
   const handleProgress = (_event: Event, progress: string) => {
@@ -344,6 +360,7 @@ const validateNumberRange = (min: number, max: number) => {
         <v-btn-toggle
           class="mt-0"
           color="secondary"
+          v-tooltip:top="$t('setting.enable-thinking-tip')"
           :model-value="config.enableThinking"
           variant="plain"
           @update:model-value="(v) => handleUpdate('enableThinking', v)"
@@ -351,8 +368,25 @@ const validateNumberRange = (min: number, max: number) => {
           <v-btn v-for="level in ENABLE_THINKING" :key="level">{{ level }}</v-btn>
         </v-btn-toggle>
       </v-field>
+      <v-switch
+        min-width="200px"
+        class="ml-4"
+        :label="$t('setting.enable-extra-body')"
+        color="secondary"
+        base-color="primary"
+        hide-details
+        inset
+        :model-value="config.enableExtraBody"
+        @update:model-value="(v) => handleUpdate('enableExtraBody', Boolean(v))"
+      ></v-switch>
     </v-card-text>
   </v-card>
+  <div ref="domExtraBody">
+    <v-card v-if="config.enableExtraBody" class="mx-auto mt-4" :title="$t('setting.extra-body')">
+      <v-divider></v-divider>
+      <ConfigJsonCard v-model="config.extraBody" clearable rows="1"> </ConfigJsonCard>
+    </v-card>
+  </div>
 </template>
 <style scoped>
 .cursor-pointer {

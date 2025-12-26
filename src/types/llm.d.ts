@@ -34,6 +34,8 @@ export interface ChatbotConfig {
   stream: boolean
   reasoningEffort?: number
   enableThinking?: number
+  enableExtraBody: boolean
+  extraBody: object
   authorization: boolean
   mcp: boolean
 }
