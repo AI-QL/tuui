@@ -41,4 +41,4 @@ export const REASONING_EFFORT = ['minimal', 'low', 'medium', 'high'] as const
 
 export type ReasoningEffort = (typeof REASONING_EFFORT)[number]
 
-export const ENABLE_THINKING = ['true', 'false']
+export const ENABLE_THINKING = ['false', 'true']

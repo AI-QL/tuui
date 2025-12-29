@@ -10,7 +10,11 @@ type ElicitRequestParams = ElicitRequest['params']
 
 // type ElicitationProperty = ElicitRequestParams['requestedSchema']['properties'][string]['type']
 
-type ElicitationProperty = string | number | boolean | null
+type ElicitationProperty = string | number | boolean | null | ElicitationEnum[] | string[]
+
+type ElicitationEnumKey = 'const' | 'title'
+
+type ElicitationEnum = Record<ElicitationEnumKey, string>
 
 const elicitationResults = ref<Record<string, ElicitationProperty>>({})
 
@@ -118,6 +122,27 @@ const validateStringLength = (
   }
 }
 
+const validateEnumLength = (
+  min: number | undefined | unknown,
+  max: number | undefined | unknown
+) => {
+  return (value: string[] | null): boolean | string => {
+    if (!value || !value.length) return true
+
+    const num = value.length
+
+    if (min !== undefined && num < Number(min)) {
+      return t('elicitation.string.too-short', { min })
+    }
+
+    if (max !== undefined && num > Number(max)) {
+      return t('elicitation.string.too-long', { max })
+    }
+
+    return true
+  }
+}
+
 const handleProgress: IpcElicitRequestCallback = (_event, progress) => {
   console.log('Elicitation', progress)
   elicitationDialog.value = true
@@ -146,6 +171,7 @@ ElicitationTransfer.request(handleProgress)
         "
       >
         <v-row v-for="{ para, key } in normalizedProperties" :key="key" class="mx-3 mb-2 mt-1">
+          <!-- Single-select enum (without titles) -->
           <v-select
             v-if="para.enum"
             prepend-icon="mdi-list-box-outline"
@@ -155,6 +181,48 @@ ElicitationTransfer.request(handleProgress)
             :items="para.enum as string[]"
             :model-value="dynamicModel(key).get() as string"
             clearable
+            @update:model-value="dynamicModel(key).set($event)"
+          ></v-select>
+          <!-- Single-select enum (with titles) -->
+          <v-select
+            v-else-if="para.oneOf"
+            prepend-icon="mdi-list-box-outline"
+            :label="para.title || para.description"
+            variant="outlined"
+            density="compact"
+            :items="para.oneOf as ElicitationEnum[]"
+            item-value="const"
+            :model-value="dynamicModel(key).get() as ElicitationEnum[]"
+            clearable
+            @update:model-value="dynamicModel(key).set($event)"
+          ></v-select>
+          <!-- Multi-select enum (without titles) -->
+          <v-select
+            v-else-if="para.items && para.items.enum"
+            prepend-icon="mdi-list-box-outline"
+            :label="para.title || para.description"
+            variant="outlined"
+            density="compact"
+            :items="para.items.enum as string[]"
+            :multiple="true"
+            :rules="[validateEnumLength(para.minItems, para.maxItems)]"
+            clearable
+            :model-value="dynamicModel(key).get() as string[]"
+            @update:model-value="dynamicModel(key).set($event)"
+          ></v-select>
+          <!-- Multi-select enum (with titles) -->
+          <v-select
+            v-else-if="para.items && para.items.anyOf"
+            prepend-icon="mdi-list-box-outline"
+            :label="para.title || para.description"
+            variant="outlined"
+            density="compact"
+            :items="para.items.anyOf as ElicitationEnum[]"
+            :multiple="true"
+            item-value="const"
+            :rules="[validateEnumLength(para.minItems, para.maxItems)]"
+            clearable
+            :model-value="dynamicModel(key).get() as ElicitationEnum[]"
             @update:model-value="dynamicModel(key).set($event)"
           ></v-select>
           <v-text-field

@@ -332,7 +332,7 @@ const read = async (
   target: AssistantMessage,
   buffer: string,
   stream: boolean
-) => {
+): Promise<void> => {
   // TextDecoder is a built-in object that allows you to convert a stream of bytes into a string
   const decoder = new TextDecoder()
   const messageStore = useMessageStore()
