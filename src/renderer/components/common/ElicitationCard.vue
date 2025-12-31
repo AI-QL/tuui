@@ -6,11 +6,15 @@ import { validateNumberRange } from '@/renderer/store/dxt'
 import { useI18n } from 'vue-i18n'
 const { t } = useI18n()
 
-type ElicitRequestParams = ElicitRequest['params']
+type RemoveIndexSignature<T> = {
+  [K in keyof T as string extends K ? never : K]: T[K]
+}
+
+type ElicitRequestParams = RemoveIndexSignature<ElicitRequest['params']>
 
 // type ElicitationProperty = ElicitRequestParams['requestedSchema']['properties'][string]['type']
 
-type ElicitationProperty = string | number | boolean | null | ElicitationEnum[] | string[]
+type ElicitationProperty = string | number | boolean | string[]
 
 type ElicitationEnumKey = 'const' | 'title'
 
@@ -25,24 +29,78 @@ const elicitationParams = ref<ElicitRequestParams | {}>({})
 const elicitationChannel = ref('')
 
 const normalizedProperties = computed(() => {
-  const props = (elicitationParams.value as ElicitRequestParams).requestedSchema.properties
-  return Object.keys(props).map((key) => ({
-    key,
-    para: props[key]
-  }))
+  const params = elicitationParams.value
+  if (!params || !('requestedSchema' in params)) return []
+
+  const props = params.requestedSchema.properties
+  return Object.keys(props).map((key) => {
+    const para = props[key]
+    return {
+      key,
+      para,
+
+      hasEnum: 'enum' in para && para.enum !== undefined,
+      enums: ('enum' in para ? para.enum : []) as string[],
+
+      hasEnumItems: 'oneOf' in para && para.oneOf !== undefined,
+      enumItems: ('oneOf' in para ? para.oneOf : []) as ElicitationEnum[],
+
+      hasMultiEnum: 'items' in para && 'enum' in para.items,
+      multiEnums: ('items' in para && 'enum' in para.items ? para.items.enum : []) as string[],
+
+      hasMultiEnumItems: 'items' in para && 'anyOf' in para.items,
+      multiEnumItems: ('items' in para && 'anyOf' in para.items
+        ? para.items.anyOf
+        : []) as ElicitationEnum[],
+
+      isString: para.type === 'string',
+      isNumber: para.type === 'number',
+      isInteger: para.type === 'integer',
+      isBoolean: para.type === 'boolean',
+
+      minLength: 'minLength' in para ? para.minLength : undefined,
+      maxLength: 'maxLength' in para ? para.maxLength : undefined,
+
+      minItems: 'minItems' in para ? para.minItems : undefined,
+      maxItems: 'maxItems' in para ? para.maxItems : undefined,
+
+      minimum: 'minimum' in para ? para.minimum : undefined,
+      maximum: 'maximum' in para ? para.maximum : undefined,
+
+      title: para.title,
+      description: para.description,
+      label: para.description || para.title,
+      default: 'default' in para ? para.default : undefined
+    }
+  })
 })
 
-const getConfigAttribute = (name: string) => {
-  return elicitationResults.value[name] ?? null
+const configExist = (name: string) => {
+  const exists = name in elicitationResults.value
+  return {
+    exists,
+    configValue: exists ? elicitationResults.value[name] : undefined
+  }
 }
 
-const updateConfigAttribute = (name: string, value: ElicitationProperty) => {
-  elicitationResults.value[name] = value
+const updateConfigAttribute = (name: string, value: ElicitationProperty | null) => {
+  if (value === null) {
+    elicitationResults.value[name] = ''
+  } else {
+    elicitationResults.value[name] = value
+  }
 }
 
 const dynamicModel = (name: string) => ({
-  get: () => getConfigAttribute(name),
-  set: (val: ElicitationProperty) => updateConfigAttribute(name, val)
+  get: (defaultVal: ElicitationProperty | undefined) => {
+    const { exists, configValue } = configExist(name)
+    if (defaultVal && !exists) {
+      updateConfigAttribute(name, defaultVal)
+      return defaultVal
+    }
+    return configValue
+  },
+  set: (val: ElicitationProperty | null) => updateConfigAttribute(name, val)
 })
 
 const declineElicitation = () => {
@@ -82,6 +140,11 @@ const clearSampling = () => {
 }
 
 const getErrorState = (key: string): boolean => {
+  const { exists } = configExist(key)
+  if (exists) {
+    return false
+  }
+
   const value = elicitationParams.value
 
   if (value && typeof value === 'object' && 'requestedSchema' in value) {
@@ -170,98 +233,99 @@ ElicitationTransfer.request(handleProgress)
           'properties' in elicitationParams.requestedSchema
         "
       >
-        <v-row v-for="{ para, key } in normalizedProperties" :key="key" class="mx-3 mb-2 mt-1">
+        <v-row v-for="item in normalizedProperties" :key="item.key" class="mx-3 mb-2 mt-1">
           <!-- Single-select enum (without titles) -->
           <v-select
-            v-if="para.enum"
+            v-if="item.hasEnum"
             prepend-icon="mdi-list-box-outline"
-            :label="para.title || para.description"
+            :label="item.label"
             variant="outlined"
             density="compact"
-            :items="para.enum as string[]"
-            :model-value="dynamicModel(key).get() as string"
+            :items="item.enums"
+            :model-value="dynamicModel(item.key).get(item.default) as string"
             clearable
-            @update:model-value="dynamicModel(key).set($event)"
+            @update:model-value="dynamicModel(item.key).set($event)"
           ></v-select>
           <!-- Single-select enum (with titles) -->
           <v-select
-            v-else-if="para.oneOf"
+            v-else-if="item.hasEnumItems"
             prepend-icon="mdi-list-box-outline"
-            :label="para.title || para.description"
+            :label="item.label"
             variant="outlined"
             density="compact"
-            :items="para.oneOf as ElicitationEnum[]"
+            :items="item.enumItems"
             item-value="const"
-            :model-value="dynamicModel(key).get() as ElicitationEnum[]"
+            :model-value="dynamicModel(item.key).get(item.default)"
             clearable
-            @update:model-value="dynamicModel(key).set($event)"
+            @update:model-value="dynamicModel(item.key).set($event)"
           ></v-select>
           <!-- Multi-select enum (without titles) -->
           <v-select
-            v-else-if="para.items && para.items.enum"
+            v-else-if="item.hasMultiEnum"
             prepend-icon="mdi-list-box-outline"
-            :label="para.title || para.description"
+            :label="item.label"
             variant="outlined"
             density="compact"
-            :items="para.items.enum as string[]"
+            :items="item.multiEnums"
             :multiple="true"
-            :rules="[validateEnumLength(para.minItems, para.maxItems)]"
+            :rules="[validateEnumLength(item.minItems, item.maxItems)]"
             clearable
-            :model-value="dynamicModel(key).get() as string[]"
-            @update:model-value="dynamicModel(key).set($event)"
+            :model-value="dynamicModel(item.key).get(item.default) as string[]"
+            @update:model-value="dynamicModel(item.key).set($event)"
           ></v-select>
           <!-- Multi-select enum (with titles) -->
           <v-select
-            v-else-if="para.items && para.items.anyOf"
+            v-else-if="item.hasMultiEnumItems"
             prepend-icon="mdi-list-box-outline"
-            :label="para.title || para.description"
+            :label="item.label"
             variant="outlined"
             density="compact"
-            :items="para.items.anyOf as ElicitationEnum[]"
+            :items="item.multiEnumItems"
             :multiple="true"
             item-value="const"
-            :rules="[validateEnumLength(para.minItems, para.maxItems)]"
+            :rules="[validateEnumLength(item.minItems, item.maxItems)]"
             clearable
-            :model-value="dynamicModel(key).get() as ElicitationEnum[]"
-            @update:model-value="dynamicModel(key).set($event)"
+            :model-value="dynamicModel(item.key).get(item.default) as string[]"
+            @update:model-value="dynamicModel(item.key).set($event)"
           ></v-select>
           <v-text-field
-            v-else-if="para.type === 'string'"
+            v-else-if="item.isString"
             prepend-icon="mdi-alphabetical"
-            :label="para.title || para.description"
+            :label="item.label"
             density="compact"
             variant="outlined"
-            :placeholder="para.description"
-            :rules="[validateStringLength(para.minLength, para.maxLength)]"
-            :model-value="dynamicModel(key).get()"
+            :placeholder="item.title"
+            :rules="[validateStringLength(item.minLength, item.maxLength)]"
+            :model-value="dynamicModel(item.key).get(item.default)"
             clearable
-            :error="getErrorState(key)"
-            :error-messages="getErrorMessages(key)"
-            @update:model-value="dynamicModel(key).set($event)"
+            :error="getErrorState(item.key)"
+            :error-messages="getErrorMessages(item.key)"
+            @update:model-value="dynamicModel(item.key).set($event)"
           >
           </v-text-field>
           <v-number-input
-            v-else-if="para.type === 'integer'"
+            v-else-if="item.isInteger"
             prepend-icon="mdi-numeric"
-            :model-value="dynamicModel(key).get() as number"
-            :label="para.title || para.description"
+            :model-value="dynamicModel(item.key).get(item.default) as number"
+            :label="item.label"
             density="compact"
             variant="outlined"
-            :placeholder="para.description"
-            :max="para.maximum"
-            :min="para.minimum"
-            :hint="validateNumberRange(para.minimum, para.maximum)"
+            :placeholder="item.title"
+            :max="item.maximum"
+            :min="item.minimum"
+            :hint="validateNumberRange(item.minimum, item.maximum)"
             clearable
-            :error="getErrorState(key)"
-            :error-messages="getErrorMessages(key)"
-            @update:model-value="dynamicModel(key).set($event)"
+            :error="getErrorState(item.key)"
+            :error-messages="getErrorMessages(item.key)"
+            @update:model-value="dynamicModel(item.key).set($event)"
           ></v-number-input>
           <v-checkbox
-            v-else-if="para.type === 'boolean'"
-            v-tooltip:top="para.description"
-            :model-value="dynamicModel(key).get()"
-            :label="para.title"
-            @update:model-value="dynamicModel(key).set($event)"
+            v-else-if="item.isBoolean"
+            v-tooltip:bottom="item.title"
+            color="secondary"
+            :model-value="dynamicModel(item.key).get(item.default)"
+            :label="item.label"
+            @update:model-value="dynamicModel(item.key).set($event)"
             hide-details
           ></v-checkbox>
         </v-row>

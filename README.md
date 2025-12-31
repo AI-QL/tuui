@@ -14,7 +14,7 @@ This repository is essentially an **LLM chat desktop application based on MCP**.
 
 Given the considerations regarding the quality and safety of AI-generated content, this project employs strict syntax checks and naming conventions. Therefore, for any further development, please ensure that you use the linting tools I've set up to check and automatically fix syntax issues.
 
-## ✨ Features
+## ✨ Highlights
 
 - ✨ Accelerate AI tool integration via MCP
 - ✨ Orchestrate cross-vendor LLM APIs through dynamic configuring
@@ -24,6 +24,19 @@ Given the considerations regarding the quality and safety of AI-generated conten
 - ✨ Basic layout manager
 - ✨ Global state management through the Pinia store
 - ✨ Quick support through the GitHub community and official documentation
+
+## 🔥 MCP features
+
+| Status | Feature | Category | Note |
+| --- | --- | --- | --- |
+| ✅ | [Tools](https://modelcontextprotocol.io/specification/latest/server/tools) | Server |  |
+| ✅ | [Prompts](https://modelcontextprotocol.io/specification/latest/server/prompts) | Server |  |
+| ✅ | [Resources](https://modelcontextprotocol.io/specification/latest/server/resources) | Server |  |
+| 🔲 | [Roots](https://modelcontextprotocol.io/specification/latest/client/roots) | Client | This is generally only used for the Vibe Coding IDE and can typically be configured through server environment variables. |
+| ✅ | [Sampling](https://modelcontextprotocol.io/specification/latest/server/sampling) | Client |  |
+| ✅ | [Elicitation](https://modelcontextprotocol.io/specification/latest/server/elicitation) | Client |  |
+| ✅ | [Discovery](https://github.com/modelcontextprotocol/registry) | Registry | Provides real-time MCP server discovery on the MCP registry |
+| ✅ | [MCPB](https://github.com/modelcontextprotocol/mcpb) | Extension | MCP Bundles (.mcpb) is the new name for what was previously known as Desktop Extensions (.dxt) |
 
 ## 🚀 Getting Started
 
