@@ -80,6 +80,12 @@ export default defineConfig(({ mode }) => {
           drop_debugger: true
         }
       },
+      rollupOptions: {
+        input: {
+          main: resolve('./src/renderer/index.html'),
+          splash: resolve('./src/renderer/splash.html')
+        }
+      },
       outDir: resolve('./dist')
     },
     plugins: [

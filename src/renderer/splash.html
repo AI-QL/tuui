@@ -1,0 +1,37 @@
+<!doctype html>
+<html>
+  <head>
+    <style>
+      .loading {
+        all: initial;
+        position: fixed;
+        top: calc(50% - 50px);
+        left: calc(50% - 50px);
+        display: flex;
+        width: 100px;
+        height: 100px;
+        border: 7px solid #1867c0;
+        border-top-color: rgba(0, 0, 0, 0.2);
+        border-right-color: rgba(0, 0, 0, 0.2);
+        border-bottom-color: rgba(0, 0, 0, 0.2);
+        border-radius: 100%;
+        overflow: hidden;
+
+        animation: circle infinite 1s linear;
+      }
+
+      @keyframes circle {
+        0% {
+          transform: rotate(0);
+        }
+
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="loading" class="loading"></div>
+  </body>
+</html>

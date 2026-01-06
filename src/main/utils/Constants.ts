@@ -69,6 +69,9 @@ export default class Constants {
   static APP_INDEX_URL_DEV = `${debug.env.VITE_DEV_SERVER_URL}/index.html`
   static APP_INDEX_URL_PROD = join(__dirname, '../index.html')
 
+  static APP_SPLASH_URL_DEV = `${debug.env.VITE_DEV_SERVER_URL}/splash.html`
+  static APP_SPLASH_URL_PROD = join(__dirname, '../splash.html')
+
   private static _buildAssetsPath(...paths: string[]) {
     const basePath = app.isPackaged ? process.resourcesPath : 'src/main'
     return join(basePath, 'assets', ...paths)

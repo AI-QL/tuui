@@ -31,6 +31,27 @@ const exitApp = (mainWindow: BrowserWindow): void => {
   app.exit()
 }
 
+export const createSplashWindow = async (): Promise<BrowserWindow> => {
+  const splashWindow = new BrowserWindow({
+    width: 400,
+    height: 300,
+    frame: false,
+    alwaysOnTop: true,
+    resizable: false,
+    show: true,
+    skipTaskbar: true,
+    transparent: true
+  })
+
+  if (Constants.IS_DEV_ENV) {
+    await splashWindow.loadURL(Constants.APP_SPLASH_URL_DEV)
+  } else {
+    await splashWindow.loadFile(Constants.APP_SPLASH_URL_PROD)
+  }
+
+  return splashWindow
+}
+
 export const createMainWindow = async (): Promise<BrowserWindow> => {
   let opt: BrowserWindowConstructorOptions = {
     title: Constants.APP_NAME,

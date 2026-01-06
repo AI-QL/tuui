@@ -1,7 +1,7 @@
 import { app, shell, WebContents, RenderProcessGoneDetails, BrowserWindow } from 'electron'
 import { v4 as uuidv4 } from 'uuid'
 import Constants from './utils/Constants'
-import { createErrorWindow, createMainWindow } from './MainRunner'
+import { createErrorWindow, createMainWindow, createSplashWindow } from './MainRunner'
 
 import {
   SamplingRequest,
@@ -27,6 +27,7 @@ import Commander from './aid/commander'
 
 import { showWindow } from './tray'
 
+let splashWindow: BrowserWindow
 let mainWindow: BrowserWindow
 let errorWindow: BrowserWindow
 
@@ -43,9 +44,15 @@ const registerShortcuts = async () => {
 
 async function createWindow() {
   try {
+    splashWindow = await createSplashWindow()
     mainWindow = await createMainWindow()
   } catch {
     app.exit()
+  } finally {
+    if (splashWindow) {
+      splashWindow.close()
+      splashWindow = null
+    }
   }
 }
 
@@ -70,6 +77,7 @@ app.on('activate', async () => {
 
 app.on('window-all-closed', () => {
   mainWindow = null
+  splashWindow = null
   errorWindow = null
 
   if (!Constants.IS_MAC) {
