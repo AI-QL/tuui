@@ -4,6 +4,10 @@ import { join } from 'path'
 import { main } from '../package.json'
 import TestUtil from './testUtil.mjs'
 
+interface CustomFixtures {
+  util: TestUtil
+}
+
 let appElectron: ElectronApplication
 let page: Page
 
@@ -32,7 +36,14 @@ export const beforeAll = async () => {
       NODE_ENV: 'production'
     }
   })
-  page = await appElectron.firstWindow()
+  const splashWindow = await appElectron.firstWindow()
+
+  const secondWindow = await appElectron.waitForEvent('window', {
+    predicate: (window) => window !== splashWindow,
+    timeout: 10000
+  })
+
+  page = secondWindow
 
   await page.waitForEvent('load')
 
@@ -59,8 +70,7 @@ export const afterAll = async () => {
   await appElectron.close()
 }
 
-export const test = base.test.extend({
-  // eslint-disable-next-line no-empty-pattern
+export const test = base.test.extend<CustomFixtures>({
   page: async ({}, use) => {
     await use(page)
   },
