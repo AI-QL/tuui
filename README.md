@@ -243,3 +243,14 @@ Many of the ideas and prose for the statements in this project were based on or 
 - [Specifications and References](https://www.tuui.com/project-structures/specification-references)
 
 You can review the specific technical details and the license. We commend them for their efforts to facilitate collaboration in their projects.
+
+## RunLedger CI gate
+
+This repo includes a deterministic CI gate for tool-using agents:
+
+```bash
+runledger run evals/runledger --mode replay --baseline baselines/runledger-demo.json
+```
+
+It replays recorded tool calls and fails the PR on schema/tool/budget regressions.
+
