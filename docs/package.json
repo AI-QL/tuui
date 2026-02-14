@@ -13,12 +13,12 @@
     "node": ">=22.12.0"
   },
   "dependencies": {
-    "vitepress": "^2.0.0-alpha.15",
-    "vitepress-i18n": "^1.3.4",
-    "vitepress-sidebar": "^1.33.0",
-    "vue": "^3.5.25"
+    "vitepress": "^2.0.0-alpha.16",
+    "vitepress-i18n": "^1.3.5",
+    "vitepress-sidebar": "^1.33.1",
+    "vue": "^3.5.28"
   },
   "optionalDependencies": {
-    "@rollup/rollup-linux-x64-gnu": "4.53.3"
+    "@rollup/rollup-linux-x64-gnu": "4.57.1"
   }
 }
