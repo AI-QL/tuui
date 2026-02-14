@@ -4,6 +4,8 @@ import { getServers } from './mcp'
 
 import type { Prompt as PromptType, GetPromptRequest } from '@modelcontextprotocol/sdk/types.d.ts'
 
+import type { ChatCompletionPromptMessage } from '@/renderer/types/message'
+
 type ParamsType = GetPromptRequest['params']
 
 // Extend the argument content to be sent to the MCP server
@@ -79,12 +81,11 @@ export const usePromptStore = defineStore('promptStore', {
     },
     fetchSelect: async function () {
       const mcpStore = useMcpStore()
-      const mcpServers = getServers()
       const title = this.promptSelect.title
       if (!title) {
         return []
       }
-      const getFun = mcpServers?.[title]?.prompts?.get
+      const getFun = mcpStore.getSelected.method.get
       if (!getFun) {
         return []
       }
@@ -105,7 +106,7 @@ export const usePromptStore = defineStore('promptStore', {
       console.log(params)
       const prompts = await getFun({ method: 'prompts/get', params })
 
-      const conversations = prompts.messages.map((item) => {
+      const conversations = prompts.messages.map((item: ChatCompletionPromptMessage) => {
         const content = mcpStore.convertItem(item.content)
         const conversation = {
           role: item.role,

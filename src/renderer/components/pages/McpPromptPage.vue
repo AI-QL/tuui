@@ -2,6 +2,7 @@
 import { useMessageStore } from '@/renderer/store/message'
 import { useLayoutStore } from '@/renderer/store/layout'
 import { usePromptStore } from '@/renderer/store/prompt'
+import { useSnackbarStore } from '@/renderer/store/snackbar'
 import { useRouter } from 'vue-router'
 import { ref } from 'vue'
 import { useRules } from '@/renderer/composables/useRules'
@@ -9,6 +10,8 @@ import { useRules } from '@/renderer/composables/useRules'
 const messageStore = useMessageStore()
 const promptStore = usePromptStore()
 const layoutStore = useLayoutStore()
+const snackbarStore = useSnackbarStore()
+
 const router = useRouter()
 
 const rules = useRules()
@@ -21,9 +24,21 @@ const navigateTo = (route: string, screenValue: number) => {
 }
 
 const handleApplyPrompt = async () => {
-  const conversations = await promptStore.fetchSelect()
-  messageStore.initConversation(conversations)
-  navigateTo('/chat', 1)
+  try {
+    const conversations = await promptStore.fetchSelect()
+
+    if (!conversations || conversations.length === 0) {
+      snackbarStore.showErrorMessage(
+        'Prompt not found — possible MCP server issue or protocol mismatch, please contact the repo owner.'
+      )
+    }
+    messageStore.initConversation(conversations)
+    navigateTo('/chat', 1)
+  } catch (error) {
+    const errorMsg = error instanceof Error ? error.message : String(error)
+    console.log(errorMsg)
+    snackbarStore.showErrorMessage(errorMsg)
+  }
 }
 </script>
 
