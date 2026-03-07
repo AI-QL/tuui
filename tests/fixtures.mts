@@ -36,7 +36,9 @@ export const beforeAll = async () => {
       NODE_ENV: 'production'
     }
   })
-  const splashWindow = await appElectron.firstWindow()
+  const splashWindow = await appElectron.firstWindow({
+    timeout: 60000
+  })
 
   const secondWindow = await appElectron.waitForEvent('window', {
     predicate: (window) => window !== splashWindow,
@@ -49,6 +51,9 @@ export const beforeAll = async () => {
 
   page.on('console', console.log)
   page.on('pageerror', console.log)
+
+  const windows = await appElectron.windows()
+  console.log(windows)
 
   const evaluateResult = await appElectron.evaluate(async ({ app, BrowserWindow }) => {
     try {

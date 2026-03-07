@@ -56,9 +56,9 @@
     "applescript": "^1.0.0",
     "highlight.js": "^11.11.1",
     "jwt-decode": "^4.0.0",
-    "katex": "^0.16.33",
+    "katex": "^0.16.37",
     "localforage": "^1.10.0",
-    "md-editor-v3": "^6.3.1",
+    "md-editor-v3": "^6.4.0",
     "mermaid": "^11.12.3",
     "pinia": "^3.0.4",
     "pinia-plugin-state-persistence": "^1.11.0",
@@ -67,10 +67,10 @@
     "vue-i18n": "^11.2.8",
     "vue-router": "^5.0.3",
     "vue3-lottie": "^3.3.1",
-    "vuetify": "^4.0.0"
+    "vuetify": "^4.0.1"
   },
   "devDependencies": {
-    "@eslint/eslintrc": "^3.3.4",
+    "@eslint/eslintrc": "^3.3.5",
     "@eslint/js": "^9.39.2",
     "@playwright/test": "^1.58.2",
     "@types/lodash": "^4.17.24",
@@ -79,7 +79,7 @@
     "@vitejs/plugin-vue": "^6.0.4",
     "@vitejs/plugin-vue-jsx": "^5.1.4",
     "dotenv": "^17.3.1",
-    "electron": "^40.6.1",
+    "electron": "^40.8.0",
     "electron-builder": "^26.8.1",
     "eslint": "^9.39.2",
     "eslint-config-prettier": "^10.1.8",
