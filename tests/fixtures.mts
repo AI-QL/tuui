@@ -22,7 +22,6 @@ export const beforeAll = async () => {
   appElectron = await electron.launch({
     args: [
       main,
-      ...(__isCiProcess ? ['--no-sandbox'] : []),
       '--enable-logging',
       '--ignore-certificate-errors',
       '--ignore-ssl-errors',
