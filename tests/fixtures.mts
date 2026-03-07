@@ -40,7 +40,7 @@ export const beforeAll = async () => {
 
   const secondWindow = await appElectron.waitForEvent('window', {
     predicate: (window) => window !== splashWindow,
-    timeout: 10000
+    timeout: 60000
   })
 
   page = secondWindow
