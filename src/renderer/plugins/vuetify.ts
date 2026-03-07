@@ -26,6 +26,7 @@ export default createVuetify({
     VIconBtn
   },
   theme: {
+    defaultTheme: 'light',
     themes: {
       light: {
         dark: false,

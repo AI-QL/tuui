@@ -34,6 +34,9 @@ function handleDelete(index: number, event: MouseEvent) {
       <template #append>
         <v-list-item-action>
           <v-icon-btn
+            class="mr-1"
+            color="error"
+            variant="plain"
             icon="mdi-delete-outline"
             rounded="lg"
             size="small"

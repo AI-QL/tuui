@@ -43,10 +43,13 @@ const selectedConversation = computed({
       <template #append>
         <v-list-item-action>
           <v-icon-btn
-            :loading="item.id in messageStore.generating"
+            class="mr-1"
+            color="error"
+            variant="plain"
             icon="mdi-delete-outline"
             rounded="lg"
             size="small"
+            :loading="item.id in messageStore.generating"
             @click="historyStore.deleteById(index)"
           >
           </v-icon-btn>

@@ -259,7 +259,7 @@ function hasErrors(config: McpbManifestAny | McpDxtErrors): config is McpDxtErro
           </div>
         </v-row>
 
-        <v-row class="mx-1 mt-2 mb-2" dense>
+        <v-row class="mx-1 mt-2 mb-2" density="compact">
           <v-col v-if="manifest.author" cols="12" md="6">
             <v-card
               color="indigo-lighten-2"

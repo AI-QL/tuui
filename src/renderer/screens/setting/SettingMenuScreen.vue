@@ -24,6 +24,9 @@ import LogoAvatar from '@/renderer/components/common/LogoAvatar.vue'
       <template #append>
         <v-list-item-action>
           <v-icon-btn
+            class="mr-1"
+            color="error"
+            variant="plain"
             icon="mdi-delete-outline"
             rounded="lg"
             size="small"

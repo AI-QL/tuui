@@ -22,7 +22,7 @@ const placeholderColor = computed(() => {
   <v-data-iterator :items="mcpNews" :items-per-page="-1">
     <template #default="{ items }">
       <v-container class="pa-0" fluid>
-        <v-row dense>
+        <v-row density="compact">
           <v-col v-for="(item, index) in items" :key="item.raw.title" cols="auto" md="4">
             <v-card class="pb-3" border flat>
               <v-img

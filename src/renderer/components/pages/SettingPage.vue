@@ -138,31 +138,36 @@ const validateNumberRange = (min: number, max: number) => {
     </template>
     <v-divider></v-divider>
     <v-card-text class="pt-6">
-      <v-row class="px-2 mr-2">
-        <v-col>
+      <v-row class="px-2 pr-4">
+        <v-col cols="12" md>
           <v-text-field
             density="compact"
             variant="outlined"
             :model-value="config.name"
             :label="$t('setting.name')"
+            hide-details
             @update:model-value="(v) => handleUpdate('name', v)"
             @blur="!config.name && handleUpdate('name', `Chatbot ${uuidv4()}`)"
           ></v-text-field>
         </v-col>
-        <v-checkbox
-          :model-value="config.mcp"
-          :label="$t('setting.mcp')"
-          color="secondary"
-          @update:model-value="(v) => handleUpdate('mcp', Boolean(v))"
-        >
-        </v-checkbox>
-        <v-checkbox
-          :model-value="config.stream"
-          :label="$t('setting.stream')"
-          color="secondary"
-          @update:model-value="(v) => handleUpdate('stream', Boolean(v))"
-        >
-        </v-checkbox>
+        <v-col cols="6" md="auto">
+          <v-checkbox
+            :model-value="config.mcp"
+            :label="$t('setting.mcp')"
+            color="secondary"
+            @update:model-value="(v) => handleUpdate('mcp', Boolean(v))"
+          >
+          </v-checkbox>
+        </v-col>
+        <v-col cols="6" md="auto">
+          <v-checkbox
+            :model-value="config.stream"
+            :label="$t('setting.stream')"
+            color="secondary"
+            @update:model-value="(v) => handleUpdate('stream', Boolean(v))"
+          >
+          </v-checkbox>
+        </v-col>
       </v-row>
 
       <!-- API Key -->
@@ -224,7 +229,7 @@ const validateNumberRange = (min: number, max: number) => {
         </v-card>
       </v-dialog>
 
-      <v-row class="px-2">
+      <v-row class="pr-2">
         <v-switch
           v-tooltip:start="$t('setting.auth-header')"
           min-width="170px"
@@ -240,6 +245,7 @@ const validateNumberRange = (min: number, max: number) => {
         </v-switch>
         <v-col>
           <v-combobox
+            class="mt-3"
             :disabled="!config.authorization"
             density="compact"
             :label="$t('setting.auth-prefix')"
@@ -289,8 +295,8 @@ const validateNumberRange = (min: number, max: number) => {
 
   <v-card class="mx-auto mt-4" :title="$t('setting.title-model')">
     <v-divider></v-divider>
-    <v-card-text class="py-6">
-      <v-row class="px-3 my-0">
+    <v-card-text class="pt-6">
+      <v-row>
         <v-combobox
           class="px-2"
           density="compact"
@@ -313,7 +319,7 @@ const validateNumberRange = (min: number, max: number) => {
         >
         </v-combobox>
       </v-row>
-      <v-row class="px-3 my-0">
+      <v-row class="my-0">
         <v-combobox
           class="px-2"
           density="compact"
@@ -353,7 +359,7 @@ const validateNumberRange = (min: number, max: number) => {
           }}</v-btn>
         </v-btn-toggle>
       </v-field>
-      <v-field class="ma-2 d-inline-flex" dirty variant="outlined">
+      <v-field class="ma-2 ml-8 d-inline-flex" dirty variant="outlined">
         <template #label>
           <div>{{ $t('setting.enable-thinking') }}</div>
         </template>
@@ -368,17 +374,19 @@ const validateNumberRange = (min: number, max: number) => {
           <v-btn v-for="level in ENABLE_THINKING" :key="level">{{ level }}</v-btn>
         </v-btn-toggle>
       </v-field>
-      <v-switch
-        min-width="200px"
-        class="ml-4"
-        :label="$t('setting.enable-extra-body')"
-        color="secondary"
-        base-color="primary"
-        hide-details
-        inset
-        :model-value="config.enableExtraBody"
-        @update:model-value="(v) => handleUpdate('enableExtraBody', Boolean(v))"
-      ></v-switch>
+      <v-row class="px-0">
+        <v-switch
+          min-width="200px"
+          class="ml-4"
+          :label="$t('setting.enable-extra-body')"
+          color="secondary"
+          base-color="primary"
+          hide-details
+          inset
+          :model-value="config.enableExtraBody"
+          @update:model-value="(v) => handleUpdate('enableExtraBody', Boolean(v))"
+        ></v-switch>
+      </v-row>
     </v-card-text>
   </v-card>
   <div ref="domExtraBody">

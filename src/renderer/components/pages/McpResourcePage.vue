@@ -26,7 +26,7 @@ const currentTemplate = computed(() => {
     @update:options="resourceStore.loadTemplates(currentServerName)"
   >
     <template #default="{ items }">
-      <v-row dense>
+      <v-row density="compact">
         <v-col
           v-for="item in items as any"
           :key="item.raw.uriTemplate + ':' + item.raw.name"

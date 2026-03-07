@@ -25,7 +25,7 @@ const agentStore = useAgentStore()
     ></v-textarea>
   </v-row>
   <v-row>
-    <v-col cols="4" class="pt-4 pb-1 pl-0">
+    <v-col cols="4">
       <v-select
         v-model="chatbotStore.selectedChatbotId"
         :label="$t('chat.select-model')"
@@ -37,7 +37,7 @@ const agentStore = useAgentStore()
         item-value="index"
       ></v-select>
     </v-col>
-    <v-col cols="4" class="pt-4 pb-1 pl-0">
+    <v-col cols="4">
       <v-select
         v-model="agentStore.selected"
         :label="$t('chat.select-agent')"
@@ -50,12 +50,12 @@ const agentStore = useAgentStore()
         clearable
       >
         <template #item="{ props: itemProps, item }">
-          <v-list-item v-bind="itemProps" :subtitle="`${item.raw.prompt}`">
+          <v-list-item v-bind="itemProps" :subtitle="`${item.prompt}`">
             <template #prepend>
               <v-badge
                 class="ml-n1 mr-n4"
                 color="primary"
-                :content="item.raw.selectedNode.length"
+                :content="item.selectedNode.length"
                 inline
                 :max="99"
               ></v-badge>
@@ -64,7 +64,7 @@ const agentStore = useAgentStore()
         </template>
       </v-select>
     </v-col>
-    <v-col cols="4" class="pt-4 pb-0 pr-0">
+    <v-col cols="4">
       <!-- Adds a horizontal flex container (row direction) to override parent column layout, ensuring right alignment within v-col -->
       <span class="d-flex justify-end">
         <v-spacer></v-spacer>

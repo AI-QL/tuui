@@ -176,7 +176,7 @@ function handleNameUpdate() {
       {{ $t('agent.no-tools') }}
     </v-alert>
     <v-card v-else class="mt-4" :title="$t('agent.tools')">
-      <v-row dense>
+      <v-row density="compact">
         <v-divider></v-divider>
         <v-treeview
           v-model:selected="selectedTree"
@@ -193,7 +193,7 @@ function handleNameUpdate() {
         ></v-treeview>
       </v-row>
 
-      <v-row dense>
+      <v-row density="compact">
         <v-divider></v-divider>
         <v-card-text>
           <div

@@ -54,7 +54,7 @@ const handleApplyPrompt = async () => {
       <v-toolbar class="px-2" rounded="lg">
         <v-text-field
           v-model="promptStore.search"
-          density="comfortable"
+          density="compact"
           placeholder="Search"
           prepend-inner-icon="mdi-magnify"
           variant="solo"
@@ -65,7 +65,7 @@ const handleApplyPrompt = async () => {
     </template>
     <template #default="{ items }">
       <v-container class="pa-2" fluid>
-        <v-row dense>
+        <v-row density="compact">
           <v-col
             v-for="item in items"
             :key="item.raw.title + ':' + item.raw.name"
