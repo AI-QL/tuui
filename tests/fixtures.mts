@@ -51,15 +51,23 @@ export const beforeAll = async () => {
   page.on('pageerror', console.log)
 
   const evaluateResult = await appElectron.evaluate(async ({ app, BrowserWindow }) => {
-    const currentWindow = BrowserWindow.getFocusedWindow()
+    try {
+      const currentWindow = BrowserWindow.getFocusedWindow()
+      if (!currentWindow) {
+        throw new Error('No focused window found')
+      }
 
-    // Fix window position for testing
-    currentWindow.setPosition(50, 50)
-    currentWindow.setSize(1080, 560)
+      // Fix window position for testing
+      currentWindow.setPosition(50, 50)
+      currentWindow.setSize(1080, 560)
 
-    return {
-      packaged: app.isPackaged,
-      dataPath: app.getPath('userData')
+      return {
+        packaged: app.isPackaged,
+        dataPath: app.getPath('userData')
+      }
+    } catch (error) {
+      console.error('Error in evaluate callback:', error)
+      throw error
     }
   })
 
