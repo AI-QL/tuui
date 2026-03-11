@@ -9,6 +9,9 @@ import '@mdi/font/css/materialdesignicons.min.css'
 import colors from 'vuetify/lib/util/colors'
 
 export default createVuetify({
+  defaults: {
+    VCardTitle: { class: 'text-title-medium' }
+  },
   locale: {
     messages: { ko, en, zhHans, zhHant, de, es, ja, fr, ru, pt, nl },
     locale: 'en',

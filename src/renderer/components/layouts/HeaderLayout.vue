@@ -88,7 +88,9 @@ const items = computed(() => {
     >
     </v-app-bar-nav-icon>
     <LocaleBtn class="no-drag ml-3" data-testid="select-language" />
-    <v-app-bar-title class="title">{{ $t(titleKey.toString()) }}</v-app-bar-title>
+    <v-app-bar-title class="title text-uppercase text-title-medium">{{
+      $t(titleKey.toString())
+    }}</v-app-bar-title>
 
     <v-btn-toggle
       v-if="smAndUp"
