@@ -5,3 +5,8 @@ declare module '@modelcontextprotocol/sdk/types' {
 declare module 'vuetify/lib/util/colors' {
   export * from 'vuetify/lib/util/colors.js'
 }
+
+declare module '*.css' {
+  const content: string
+  export default content
+}
