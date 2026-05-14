@@ -1,4 +1,3 @@
-import { fileURLToPath } from 'url'
 import { defineConfig, loadEnv } from 'vite'
 import ElectronPlugin, { ElectronOptions } from 'vite-plugin-electron'
 import RendererPlugin from 'vite-plugin-electron-renderer'
@@ -6,7 +5,7 @@ import VuetifyPlugin from 'vite-plugin-vuetify'
 import VueJsx from '@vitejs/plugin-vue-jsx'
 import Vue from '@vitejs/plugin-vue'
 import { rmSync } from 'fs'
-import { resolve, dirname } from 'path'
+import { resolve } from 'path'
 import { builtinModules } from 'module'
 
 const isDevEnv = process.env.NODE_ENV === 'development'
@@ -64,7 +63,7 @@ export default defineConfig(({ mode }) => {
     resolve: {
       extensions: ['.mjs', '.js', '.ts', '.vue', '.json', '.scss'],
       alias: {
-        '@': resolve(dirname(fileURLToPath(import.meta.url)), 'src')
+        '@': resolve(__dirname, 'src')
       }
     },
     base: './',

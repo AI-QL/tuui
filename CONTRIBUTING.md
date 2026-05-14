@@ -75,7 +75,7 @@ Typically, a project maintainer will review and test your code before merging it
 
 The following software is required to work on the spec:
 
-- Node.js 20 or above
+- Node.js 22 or above
 - TypeScript
 
 ## Getting Started

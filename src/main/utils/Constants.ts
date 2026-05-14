@@ -1,9 +1,6 @@
-import { join, dirname, normalize, sep } from 'path'
+import { join, normalize, sep } from 'path'
 import { name, version, debug, homepage, schemaVersion } from '../../../package.json'
-import { fileURLToPath } from 'url'
 import { app } from 'electron'
-
-const __dirname = dirname(fileURLToPath(import.meta.url))
 
 export interface TrayOptions {
   enabled: boolean

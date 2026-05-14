@@ -12,7 +12,7 @@ import { loadConfig } from './mcp/init'
 
 const options = {
   width: Constants.IS_DEV_ENV ? 1500 : 1280,
-  height: 1080,
+  height: 900,
   minWidth: 375,
   minHeight: 480,
   tray: {
