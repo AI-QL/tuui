@@ -59,6 +59,15 @@
       "modelList": ["deepseek-chat"]
     },
     {
+      "url": "https://api.qnaigc.com",
+      "urlList": ["https://api.qnaigc.com"],
+      "path": "/v1/chat/completions",
+      "name": "Qiniu",
+      "icon": "https://www.qiniu.com/favicon.ico",
+      "model": "deepseek-v3",
+      "modelList": ["deepseek-v3"]
+    },
+    {
       "url": "https://api.openai.com",
       "urlList": ["https://api.openai.com", "https://api.aiql.com"],
       "name": "OpenAI & Proxy",
