@@ -35,13 +35,19 @@ export async function initClients(
       if (object.type === 'metadata__stdio_config') {
         return initSingleClient(name, object.config, callback)
       } else if (object.type === 'metadata__mcpb_manifest') {
-        const stdioConfig = await getMcpConfigForDxt(
-          Constants.getPosixPath(path.join(Constants.ASSETS_PATH.mcpb, name)),
-          object.config,
-          object.user_config
-        )
-        console.log(stdioConfig)
-        return initSingleClient(name, stdioConfig, callback)
+        try {
+          const stdioConfig = await getMcpConfigForDxt(
+            Constants.getPosixPath(path.join(Constants.ASSETS_PATH.mcpb, name)),
+            object.config,
+            object.user_config
+          )
+          console.log(stdioConfig)
+          return initSingleClient(name, stdioConfig, callback)
+        } catch (error) {
+          const errorMsg = error instanceof Error ? error.message : String(error)
+          if (callback) callback(name, errorMsg, 'error')
+          return { name }
+        }
       } else {
         return { name }
       }
@@ -51,8 +57,9 @@ export async function initClients(
     console.log('All clients initialized.')
     return clients
   } catch (error) {
-    console.error('Error during client initialization:', error?.message)
-    throw new Error(`${error?.message}`)
+    const errorMsg = error instanceof Error ? error.message : String(error)
+    console.error('Error during client initialization:', errorMsg)
+    throw new Error(`${errorMsg}`)
   }
 }
 
