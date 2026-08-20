@@ -154,6 +154,18 @@ If you encounter any issues (please try to maintain OAuth auto-redirect to preve
 
 ![](https://gcore.jsdelivr.net/gh/AI-QL/.github/public/tuui/7.png)
 
+## 🔍 You.com MCP Servers
+
+TUUI includes built-in support for [You.com MCP servers](https://you.com/docs/mcp?utm_source=ai-ql-tuui&utm_medium=2026-08-oss-integrations&utm_content=mcp-config), providing web search, content extraction, and research capabilities directly in your AI workflows:
+
+- **You.com Search & Research** (`https://api.you.com/mcp`) - Full authenticated access to you-search, you-contents, and you-research tools. Requires [YDC_API_KEY](https://you.com/platform/api-keys?utm_source=ai-ql-tuui&utm_medium=2026-08-oss-integrations&utm_content=mcp-config) for enhanced capabilities.
+
+- **You.com Free Search** (`https://api.you.com/mcp?profile=free`) - Keyless basic web search with 100 free searches per day. No API key required.
+
+- **You.com Docs** (`https://you.com/docs/_mcp/server`) - Search You.com's documentation and developer resources. No authentication required.
+
+These servers are pre-configured in the default [mcp.json](src/main/assets/config/mcp.json) and can be enabled/disabled through TUUI's MCP server management interface.
+
 <a id="mcp-server-issue"></a>
 
 ## 🚸 MCP Server Issue

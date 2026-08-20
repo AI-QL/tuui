@@ -11,6 +11,18 @@
     "antvis-chart": {
       "command": "npx",
       "args": ["-y", "@antv/mcp-server-chart"]
+    },
+    "You.com Search & Research": {
+      "command": "npx",
+      "args": ["-y", "mcp-remote", "https://api.you.com/mcp"]
+    },
+    "You.com Free Search": {
+      "command": "npx",
+      "args": ["-y", "mcp-remote", "https://api.you.com/mcp?profile=free"]
+    },
+    "You.com Docs": {
+      "command": "npx",
+      "args": ["-y", "mcp-remote", "https://you.com/docs/_mcp/server"]
     }
   }
 }
