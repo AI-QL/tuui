@@ -154,6 +154,39 @@ If you encounter any issues (please try to maintain OAuth auto-redirect to preve
 
 ![](https://gcore.jsdelivr.net/gh/AI-QL/.github/public/tuui/7.png)
 
+### Web search and page fetching with Parallel
+
+[Parallel Search MCP](https://docs.parallel.ai/integrations/mcp/search-mcp) provides free web search and page fetching without a Parallel account or API key. Anonymous search uses Fast mode and is intended for exploration and light use, with lower rate limits than authenticated access.
+
+TUUI connects to this HTTP server through the same `mcp-remote` bridge. Install [Node.js](https://nodejs.org/en/download) 22.12 or newer and ensure `npx` is available to TUUI, then add this configuration:
+
+```json
+{
+  "mcpServers": {
+    "parallel-search": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "mcp-remote",
+        "https://search.parallel.ai/mcp",
+        "--transport",
+        "http-only",
+        "--header",
+        "User-Agent:tuui"
+      ]
+    }
+  }
+}
+```
+
+1. In the MCP panel, open **Add MCP Server** (`+`) → **Server Config**, paste the JSON, and save it. This adds `parallel-search` alongside your existing servers; use a different name if you already have an entry with that name.
+2. Select `parallel-search` in the server list and click **Start MCP Servers** (the power button).
+3. Open its tools list and check that `web_search` and `web_fetch` appear. `web_search` finds current sources; `web_fetch` reads specific URLs. To use them in chat, select these tools for your agent and use an LLM backend that supports tool/function calling.
+
+For example, ask your agent: “Search for the latest stable Node.js release, fetch its release notes, and summarize the changes with source links.” Search queries and fetched URLs are sent to Parallel.
+
+If `npx` cannot be found or the first connection times out while downloading the bridge, follow [MCP Server Issue](#mcp-server-issue). This setup is opt-in and does not change the bundled MCP servers or your LLM configuration.
+
 <a id="mcp-server-issue"></a>
 
 ## 🚸 MCP Server Issue
